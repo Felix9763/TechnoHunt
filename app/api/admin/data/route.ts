@@ -3,6 +3,7 @@ import { getAdminSession } from '@/lib/auth';
 import {
   getLiveActiveRound,
   getTeamsForRound,
+  getStagesForRound,
   checkRoundConfig,
   getSettings,
 } from '@/lib/round';
@@ -37,11 +38,14 @@ export async function GET(req: NextRequest) {
       };
     });
 
+    const stages = getStagesForRound(activeRound);
+
     return NextResponse.json({
       activeRound,
       round1,
       round2,
       teams,
+      stages,
       progress: progressMap,
       attempts,
       finale,

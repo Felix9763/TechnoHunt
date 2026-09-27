@@ -12,9 +12,9 @@ import {
   fetchAllAttempts,
   fetchFinaleSubmissions,
 } from '@/lib/db';
-import AdminClient from './AdminClient';
+import AdminClient from '../AdminClient';
 
-export default async function AdminPage() {
+export default async function AdminPathsPage() {
   const session = await getAdminSession();
   if (!session) {
     redirect('/admin/login');
@@ -50,5 +50,5 @@ export default async function AdminPage() {
     settings,
   };
 
-  return <AdminClient initialData={initialData} />;
+  return <AdminClient initialData={initialData} initialTab="paths" />;
 }

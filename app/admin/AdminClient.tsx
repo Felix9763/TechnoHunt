@@ -31,11 +31,13 @@ interface AdminClientProps {
     round1: { isReady: boolean; teamCount: number; stageCount: number; reason?: string };
     round2: { isReady: boolean; teamCount: number; stageCount: number; reason?: string };
     teams: Array<{ code: string; pin: string; track: string }>;
+    stages?: Record<string, any>;
     progress: Record<string, TeamProgressInfo>;
     attempts: Attempt[];
     finale: FinaleSubmission[];
     settings: any;
   };
+  initialTab?: 'ops' | 'paths';
 }
 
 const STAGE_LABELS: Record<string, string> = {
@@ -56,9 +58,10 @@ function formatTime(iso: string): string {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-export default function AdminClient({ initialData }: AdminClientProps) {
+export default function AdminClient({ initialData, initialTab = 'ops' }: AdminClientProps) {
   const router = useRouter();
   const [data, setData] = useState(initialData);
+  const [activeTab, setActiveTab] = useState<'ops' | 'paths'>(initialTab);
   const [loading, setLoading] = useState(false);
   const [actionMsg, setActionMsg] = useState<{ text: string; error?: boolean } | null>(null);
 
@@ -72,8 +75,17 @@ export default function AdminClient({ initialData }: AdminClientProps) {
   const [submittingFinale, setSubmittingFinale] = useState(false);
 
   // Filter state for roster
-  const [trackFilter, setTrackFilter] = useState<'ALL' | 'A' | 'B'>('ALL');
+  const [trackFilter, setTrackFilter] = useState<string>('ALL');
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Path Dossier state
+  const [dossierTrackFilter, setDossierTrackFilter] = useState<string>('ALL');
+  const [dossierSearch, setDossierSearch] = useState('');
+  const [selectedDossierTeam, setSelectedDossierTeam] = useState<string>('A1');
+  const [dossierViewMode, setDossierViewMode] = useState<'cards' | 'table'>('cards');
+  const [copiedTeam, setCopiedTeam] = useState<string | null>(null);
+
+  const uniqueTracks = Array.from(new Set(data.teams.map((t) => t.track))).filter(Boolean).sort();
 
   // Auto-refresh interval (5s)
   useEffect(() => {
@@ -120,19 +132,19 @@ export default function AdminClient({ initialData }: AdminClientProps) {
       if (!res.ok) {
         setActionMsg({ text: resData.error || 'Failed to switch round', error: true });
       } else {
-        setActionMsg({ text: `Switched active round to ${targetRound}.` });
+        setActionMsg({ text: `Switched active round to ${targetRound.toUpperCase()}.` });
         await refreshData();
       }
     } catch (e) {
-      setActionMsg({ text: 'Error switching round.', error: true });
+      setActionMsg({ text: 'Error contacting server to switch round.', error: true });
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleManualOverride(e: React.FormEvent) {
+  async function handleOverride(e: React.FormEvent) {
     e.preventDefault();
-    if (!overrideTeam || overriding) return;
+    if (!overrideTeam || !overrideStage || overriding) return;
 
     setOverriding(true);
     setActionMsg(null);
@@ -148,19 +160,19 @@ export default function AdminClient({ initialData }: AdminClientProps) {
       if (!res.ok) {
         setActionMsg({ text: resData.error || 'Override failed', error: true });
       } else {
-        setActionMsg({ text: `Team ${overrideTeam} stage set to ${STAGE_LABELS[overrideStage] || overrideStage}.` });
+        setActionMsg({ text: `Team ${overrideTeam} moved to ${STAGE_LABELS[overrideStage]}.` });
         await refreshData();
       }
     } catch (e) {
-      setActionMsg({ text: 'Error sending override.', error: true });
+      setActionMsg({ text: 'Network error during override.', error: true });
     } finally {
       setOverriding(false);
     }
   }
 
-  async function handleMarkFinale(teamCodeToMark?: string) {
-    const target = teamCodeToMark || finaleTeam;
-    if (!target || submittingFinale) return;
+  async function handleFinaleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!finaleTeam || submittingFinale) return;
 
     setSubmittingFinale(true);
     setActionMsg(null);
@@ -169,34 +181,38 @@ export default function AdminClient({ initialData }: AdminClientProps) {
       const res = await fetch('/api/admin/finale', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ teamCode: target }),
+        body: JSON.stringify({ teamCode: finaleTeam }),
       });
       const resData = await res.json();
 
       if (!res.ok) {
-        setActionMsg({ text: resData.error || 'Finale marking failed', error: true });
+        setActionMsg({ text: resData.error || 'Finale verification failed', error: true });
       } else {
-        const posText = resData.position ? `Position: #${resData.position}` : 'Finished';
-        setActionMsg({ text: `Team ${target} key submitted! ${posText}` });
-        if (!teamCodeToMark) setFinaleTeam('');
+        const posText = resData.position ? `Position: #${resData.position} Place` : 'Finished!';
+        setActionMsg({ text: `Recorded key hand-off for ${finaleTeam}. ${posText}` });
+        setFinaleTeam('');
         await refreshData();
       }
     } catch (e) {
-      setActionMsg({ text: 'Error marking key submission.', error: true });
+      setActionMsg({ text: 'Error recording finale verification.', error: true });
     } finally {
       setSubmittingFinale(false);
     }
   }
 
   async function handleResetRound() {
-    if (!window.confirm(`Are you sure you want to reset all test data (progress, attempts, finale) for ${data.activeRound.toUpperCase()}?`)) {
-      return;
-    }
+    const confirmed = window.confirm(
+      `WARNING: This will clear all team progress, attempt logs, and finale submissions for ${data.activeRound.toUpperCase()}.\n\nAre you sure you want to reset all test data?`
+    );
+    if (!confirmed) return;
+
     setLoading(true);
     setActionMsg(null);
+
     try {
       const res = await fetch('/api/admin/reset', { method: 'POST' });
       const resData = await res.json();
+
       if (!res.ok) {
         setActionMsg({ text: resData.error || 'Reset failed', error: true });
       } else {
@@ -216,16 +232,63 @@ export default function AdminClient({ initialData }: AdminClientProps) {
     router.refresh();
   }
 
+  function copyTeamPathSummary(t: { code: string; pin: string; track: string }, s: any) {
+    if (!s) return;
+    const text = `=== TEAM ${t.code} (TRACK ${t.track}) ===
+PIN: ${t.pin}
+1. CLUE 2 (Physical Codeword):
+   - Location: ${s.clue2?.zone || 'N/A'}
+   - Codeword: ${s.clue2?.codeword || 'N/A'}
+   - Riddle: "${s.clue2?.riddle || ''}"
+2. CREWMATE (Witness Contact):
+   - Crewmate: ${s.crewmate?.name || 'N/A'} (${s.crewmate?.id || ''})
+   - Scrambled Code: ${s.crewmate?.code || 'N/A'}
+3. CLUE 3 (Cipher Intercept):
+   - Classification: ${s.clue3?.cipherType || 'N/A'}
+   - Intercept: ${s.clue3?.intercept || 'N/A'}
+   - Decrypted Answer: ${s.clue3?.answer || 'N/A'}
+   - Next Sector Riddle: "${s.clue3?.nextRiddle || ''}"
+4. CLUE 4 (Physical Evidence):
+   - Sector: ${s.clue4?.zone || 'N/A'}
+   - Calculation/Answer: ${s.clue4?.answer || 'N/A'}
+5. FINALE:
+   - Target: Empty Stage (3 hidden keys backstage)`;
+
+    navigator.clipboard.writeText(text);
+    setCopiedTeam(t.code);
+    setTimeout(() => setCopiedTeam(null), 2500);
+  }
+
   const filteredTeams = data.teams.filter((t) => {
     if (trackFilter !== 'ALL' && t.track !== trackFilter) return false;
     if (searchTerm && !t.code.toLowerCase().includes(searchTerm.toLowerCase())) return false;
     return true;
   });
 
+  const stagesData = data.stages || {};
+
+  const dossierFilteredTeams = data.teams.filter((t) => {
+    if (dossierTrackFilter !== 'ALL' && t.track !== dossierTrackFilter) return false;
+    if (!dossierSearch) return true;
+    const q = dossierSearch.toLowerCase();
+    const s = stagesData[t.code] || {};
+    return (
+      t.code.toLowerCase().includes(q) ||
+      t.pin.toLowerCase().includes(q) ||
+      (s.clue2?.zone && s.clue2.zone.toLowerCase().includes(q)) ||
+      (s.clue2?.codeword && s.clue2.codeword.toLowerCase().includes(q)) ||
+      (s.crewmate?.name && s.crewmate.name.toLowerCase().includes(q)) ||
+      (s.crewmate?.id && s.crewmate.id.toLowerCase().includes(q)) ||
+      (s.clue3?.answer && s.clue3.answer.toLowerCase().includes(q)) ||
+      (s.clue4?.zone && s.clue4.zone.toLowerCase().includes(q)) ||
+      (s.clue4?.answer && s.clue4.answer.toLowerCase().includes(q))
+    );
+  });
+
   return (
     <div className="min-h-screen bg-paper text-ink font-mono p-4 md:p-8 max-w-6xl mx-auto">
       {/* Top Header */}
-      <header className="border-b-2 border-ink pb-4 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <header className="border-b-2 border-ink pb-4 mb-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <div className="text-xs text-ink-soft tracking-wider">TECHNOHUNT // EVENT CONTROL ROOM</div>
           <h1 className="font-display text-2xl md:text-3xl text-ink">Organizer Admin Panel</h1>
@@ -254,6 +317,38 @@ export default function AdminClient({ initialData }: AdminClientProps) {
         </div>
       </header>
 
+      {/* Navigation Tabs */}
+      <nav className="flex items-center gap-3 mb-6 border-b-2 border-line pb-3">
+        <button
+          type="button"
+          onClick={() => setActiveTab('ops')}
+          className={`px-4 py-2 text-xs font-mono font-bold uppercase transition-colors flex items-center gap-2 ${
+            activeTab === 'ops'
+              ? 'bg-ink text-paper shadow'
+              : 'bg-paper text-ink border border-line hover:border-ink'
+          }`}
+        >
+          <span>📊 Live Operations</span>
+          <span className="text-[10px] opacity-75 font-normal">
+            ({Object.keys(data.progress).length} Active)
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('paths')}
+          className={`px-4 py-2 text-xs font-mono font-bold uppercase transition-colors flex items-center gap-2 ${
+            activeTab === 'paths'
+              ? 'bg-ink text-paper shadow'
+              : 'bg-paper text-ink border border-line hover:border-ink'
+          }`}
+        >
+          <span>🗺️ Master Team Paths & Dossier</span>
+          <span className="bg-verified-teal/20 text-verified-teal text-[10px] px-1.5 py-0.5 rounded font-mono font-bold">
+            {data.teams.length} Teams
+          </span>
+        </button>
+      </nav>
+
       {/* Action Notice */}
       {actionMsg && (
         <div
@@ -267,374 +362,697 @@ export default function AdminClient({ initialData }: AdminClientProps) {
         </div>
       )}
 
-      {/* ROUND SWITCHER (Prominent, top of page) */}
-      <section className="border-2 border-ink p-5 bg-paper mb-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <span className="text-xs text-ink-soft block uppercase tracking-wider">
-              Runtime Round Configuration
-            </span>
-            <div className="flex items-baseline gap-3 mt-1">
-              <span className="text-lg font-bold">
-                ACTIVE ROUND:
-              </span>
-              <span className="bg-ink text-paper px-2.5 py-0.5 text-base font-bold uppercase">
-                {data.activeRound}
-              </span>
-            </div>
-            <p className="text-xs text-ink-soft mt-1">
-              Switching rounds immediately updates team sessions on their next request. Zero redeploy needed.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            {/* Round 1 Switch Button */}
-            <div className="relative group flex-1 md:flex-none">
-              <button
-                id="switch-round1-button"
-                onClick={() => handleSwitchRound('round1')}
-                disabled={!data.round1.isReady || data.activeRound === 'round1' || loading}
-                className={`w-full md:w-auto px-4 py-2 text-xs uppercase font-bold border-2 transition-colors ${
-                  data.activeRound === 'round1'
-                    ? 'bg-verified-teal text-paper border-verified-teal'
-                    : data.round1.isReady
-                    ? 'border-ink hover:bg-ink hover:text-paper'
-                    : 'border-line text-ink-soft/50 bg-paper cursor-not-allowed'
-                }`}
-              >
-                {data.activeRound === 'round1' ? '● Round 1 Live' : 'Switch to Round 1'}
-              </button>
-              {!data.round1.isReady && (
-                <div className="hidden group-hover:block absolute bottom-full left-0 mb-1 z-10 w-48 p-2 bg-ink text-paper text-[10px] shadow">
-                  {data.round1.reason || 'Round 1 config not loaded yet'}
-                </div>
-              )}
-            </div>
-
-            {/* Round 2 Switch Button */}
-            <div className="relative group flex-1 md:flex-none">
-              <button
-                id="switch-round2-button"
-                onClick={() => handleSwitchRound('round2')}
-                disabled={!data.round2.isReady || data.activeRound === 'round2' || loading}
-                className={`w-full md:w-auto px-4 py-2 text-xs uppercase font-bold border-2 transition-colors ${
-                  data.activeRound === 'round2'
-                    ? 'bg-verified-teal text-paper border-verified-teal'
-                    : data.round2.isReady
-                    ? 'border-ink hover:bg-ink hover:text-paper'
-                    : 'border-line text-ink-soft/50 bg-paper cursor-not-allowed'
-                }`}
-              >
-                {data.activeRound === 'round2' ? '● Round 2 Live' : 'Switch to Round 2'}
-              </button>
-              {!data.round2.isReady && (
-                <div className="hidden group-hover:block absolute bottom-full left-0 mb-1 z-10 w-48 p-2 bg-ink text-paper text-[10px] shadow">
-                  {data.round2.reason || 'Round 2 config not loaded yet'}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Grid: Finale Board + Manual Override */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {/* Finale Board */}
-        <section className="border border-line p-4 bg-paper">
-          <div className="flex justify-between items-center mb-3 pb-2 border-b border-line">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-ink">
-              Finale Board // Physical Keys
-            </h2>
-            <span className="text-xs text-ink-soft">
-              {data.finale.length} verified
-            </span>
-          </div>
-
-          <div className="flex gap-2 mb-4">
-            <select
-              value={finaleTeam}
-              onChange={(e) => setFinaleTeam(e.target.value)}
-              className="bg-paper border border-line px-2.5 py-1.5 text-xs text-ink focus:outline-none focus:border-ink flex-1"
-            >
-              <option value="">Select team to mark key...</option>
-              {data.teams.map((t) => (
-                <option key={t.code} value={t.code}>
-                  Team {t.code} (Track {t.track})
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={() => handleMarkFinale()}
-              disabled={!finaleTeam || submittingFinale}
-              className="bg-verified-teal text-paper px-3 py-1.5 text-xs font-semibold hover:opacity-90 disabled:opacity-50"
-            >
-              Mark Key
-            </button>
-          </div>
-
-          <div className="space-y-1.5">
-            {data.finale.length === 0 ? (
-              <div className="text-xs text-ink-soft py-4 text-center border border-dashed border-line">
-                No physical keys submitted yet for {data.activeRound}.
-              </div>
-            ) : (
-              data.finale.map((sub, idx) => (
-                <div
-                  key={sub.team_code}
-                  className="flex items-center justify-between p-2 border border-line bg-paper/60 text-xs"
-                >
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`font-bold px-1.5 py-0.5 text-[10px] ${
-                        sub.position === 1
-                          ? 'bg-lockout-amber text-paper'
-                          : sub.position === 2
-                          ? 'bg-ink-soft text-paper'
-                          : sub.position === 3
-                          ? 'bg-evidence-red text-paper'
-                          : 'bg-line text-ink'
-                      }`}
-                    >
-                      {sub.position ? `#${sub.position}` : `#${idx + 1}`}
-                    </span>
-                    <span className="font-bold">Team {sub.team_code}</span>
-                  </div>
-                  <span suppressHydrationWarning className="text-[11px] text-ink-soft">
-                    {formatTime(sub.submitted_at)}
+      {/* TAB 1: LIVE OPERATIONS */}
+      {activeTab === 'ops' && (
+        <div className="space-y-8">
+          {/* ROUND SWITCHER (Prominent, top of page) */}
+          <section className="border-2 border-ink p-5 bg-paper">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div>
+                <span className="text-xs text-ink-soft block uppercase tracking-wider">
+                  Runtime Round Configuration
+                </span>
+                <div className="flex items-baseline gap-3 mt-1">
+                  <span className="text-lg font-bold">
+                    ACTIVE ROUND:
+                  </span>
+                  <span className="bg-ink text-paper px-2.5 py-0.5 text-base font-bold uppercase">
+                    {data.activeRound}
                   </span>
                 </div>
-              ))
-            )}
-          </div>
-        </section>
+                <p className="text-xs text-ink-soft mt-1">
+                  Switching rounds immediately updates team sessions on their next request. Zero redeploy needed.
+                </p>
+              </div>
 
-        {/* Manual Override */}
-        <section className="border border-line p-4 bg-paper">
-          <div className="mb-3 pb-2 border-b border-line">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-ink">
-              Manual Override // Stage Advance
-            </h2>
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                {/* Round 1 Switch Button */}
+                <div className="relative group flex-1 md:flex-none">
+                  <button
+                    id="switch-round1-button"
+                    onClick={() => handleSwitchRound('round1')}
+                    disabled={!data.round1.isReady || data.activeRound === 'round1' || loading}
+                    className={`w-full md:w-auto px-4 py-2 text-xs uppercase font-bold border-2 transition-colors ${
+                      data.activeRound === 'round1'
+                        ? 'bg-verified-teal text-paper border-verified-teal'
+                        : data.round1.isReady
+                        ? 'border-ink hover:bg-ink hover:text-paper'
+                        : 'border-line text-ink-soft/50 bg-paper cursor-not-allowed'
+                    }`}
+                  >
+                    {data.activeRound === 'round1' ? '● Round 1 Live' : 'Switch to Round 1'}
+                  </button>
+                  {!data.round1.isReady && (
+                    <div className="hidden group-hover:block absolute bottom-full left-0 mb-1 z-10 w-48 p-2 bg-ink text-paper text-[10px] shadow">
+                      {data.round1.reason || 'Round 1 config not loaded yet'}
+                    </div>
+                  )}
+                </div>
+
+                {/* Round 2 Switch Button */}
+                <div className="relative group flex-1 md:flex-none">
+                  <button
+                    id="switch-round2-button"
+                    onClick={() => handleSwitchRound('round2')}
+                    disabled={!data.round2.isReady || data.activeRound === 'round2' || loading}
+                    className={`w-full md:w-auto px-4 py-2 text-xs uppercase font-bold border-2 transition-colors ${
+                      data.activeRound === 'round2'
+                        ? 'bg-verified-teal text-paper border-verified-teal'
+                        : data.round2.isReady
+                        ? 'border-ink hover:bg-ink hover:text-paper'
+                        : 'border-line text-ink-soft/50 bg-paper cursor-not-allowed'
+                    }`}
+                  >
+                    {data.activeRound === 'round2' ? '● Round 2 Live' : 'Switch to Round 2'}
+                  </button>
+                  {!data.round2.isReady && (
+                    <div className="hidden group-hover:block absolute bottom-full left-0 mb-1 z-10 w-48 p-2 bg-ink text-paper text-[10px] shadow">
+                      {data.round2.reason || 'Round 2 config not loaded yet'}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* LIVE ROSTER TABLE */}
+          <section className="border-2 border-ink p-5 bg-paper">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4 pb-3 border-b border-line">
+              <div>
+                <h2 className="font-display text-xl text-ink">Active Teams ({filteredTeams.length})</h2>
+                <div className="text-xs text-ink-soft mt-0.5">
+                  Round: <span className="font-bold text-ink uppercase">{data.activeRound}</span>
+                </div>
+              </div>
+
+              {/* Filters */}
+              <div className="flex items-center gap-2 flex-wrap w-full md:w-auto">
+                <div className="flex border border-ink text-xs">
+                  <button
+                    onClick={() => setTrackFilter('ALL')}
+                    className={`px-3 py-1 font-bold ${trackFilter === 'ALL' ? 'bg-ink text-paper' : 'hover:bg-line/20'}`}
+                  >
+                    ALL
+                  </button>
+                  {uniqueTracks.map((tr) => (
+                    <button
+                      key={tr}
+                      onClick={() => setTrackFilter(tr)}
+                      className={`px-3 py-1 font-bold ${trackFilter === tr ? 'bg-ink text-paper' : 'hover:bg-line/20'}`}
+                    >
+                      Track {tr}
+                    </button>
+                  ))}
+                </div>
+
+                <input
+                  type="text"
+                  placeholder="Search team code..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="bg-paper border border-ink px-2.5 py-1 text-xs font-mono placeholder:text-ink-soft/60"
+                />
+              </div>
+            </div>
+
+            {/* Roster Grid */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs text-left border-collapse">
+                <thead>
+                  <tr className="border-b-2 border-ink bg-line/20">
+                    <th className="p-2.5 font-bold">TEAM</th>
+                    <th className="p-2.5 font-bold">TRACK</th>
+                    <th className="p-2.5 font-bold">PIN</th>
+                    <th className="p-2.5 font-bold">CURRENT STAGE</th>
+                    <th className="p-2.5 font-bold">LAST UPDATED</th>
+                    <th className="p-2.5 font-bold text-right">ACTION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredTeams.map((team) => {
+                    const prog = data.progress[team.code];
+                    const stageKey = prog?.current_stage || 'clue2';
+                    const stageLabel = STAGE_LABELS[stageKey] || stageKey;
+                    const isFinished = stageKey === 'final';
+
+                    return (
+                      <tr
+                        key={team.code}
+                        className={`border-b border-line hover:bg-line/10 transition-colors ${
+                          isFinished ? 'bg-verified-teal/5' : ''
+                        }`}
+                      >
+                        <td className="p-2.5 font-bold">{team.code}</td>
+                        <td className="p-2.5">{team.track}</td>
+                        <td className="p-2.5 text-ink-soft">{team.pin}</td>
+                        <td className="p-2.5">
+                          <span
+                            className={`inline-block px-2 py-0.5 text-[11px] font-bold ${
+                              isFinished
+                                ? 'bg-verified-teal text-paper'
+                                : stageKey === 'clue4'
+                                ? 'bg-ink text-paper'
+                                : 'bg-line text-ink'
+                            }`}
+                          >
+                            {stageLabel}
+                          </span>
+                        </td>
+                        <td className="p-2.5 text-ink-soft" suppressHydrationWarning>
+                          {prog?.last_updated ? formatTime(prog.last_updated) : 'Not started'}
+                        </td>
+                        <td className="p-2.5 text-right">
+                          <button
+                            onClick={() => {
+                              setSelectedDossierTeam(team.code);
+                              setActiveTab('paths');
+                            }}
+                            className="text-[11px] text-ink underline hover:text-evidence-red"
+                          >
+                            View Path
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          {/* TWO-COLUMN CONTROLS: OVERRIDE & FINALE */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* MANUAL OVERRIDE */}
+            <section className="border-2 border-ink p-5 bg-paper">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-ink mb-1">
+                Emergency Stage Override
+              </h2>
+              <p className="text-xs text-ink-soft mb-4">
+                Manually force any team to a specific stage in the database.
+              </p>
+
+              <form onSubmit={handleOverride} className="space-y-3">
+                <div>
+                  <label className="block text-xs font-bold mb-1">Select Team</label>
+                  <select
+                    value={overrideTeam}
+                    onChange={(e) => setOverrideTeam(e.target.value)}
+                    className="w-full bg-paper border border-ink p-2 text-xs"
+                    required
+                  >
+                    <option value="">-- Choose Team --</option>
+                    {data.teams.map((t) => (
+                      <option key={t.code} value={t.code}>
+                        {t.code} (Track {t.track}) — Current: {STAGE_LABELS[data.progress[t.code]?.current_stage || 'clue2']}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold mb-1">Target Stage</label>
+                  <select
+                    value={overrideStage}
+                    onChange={(e) => setOverrideStage(e.target.value)}
+                    className="w-full bg-paper border border-ink p-2 text-xs"
+                  >
+                    <option value="clue2">Clue 2</option>
+                    <option value="crewmate">Witness (Crewmate)</option>
+                    <option value="clue3">Clue 3</option>
+                    <option value="clue4">Clue 4</option>
+                    <option value="final">Final (Empty Stage)</option>
+                  </select>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={!overrideTeam || overriding}
+                  className="w-full bg-ink text-paper py-2 text-xs font-bold hover:bg-ink-soft disabled:opacity-50 transition-colors"
+                >
+                  {overriding ? 'Updating Stage...' : 'Apply Stage Override'}
+                </button>
+              </form>
+            </section>
+
+            {/* FINALE VERIFICATION BOARD */}
+            <section className="border-2 border-ink p-5 bg-paper">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-ink mb-1">
+                Finale Key Verification Board
+              </h2>
+              <p className="text-xs text-ink-soft mb-4">
+                Log physical key hand-off at Empty Stage. First 3 arrivals receive official placement!
+              </p>
+
+              <form onSubmit={handleFinaleSubmit} className="space-y-3 mb-5">
+                <div>
+                  <label className="block text-xs font-bold mb-1">Team Handing In Key</label>
+                  <select
+                    value={finaleTeam}
+                    onChange={(e) => setFinaleTeam(e.target.value)}
+                    className="w-full bg-paper border border-ink p-2 text-xs"
+                    required
+                  >
+                    <option value="">-- Choose Team --</option>
+                    {data.teams.map((t) => (
+                      <option key={t.code} value={t.code}>
+                        Team {t.code} (Track {t.track})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={!finaleTeam || submittingFinale}
+                  className="w-full bg-verified-teal text-paper py-2 text-xs font-bold hover:opacity-90 disabled:opacity-50 transition-opacity"
+                >
+                  {submittingFinale ? 'Recording...' : '✓ Confirm Physical Key Arrival'}
+                </button>
+              </form>
+
+              {/* Podium / Arrivals List */}
+              <div className="border border-line p-3 bg-paper/60">
+                <div className="text-xs font-bold uppercase mb-2">Arrivals ({data.finale.length})</div>
+                {data.finale.length === 0 ? (
+                  <div className="text-xs text-ink-soft italic">No keys handed in yet.</div>
+                ) : (
+                  <div className="space-y-1.5">
+                    {data.finale.map((sub, idx) => (
+                      <div
+                        key={sub.team_code}
+                        className="flex justify-between items-center text-xs p-1.5 border-b border-line/50"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`font-bold px-1.5 py-0.5 text-[10px] ${
+                              idx === 0
+                                ? 'bg-verified-teal text-paper'
+                                : idx === 1
+                                ? 'bg-ink text-paper'
+                                : idx === 2
+                                ? 'bg-line text-ink'
+                                : 'text-ink-soft'
+                            }`}
+                          >
+                            {sub.position ? `#${sub.position}` : `#${idx + 1}`}
+                          </span>
+                          <span className="font-bold">Team {sub.team_code}</span>
+                        </div>
+                        <span className="text-[11px] text-ink-soft" suppressHydrationWarning>
+                          {formatTime(sub.submitted_at)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
           </div>
 
-          <form onSubmit={handleManualOverride} className="space-y-3">
-            <div>
-              <label className="block text-[11px] text-ink-soft uppercase mb-1">
-                Target Team
-              </label>
-              <select
-                value={overrideTeam}
-                onChange={(e) => setOverrideTeam(e.target.value)}
-                className="w-full bg-paper border border-line px-2.5 py-1.5 text-xs text-ink focus:outline-none focus:border-ink"
-                required
+          {/* ATTEMPT LOG */}
+          <section className="border border-line p-4 bg-paper">
+            <div className="flex justify-between items-center mb-3 pb-2 border-b border-line">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-ink">
+                Attempt Log // Live Feed ({data.activeRound.toUpperCase()})
+              </h2>
+              <span className="text-xs text-ink-soft">
+                {data.attempts.length} logged
+              </span>
+            </div>
+
+            <div className="max-h-72 overflow-y-auto space-y-1">
+              {data.attempts.length === 0 ? (
+                <div className="text-xs text-ink-soft py-4 text-center border border-dashed border-line">
+                  No attempts recorded yet for {data.activeRound}.
+                </div>
+              ) : (
+                data.attempts.map((att) => (
+                  <div
+                    key={att.id}
+                    className="flex items-center justify-between p-2 border-b border-line/40 text-xs font-mono"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={`px-1.5 py-0.5 text-[10px] font-bold ${
+                          att.correct
+                            ? 'bg-verified-teal text-paper'
+                            : 'bg-evidence-red text-paper'
+                        }`}
+                      >
+                        {att.correct ? 'PASS' : 'FAIL'}
+                      </span>
+                      <span className="font-bold">{att.team_code}</span>
+                      <span className="text-ink-soft">[{STAGE_LABELS[att.stage] || att.stage}]</span>
+                      <span className="text-ink truncate max-w-xs md:max-w-md">
+                        &ldquo;{att.submitted_answer}&rdquo;
+                      </span>
+                    </div>
+                    <span suppressHydrationWarning className="text-[10px] text-ink-soft shrink-0">
+                      {formatTime(att.created_at)}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
+        </div>
+      )}
+
+      {/* TAB 2: MASTER TEAM PATHS & DOSSIER */}
+      {activeTab === 'paths' && (
+        <div className="space-y-6">
+          {/* Paths Search & Filters */}
+          <div className="border-2 border-ink p-4 bg-paper flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-bold uppercase text-ink-soft">Filter Track:</span>
+              <button
+                onClick={() => setDossierTrackFilter('ALL')}
+                className={`px-3 py-1 text-xs font-bold border ${
+                  dossierTrackFilter === 'ALL'
+                    ? 'bg-ink text-paper border-ink'
+                    : 'bg-paper text-ink border-line hover:border-ink'
+                }`}
               >
-                <option value="">Select team...</option>
-                {data.teams.map((t) => (
-                  <option key={t.code} value={t.code}>
-                    Team {t.code} (Track {t.track}) — Current: {STAGE_LABELS[data.progress[t.code]?.current_stage || 'clue2'] || 'Clue 2'}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-[11px] text-ink-soft uppercase mb-1">
-                Target Stage
-              </label>
-              <select
-                value={overrideStage}
-                onChange={(e) => setOverrideStage(e.target.value)}
-                className="w-full bg-paper border border-line px-2.5 py-1.5 text-xs text-ink focus:outline-none focus:border-ink"
-              >
-                <option value="clue2">Clue 2</option>
-                <option value="crewmate">Witness</option>
-                <option value="clue3">Clue 3</option>
-                <option value="clue4">Clue 4</option>
-                <option value="final">Final (Empty Stage)</option>
-              </select>
-            </div>
-
-            <button
-              type="submit"
-              disabled={!overrideTeam || overriding}
-              className="w-full bg-ink text-paper py-2 text-xs uppercase font-semibold hover:bg-ink-soft disabled:opacity-50 transition-colors"
-            >
-              {overriding ? 'Updating...' : 'Apply Stage Override'}
-            </button>
-          </form>
-        </section>
-      </div>
-
-      {/* Live Roster Table */}
-      <section className="border border-line p-4 bg-paper mb-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4 pb-2 border-b border-line">
-          <div>
-            <h2 className="text-sm font-bold uppercase tracking-wider text-ink">
-              Live Roster Table ({data.activeRound.toUpperCase()})
-            </h2>
-            <div className="text-xs text-ink-soft">
-              {filteredTeams.length} of {data.teams.length} teams shown
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 w-full md:w-auto">
-            <input
-              type="text"
-              placeholder="Search team..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-paper border border-line px-2.5 py-1 text-xs text-ink w-32 focus:outline-none focus:border-ink"
-            />
-            <div className="flex border border-line text-xs">
-              {(['ALL', 'A', 'B'] as const).map((tr) => (
+                ALL
+              </button>
+              {uniqueTracks.map((tr) => (
                 <button
                   key={tr}
-                  onClick={() => setTrackFilter(tr)}
-                  className={`px-2.5 py-1 ${
-                    trackFilter === tr
-                      ? 'bg-ink text-paper font-bold'
-                      : 'hover:bg-line/50 text-ink'
+                  onClick={() => setDossierTrackFilter(tr)}
+                  className={`px-3 py-1 text-xs font-bold border ${
+                    dossierTrackFilter === tr
+                      ? 'bg-ink text-paper border-ink'
+                      : 'bg-paper text-ink border-line hover:border-ink'
                   }`}
                 >
-                  {tr}
+                  Track {tr}
                 </button>
               ))}
             </div>
-          </div>
-        </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="border-b border-line text-ink-soft bg-paper">
-                <th className="py-2 px-2 font-semibold">TEAM</th>
-                <th className="py-2 px-2 font-semibold">TRACK</th>
-                <th className="py-2 px-2 font-semibold">CURRENT STAGE</th>
-                <th className="py-2 px-2 font-semibold">LAST ACTIVITY</th>
-                <th className="py-2 px-2 font-semibold text-right">ACTION</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredTeams.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="py-4 text-center text-ink-soft">
-                    No teams found matching filter.
-                  </td>
-                </tr>
+            <div className="flex items-center gap-3 w-full md:w-auto">
+              <input
+                type="text"
+                placeholder="Search team, crew, codeword, zone..."
+                value={dossierSearch}
+                onChange={(e) => setDossierSearch(e.target.value)}
+                className="w-full md:w-64 bg-paper border border-ink px-3 py-1.5 text-xs font-mono placeholder:text-ink-soft/60"
+              />
+              <div className="flex border border-ink text-xs">
+                <button
+                  type="button"
+                  onClick={() => setDossierViewMode('cards')}
+                  className={`px-3 py-1 font-bold ${
+                    dossierViewMode === 'cards' ? 'bg-ink text-paper' : 'hover:bg-line/20'
+                  }`}
+                >
+                  Cards
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDossierViewMode('table')}
+                  className={`px-3 py-1 font-bold ${
+                    dossierViewMode === 'table' ? 'bg-ink text-paper' : 'hover:bg-line/20'
+                  }`}
+                >
+                  Matrix
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Team Badges Selector Bar */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-line">
+            {dossierFilteredTeams.map((t) => {
+              const liveStage = data.progress[t.code]?.current_stage || 'clue2';
+              const isSelected = selectedDossierTeam === t.code;
+              return (
+                <button
+                  key={t.code}
+                  onClick={() => setSelectedDossierTeam(t.code)}
+                  className={`px-2.5 py-1 text-xs font-mono font-bold shrink-0 border transition-colors ${
+                    isSelected
+                      ? 'bg-ink text-paper border-ink shadow'
+                      : 'bg-paper text-ink border-line hover:border-ink'
+                  }`}
+                >
+                  <span>{t.code}</span>
+                  <span className="text-[10px] ml-1 opacity-70">
+                    ({STAGE_LABELS[liveStage] || liveStage})
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* CARD VIEW: SELECTED TEAM DOSSIER */}
+          {dossierViewMode === 'cards' && (
+            <div>
+              {dossierFilteredTeams.length === 0 ? (
+                <div className="border border-dashed border-line p-8 text-center text-ink-soft text-xs">
+                  No teams found matching your search.
+                </div>
               ) : (
-                filteredTeams.map((t) => {
-                  const p = data.progress[t.code];
-                  const stage = p?.current_stage || 'clue2';
-                  const isFinished = stage === 'final';
-                  const keyDone = data.finale.some((f) => f.team_code === t.code);
+                (() => {
+                  const currentTeam =
+                    dossierFilteredTeams.find((t) => t.code === selectedDossierTeam) ||
+                    dossierFilteredTeams[0];
+                  const st = stagesData[currentTeam.code] || {};
+                  const liveStage = data.progress[currentTeam.code]?.current_stage || 'clue2';
 
                   return (
-                    <tr
-                      key={t.code}
-                      className="border-b border-line/50 hover:bg-line/20 transition-colors"
-                    >
-                      <td className="py-2.5 px-2 font-bold">{t.code}</td>
-                      <td className="py-2.5 px-2">Track {t.track}</td>
-                      <td className="py-2.5 px-2">
-                        <span
-                          className={`inline-block px-2 py-0.5 text-[11px] ${
-                            isFinished
-                              ? 'bg-verified-teal/20 text-verified-teal font-semibold'
-                              : 'bg-line/40 text-ink'
-                          }`}
-                        >
-                          {STAGE_LABELS[stage] || stage}
-                        </span>
-                      </td>
-                      <td suppressHydrationWarning className="py-2.5 px-2 text-ink-soft text-[11px]">
-                        {p?.last_updated
-                          ? formatTime(p.last_updated)
-                          : 'Not started'}
-                      </td>
-                      <td className="py-2.5 px-2 text-right">
-                        {keyDone ? (
-                          <span className="text-[11px] text-verified-teal font-semibold">
-                            ✓ Key Submitted
-                          </span>
-                        ) : isFinished ? (
+                    <div className="border-2 border-ink bg-paper p-5 md:p-6 space-y-6">
+                      {/* Team Header */}
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 pb-4 border-b-2 border-ink">
+                        <div>
+                          <div className="text-xs text-evidence-red font-bold tracking-wider">
+                            CONFIDENTIAL // MASTER DOSSIER
+                          </div>
+                          <div className="flex items-baseline gap-3 mt-1">
+                            <h2 className="font-display text-2xl md:text-3xl text-ink">
+                              Team {currentTeam.code}
+                            </h2>
+                            <span className="text-xs bg-ink text-paper px-2 py-0.5 font-bold">
+                              Track {currentTeam.track}
+                            </span>
+                            <span className="text-xs font-mono text-ink-soft">
+                              PIN: <strong className="text-ink">{currentTeam.pin}</strong>
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className="text-right">
+                            <span className="text-[11px] text-ink-soft block">LIVE PROGRESS</span>
+                            <span className="text-xs font-bold bg-verified-teal/20 text-verified-teal px-2 py-0.5 rounded">
+                              {STAGE_LABELS[liveStage] || liveStage}
+                            </span>
+                          </div>
                           <button
-                            onClick={() => handleMarkFinale(t.code)}
-                            className="bg-verified-teal text-paper text-[10px] px-2 py-1 font-semibold hover:opacity-90"
+                            onClick={() => copyTeamPathSummary(currentTeam, st)}
+                            className="text-xs bg-ink text-paper px-3 py-1.5 font-bold hover:bg-ink-soft transition-colors"
                           >
-                            Mark Key
+                            {copiedTeam === currentTeam.code ? '✓ Copied!' : '📋 Copy Path'}
                           </button>
-                        ) : (
-                          <button
-                            onClick={() => {
-                              setOverrideTeam(t.code);
-                              const nextStageMap: Record<string, string> = {
-                                clue2: 'crewmate',
-                                crewmate: 'clue3',
-                                clue3: 'clue4',
-                                clue4: 'final',
-                              };
-                              setOverrideStage(nextStageMap[stage] || 'final');
-                            }}
-                            className="text-[11px] text-ink-soft hover:text-ink underline"
-                          >
-                            Override
-                          </button>
-                        )}
-                      </td>
-                    </tr>
+                        </div>
+                      </div>
+
+                      {/* 4 Pipeline Stages */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* STAGE 1: CLUE 2 */}
+                        <div className="border border-line p-4 bg-paper/60 space-y-2">
+                          <div className="flex justify-between items-center border-b border-line pb-1.5">
+                            <span className="text-xs font-bold text-evidence-red">
+                              1. PHYSICAL CLUE (CLUE 2)
+                            </span>
+                            <span className="text-xs bg-line/40 px-2 py-0.5 font-bold">
+                              {st.clue2?.zone || 'TBD'}
+                            </span>
+                          </div>
+                          <div className="text-xs font-mono space-y-1">
+                            <div>
+                              <span className="text-ink-soft">Expected Codeword: </span>
+                              <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5">
+                                {st.clue2?.codeword || 'N/A'}
+                              </strong>
+                            </div>
+                            {st.clue2?.riddle && (
+                              <p className="text-[11px] italic text-ink-soft pt-1 border-t border-line/40">
+                                &ldquo;{st.clue2.riddle}&rdquo;
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* STAGE 2: WITNESS CONTACT */}
+                        <div className="border border-line p-4 bg-paper/60 space-y-2">
+                          <div className="flex justify-between items-center border-b border-line pb-1.5">
+                            <span className="text-xs font-bold text-evidence-red">
+                              2. WITNESS CONTACT
+                            </span>
+                            <span className="text-xs bg-line/40 px-2 py-0.5 font-bold">
+                              {st.crewmate?.id || 'CREW'}
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            {st.crewmate?.photo && (
+                              <img
+                                src={st.crewmate.photo}
+                                alt={st.crewmate.name || 'Crewmate'}
+                                className="w-14 h-14 object-contain rounded border border-line bg-neutral-900 shrink-0"
+                              />
+                            )}
+                            <div className="text-xs font-mono space-y-1">
+                              <div>
+                                <span className="text-ink-soft">Person: </span>
+                                <strong>{st.crewmate?.name || 'N/A'}</strong>
+                              </div>
+                              <div>
+                                <span className="text-ink-soft">Physical Code: </span>
+                                <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5 break-all">
+                                  {st.crewmate?.code || 'N/A'}
+                                </strong>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* STAGE 3: CLUE 3 */}
+                        <div className="border border-line p-4 bg-paper/60 space-y-2">
+                          <div className="flex justify-between items-center border-b border-line pb-1.5">
+                            <span className="text-xs font-bold text-evidence-red">
+                              3. ONLINE CIPHER (CLUE 3)
+                            </span>
+                            <span className="text-xs bg-line/40 px-2 py-0.5 font-bold">
+                              {st.clue3?.cipherType || 'Cipher'}
+                            </span>
+                          </div>
+                          <div className="text-xs font-mono space-y-1">
+                            <div>
+                              <span className="text-ink-soft">Intercept: </span>
+                              <span className="text-[11px] font-bold text-ink break-all">
+                                {st.clue3?.intercept || 'N/A'}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-ink-soft">Decrypted Answer: </span>
+                              <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5">
+                                {st.clue3?.answer || 'N/A'}
+                              </strong>
+                            </div>
+                            {st.clue3?.nextRiddle && (
+                              <p className="text-[11px] italic text-ink-soft pt-1 border-t border-line/40">
+                                Next Destination Riddle: &ldquo;{st.clue3.nextRiddle}&rdquo;
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* STAGE 4: CLUE 4 */}
+                        <div className="border border-line p-4 bg-paper/60 space-y-2">
+                          <div className="flex justify-between items-center border-b border-line pb-1.5">
+                            <span className="text-xs font-bold text-evidence-red">
+                              4. PHYSICAL EVIDENCE (CLUE 4)
+                            </span>
+                            <span className="text-xs bg-line/40 px-2 py-0.5 font-bold">
+                              {st.clue4?.zone || 'TBD'}
+                            </span>
+                          </div>
+                          <div className="text-xs font-mono space-y-1">
+                            <div>
+                              <span className="text-ink-soft">Escape Sector: </span>
+                              <strong>{st.clue4?.zone || 'N/A'}</strong>
+                            </div>
+                            <div>
+                              <span className="text-ink-soft">Physical Puzzle Answer: </span>
+                              <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5">
+                                {st.clue4?.answer || 'N/A'}
+                              </strong>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* STAGE 5: FINALE */}
+                      <div className="border border-ink bg-paper p-3 text-xs flex justify-between items-center">
+                        <div>
+                          <strong className="text-evidence-red">5. CASE RESOLUTION: </strong>
+                          <span>Empty Stage // Backstage key retrieval (3 Keys available)</span>
+                        </div>
+                        <span className="text-ink-soft">Round: {data.activeRound.toUpperCase()}</span>
+                      </div>
+                    </div>
                   );
-                })
+                })()
               )}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* Attempt Log (Wrong-answer and attempt feed) */}
-      <section className="border border-line p-4 bg-paper">
-        <div className="flex justify-between items-center mb-3 pb-2 border-b border-line">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-ink">
-            Attempt Log // Live Feed ({data.activeRound.toUpperCase()})
-          </h2>
-          <span className="text-xs text-ink-soft">
-            {data.attempts.length} logged
-          </span>
-        </div>
-
-        <div className="max-h-72 overflow-y-auto space-y-1">
-          {data.attempts.length === 0 ? (
-            <div className="text-xs text-ink-soft py-4 text-center border border-dashed border-line">
-              No attempts recorded yet for {data.activeRound}.
             </div>
-          ) : (
-            data.attempts.map((att) => (
-              <div
-                key={att.id}
-                className="flex items-center justify-between p-2 border-b border-line/40 text-xs font-mono"
-              >
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`px-1.5 py-0.5 text-[10px] font-bold ${
-                      att.correct
-                        ? 'bg-verified-teal text-paper'
-                        : 'bg-evidence-red text-paper'
-                    }`}
-                  >
-                    {att.correct ? 'PASS' : 'FAIL'}
-                  </span>
-                  <span className="font-bold">{att.team_code}</span>
-                  <span className="text-ink-soft">[{STAGE_LABELS[att.stage] || att.stage}]</span>
-                  <span className="text-ink truncate max-w-xs md:max-w-md">
-                    &ldquo;{att.submitted_answer}&rdquo;
-                  </span>
-                </div>
-                <span suppressHydrationWarning className="text-[10px] text-ink-soft shrink-0">
-                  {formatTime(att.created_at)}
-                </span>
-              </div>
-            ))
+          )}
+
+          {/* TABLE / MATRIX VIEW */}
+          {dossierViewMode === 'table' && (
+            <div className="border-2 border-ink p-4 bg-paper overflow-x-auto">
+              <table className="w-full text-xs text-left border-collapse min-w-[900px]">
+                <thead>
+                  <tr className="border-b-2 border-ink bg-line/20 font-bold">
+                    <th className="p-2">TEAM</th>
+                    <th className="p-2">TRACK</th>
+                    <th className="p-2">PIN</th>
+                    <th className="p-2">LIVE</th>
+                    <th className="p-2">CLUE 2 (ZONE & CODEWORD)</th>
+                    <th className="p-2">CREWMATE (NAME & CODE)</th>
+                    <th className="p-2">CLUE 3 (CIPHER & ANS)</th>
+                    <th className="p-2">CLUE 4 (ZONE & ANS)</th>
+                    <th className="p-2 text-right">ACTION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dossierFilteredTeams.map((team) => {
+                    const st = stagesData[team.code] || {};
+                    const live = data.progress[team.code]?.current_stage || 'clue2';
+
+                    return (
+                      <tr key={team.code} className="border-b border-line hover:bg-line/10 font-mono">
+                        <td className="p-2 font-bold">{team.code}</td>
+                        <td className="p-2">{team.track}</td>
+                        <td className="p-2 text-ink-soft">{team.pin}</td>
+                        <td className="p-2">
+                          <span className="bg-line px-1.5 py-0.5 text-[10px] font-bold">
+                            {STAGE_LABELS[live] || live}
+                          </span>
+                        </td>
+                        <td className="p-2">
+                          <div><strong>{st.clue2?.zone}</strong></div>
+                          <div className="text-verified-teal">{st.clue2?.codeword}</div>
+                        </td>
+                        <td className="p-2">
+                          <div><strong>{st.crewmate?.name}</strong> ({st.crewmate?.id})</div>
+                          <div className="text-ink-soft text-[10px] truncate max-w-[140px]">{st.crewmate?.code}</div>
+                        </td>
+                        <td className="p-2">
+                          <div className="text-[10px] text-ink-soft">{st.clue3?.cipherType}</div>
+                          <div className="text-verified-teal font-bold">{st.clue3?.answer}</div>
+                        </td>
+                        <td className="p-2">
+                          <div><strong>{st.clue4?.zone}</strong></div>
+                          <div className="text-verified-teal">{st.clue4?.answer}</div>
+                        </td>
+                        <td className="p-2 text-right">
+                          <button
+                            onClick={() => copyTeamPathSummary(team, st)}
+                            className="text-[10px] underline hover:text-evidence-red"
+                          >
+                            {copiedTeam === team.code ? 'Copied' : 'Copy'}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
-      </section>
+      )}
     </div>
   );
 }
