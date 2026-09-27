@@ -13,12 +13,25 @@ interface DashboardClientProps {
 }
 
 const STAGES = [
-  { key: 'clue2', name: 'Clue 2', prevName: 'Clue 1' },
-  { key: 'crewmate', name: 'Witness', prevName: 'Clue 2' },
-  { key: 'clue3', name: 'Clue 3', prevName: 'Witness' },
-  { key: 'clue4', name: 'Clue 4', prevName: 'Clue 3' },
-  { key: 'final', name: 'Empty Stage', prevName: 'Clue 4' },
+  { key: 'clue2', name: 'Clue 2', short: 'Codeword', num: '01' },
+  { key: 'crewmate', name: 'Witness', short: 'Witness', num: '02' },
+  { key: 'clue3', name: 'Clue 3', short: 'Cipher', num: '03' },
+  { key: 'clue4', name: 'Clue 4', short: 'Evidence', num: '04' },
+  { key: 'final', name: 'Empty Stage', short: 'Finale', num: '05' },
 ];
+
+function triggerHaptic(type: 'tap' | 'success' | 'error') {
+  if (typeof window === 'undefined') return;
+  try {
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      if (type === 'success') navigator.vibrate([25, 35, 25]);
+      else if (type === 'error') navigator.vibrate([50, 40, 50]);
+      else navigator.vibrate(10);
+    }
+  } catch (e) {
+    // Non-blocking fallback
+  }
+}
 
 export default function DashboardClient({
   teamCode,
@@ -85,6 +98,7 @@ export default function DashboardClient({
   const currentIndex = STAGES.findIndex((s) => s.key === currentStage);
 
   async function handleLogout() {
+    triggerHaptic('tap');
     await fetch('/api/logout', { method: 'POST' });
     router.push('/login');
     router.refresh();
@@ -99,6 +113,7 @@ export default function DashboardClient({
     setSubmitting(true);
     setErrorMsg(null);
     setJustErrored(false);
+    triggerHaptic('tap');
 
     try {
       const res = await fetch('/api/submit', {
@@ -116,6 +131,7 @@ export default function DashboardClient({
       }
 
       if (res.status === 429) {
+        triggerHaptic('error');
         if (data.reason === 'lockout') {
           setLockoutRemaining(data.remainingSeconds || 90);
           setErrorMsg(data.error || 'Detective lockout active.');
@@ -128,6 +144,7 @@ export default function DashboardClient({
       }
 
       if (!res.ok) {
+        triggerHaptic('error');
         setJustErrored(true);
         setErrorMsg(data.error || "That's not it, Detective.");
         if (data.lockedOut) {
@@ -139,6 +156,7 @@ export default function DashboardClient({
       }
 
       // Submission was correct!
+      triggerHaptic('success');
       setJustVerified(true);
       setInputValue('');
       setCurrentStage(data.currentStage);
@@ -154,6 +172,7 @@ export default function DashboardClient({
 
       setSubmitting(false);
     } catch (err) {
+      triggerHaptic('error');
       setErrorMsg('Connection lost. Please retry.');
       setSubmitting(false);
     }
@@ -162,19 +181,21 @@ export default function DashboardClient({
   if (roundMismatch) {
     return (
       <main className="min-h-screen bg-paper text-ink p-6 flex flex-col items-center justify-center max-w-md mx-auto text-left">
-        <div className="border-2 border-evidence-red bg-paper p-6 w-full clip-case">
-          <div className="font-mono text-xs text-evidence-red mb-2">NOTICE // EVENT STATE UPDATED</div>
-          <h2 className="font-display text-2xl text-ink mb-3 transform -rotate-1">
+        <div className="border-2 border-evidence-red bg-paper p-6 w-full clip-case shadow-md">
+          <div className="font-mono text-xs text-evidence-red mb-2 font-bold tracking-wider">
+            NOTICE // INVESTIGATION PHASE UPDATED
+          </div>
+          <h2 className="font-display text-2xl text-ink mb-3">
             This round has ended — please log in again
           </h2>
-          <p className="text-sm text-ink-soft mb-6 font-body">
+          <p className="text-xs text-ink-soft mb-6 font-body leading-relaxed">
             The organizer has shifted the investigation to a new phase. Your previous session credentials are no longer active.
           </p>
           <button
             onClick={handleLogout}
-            className="w-full bg-ink text-paper py-3 font-medium text-sm hover:bg-ink-soft transition-colors"
+            className="w-full bg-ink text-paper py-3 font-mono font-bold text-xs uppercase tracking-wider hover:bg-ink-soft active:translate-y-0.5 transition-all shadow"
           >
-            Submit
+            Re-enter Portal
           </button>
         </div>
       </main>
@@ -182,71 +203,109 @@ export default function DashboardClient({
   }
 
   return (
-    <div className="min-h-screen bg-paper text-ink pb-36 max-w-md mx-auto">
-      {/* Top Header */}
-      <header className="px-4 pt-5 pb-3 border-b border-line flex justify-between items-start sticky top-0 bg-paper/95 backdrop-blur-sm z-20">
-        <div>
-          <div className="text-xs font-mono text-ink-soft tracking-wider">
-            CASE #0426 // {round.toUpperCase()}
-          </div>
-          <div className="flex items-baseline space-x-2 mt-0.5">
-            <span className="font-display text-xl text-ink">
-              Team {teamCode}
-            </span>
-            <span className="text-xs font-mono text-ink-soft">
-              Track {track}
-            </span>
+    <div className="min-h-screen bg-paper text-ink pb-40 max-w-md mx-auto relative select-none">
+      {/* Top Header — Antique Police Case Header */}
+      <header className="px-4 pt-4 pb-3 border-b-2 border-ink flex justify-between items-center sticky top-0 bg-paper/95 backdrop-blur-sm z-20 shadow-sm">
+        <div className="flex items-center gap-2">
+          {/* Subtle Brass Paperclip Accent */}
+          <svg className="w-5 h-5 text-ink-soft shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+          </svg>
+          <div>
+            <div className="text-[10px] font-mono text-evidence-red font-bold tracking-wider uppercase">
+              CASE #0426 // {round.toUpperCase()}
+            </div>
+            <div className="flex items-baseline space-x-2">
+              <span className="font-display text-lg text-ink">
+                Team {teamCode}
+              </span>
+              <span className="text-[11px] font-mono bg-ink text-paper px-1.5 py-0.2 rounded text-xs font-semibold">
+                Track {track}
+              </span>
+            </div>
           </div>
         </div>
         <button
           onClick={handleLogout}
-          className="text-xs font-mono text-ink-soft hover:text-ink underline py-1"
+          className="text-xs font-mono text-ink-soft hover:text-ink underline py-1 transition-colors"
         >
           Sign out
         </button>
       </header>
 
-      {/* Case File Intro */}
-      <div className="px-4 py-4">
-        <div className="border border-line bg-paper/70 p-3.5 mb-5 clip-case">
-          <div className="text-xs font-mono text-evidence-red mb-1">
-            CASE #0426 — OPEN
+      {/* Investigation Progress Stepper */}
+      <div className="px-4 pt-3 pb-2 bg-paper/80 border-b border-line/60">
+        <div className="flex items-center justify-between text-[11px] font-mono mb-1.5">
+          <span className="text-ink-soft font-semibold">INVESTIGATION TRACK</span>
+          <span className="text-evidence-red font-bold">
+            {currentStage === 'final' ? 'STAGE 5/5 (PODIUM)' : `STAGE ${currentIndex + 1} OF 5`}
+          </span>
+        </div>
+        <div className="grid grid-cols-5 gap-1.5">
+          {STAGES.map((s, idx) => {
+            const isDone = currentIndex > idx;
+            const isCurrent = currentIndex === idx;
+            return (
+              <div
+                key={s.key}
+                className={`py-1 text-center font-mono text-[10px] border transition-all ${
+                  isDone
+                    ? 'bg-verified-teal/15 border-verified-teal text-verified-teal font-bold'
+                    : isCurrent
+                    ? 'bg-ink text-paper border-ink font-bold shadow'
+                    : 'bg-paper/30 border-line/60 text-ink-soft/60'
+                }`}
+              >
+                <div>{isDone ? '✓' : s.num}</div>
+                <div className="text-[9px] uppercase tracking-tighter truncate">{s.short}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Case File Body */}
+      <div className="px-4 py-4 space-y-4">
+        {/* Detective Briefing Notice */}
+        <div className="border border-line bg-paper/90 p-3.5 clip-case shadow-sm relative">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[10px] font-mono text-evidence-red font-bold tracking-wider">
+              FIELD BRIEFING // CLASSIFIED
+            </span>
+            <span className="text-[9px] font-mono text-ink-soft">REF: TR-89</span>
           </div>
           <p className="text-xs text-ink-soft leading-relaxed font-body">
-            You are no longer students. Tonight, you’re Detectives, badge and all. Something walked off campus last night. Somebody made sure of it. Somebody else nearly did too. Follow what’s left behind. Find where it ended up. Detectives — move out.
+            You are Detectives on scene. Something walked off campus last night. Follow the physical traces, find the witnesses, decrypt their intercepts, and reach the final coordinates before time runs out.
           </p>
         </div>
 
-        {/* Evidence Log Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-display text-lg tracking-tight transform rotate-0.5">
-            Evidence Log
-          </h2>
-          <span className="text-xs font-mono text-ink-soft">
-            {currentStage === 'final' ? 'FINAL LEAD' : `STAGE ${currentIndex + 1} OF 4`}
-          </span>
-        </div>
-
-        {/* Sequential Evidence Log with Margin Line */}
-        <div className="border-l-2 border-line pl-4 ml-1 space-y-5">
-          {/* STAGE 1: CLUE 2 */}
+        {/* Sequential Evidence Cards */}
+        <div className="border-l-2 border-line/70 pl-3.5 ml-1 space-y-4">
+          
+          {/* ============================================================ */}
+          {/* STAGE 1: CLUE 2 (Physical Codeword) */}
+          {/* ============================================================ */}
           <section
             id="stage-card-clue2"
-            className={`border p-4 relative transition-colors ${
+            className={`border p-3.5 relative transition-all duration-200 notched-card ${
               currentIndex > 0
-                ? 'border-line bg-paper/40'
+                ? 'border-line/70 bg-paper/50'
                 : currentIndex === 0
-                ? `border-ink bg-paper ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
-                : 'border-line/40 opacity-50'
+                ? `border-2 border-ink bg-paper shadow ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
+                : 'border-line/40 opacity-40'
             }`}
           >
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs font-mono text-ink-soft">
+              <span className="text-[10px] font-mono text-ink-soft font-semibold tracking-wider">
                 LEAD 01 // PHYSICAL TRACE
               </span>
-              {currentIndex > 0 && (
-                <span className="text-xs font-mono text-verified-teal font-semibold">
-                  ✓ Verified
+              {currentIndex > 0 ? (
+                <span className="rubber-stamp text-verified-teal text-[10px] rotate-[-2deg]">
+                  ✓ SOLVED
+                </span>
+              ) : (
+                <span className="text-[10px] font-mono bg-evidence-red text-paper px-1.5 py-0.5 font-bold animate-pulse">
+                  ACTIVE LEAD
                 </span>
               )}
             </div>
@@ -256,15 +315,20 @@ export default function DashboardClient({
             </h3>
 
             {currentIndex > 0 ? (
-              <div className="text-xs font-mono text-ink-soft">
-                Lead 01 cleared — Codeword verified
+              <div className="text-xs font-mono text-verified-teal/90 pt-1">
+                ✓ Lead cleared — on-site codeword authenticated
               </div>
             ) : (
-              <div className="space-y-2 mt-2">
+              <div className="space-y-2.5 mt-2">
                 {stageData.clue2?.riddle && (
-                  <p className="text-xs text-ink italic bg-paper/80 p-2.5 border-l-2 border-line leading-relaxed">
-                    &ldquo;{stageData.clue2.riddle}&rdquo;
-                  </p>
+                  <div className="bg-paper border-l-2 border-ink-soft p-2.5 shadow-sm">
+                    <div className="text-[10px] font-mono text-ink-soft mb-1 font-bold">
+                      LOCATION RIDDLE:
+                    </div>
+                    <p className="text-xs text-ink italic leading-relaxed font-body">
+                      &ldquo;{stageData.clue2.riddle}&rdquo;
+                    </p>
+                  </div>
                 )}
                 <div className="text-xs font-mono bg-paper/90 p-2.5 border border-line text-ink leading-relaxed">
                   <span className="font-bold text-evidence-red block mb-1">FIELD DIRECTIVE:</span>
@@ -274,85 +338,101 @@ export default function DashboardClient({
             )}
           </section>
 
-          {/* STAGE 2: CREWMATE */}
+          {/* ============================================================ */}
+          {/* STAGE 2: CREWMATE (Witness Contact) */}
+          {/* ============================================================ */}
           <section
             id="stage-card-crewmate"
-            className={`border p-4 relative transition-colors ${
+            className={`border p-3.5 relative transition-all duration-200 notched-card ${
               currentIndex > 1
-                ? 'border-line bg-paper/40'
+                ? 'border-line/70 bg-paper/50'
                 : currentIndex === 1
-                ? `border-ink bg-paper ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
+                ? `border-2 border-ink bg-paper shadow ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
                 : 'border-dashed border-line/60 bg-paper/20'
             }`}
           >
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs font-mono text-ink-soft">
+              <span className="text-[10px] font-mono text-ink-soft font-semibold tracking-wider">
                 LEAD 02 // WITNESS CONTACT
               </span>
-              {currentIndex > 1 && (
-                <span className="text-xs font-mono text-verified-teal font-semibold">
-                  ✓ Verified
+              {currentIndex > 1 ? (
+                <span className="rubber-stamp text-verified-teal text-[10px] rotate-[-2deg]">
+                  ✓ CONTACTED
                 </span>
-              )}
+              ) : currentIndex === 1 ? (
+                <span className="text-[10px] font-mono bg-evidence-red text-paper px-1.5 py-0.5 font-bold animate-pulse">
+                  LOCATE WITNESS
+                </span>
+              ) : null}
             </div>
 
             <h3 className="font-display text-base text-ink mb-1">
-              Crewmate Contact
+              Witness Contact
             </h3>
 
             {currentIndex < 1 ? (
-              <p className="text-xs font-mono text-ink-soft/75">
-                Solve Clue 2 to unlock this
+              <p className="text-xs font-mono text-ink-soft/70">
+                🔒 Solve Lead 01 to unlock the witness dossier
               </p>
             ) : currentIndex > 1 ? (
-              <div className="text-xs font-mono text-ink-soft">
-                Witness statement recorded — scrambled code confirmed
+              <div className="text-xs font-mono text-verified-teal/90 pt-1">
+                ✓ Witness contact confirmed — scrambled code acquired
               </div>
             ) : (
               <div className="space-y-3 mt-2">
-                {/* Crewmate Photo Card */}
+                {/* Polaroid Photo Frame */}
                 {stageData.crewmate?.photo && (
-                  <div className="border-2 border-ink p-2 bg-paper/90 shadow-sm">
+                  <div className="polaroid-frame mt-3">
+                    {/* Simulated Masking Tape */}
+                    <div className="masking-tape" />
+
                     <div
                       onClick={() => setShowImageModal(true)}
-                      className="relative w-full min-h-[17rem] max-h-96 bg-neutral-950 flex items-center justify-center p-2 mb-2 border border-line cursor-pointer group overflow-hidden"
-                      title="Click to view full image"
+                      className="relative w-full min-h-[16rem] max-h-80 bg-neutral-900 flex items-center justify-center p-2 mb-2 border border-line/60 cursor-pointer group overflow-hidden"
+                      title="Click to view full uncropped image"
                     >
                       <img
                         src={stageData.crewmate.photo}
                         alt={stageData.crewmate?.name || 'Person of Interest'}
-                        className="max-h-88 w-auto max-w-full object-contain mx-auto transition-transform duration-200 group-hover:scale-[1.02]"
+                        className="max-h-72 w-auto max-w-full object-contain mx-auto transition-transform duration-200 group-hover:scale-[1.02]"
                       />
-                      <div className="absolute bottom-2 right-2 bg-black/85 text-white font-mono text-[10px] px-2 py-0.5 border border-white/20 backdrop-blur-sm pointer-events-none flex items-center gap-1 shadow">
+                      <div className="absolute bottom-2 right-2 bg-black/80 text-white font-mono text-[9px] px-2 py-0.5 border border-white/20 backdrop-blur-sm pointer-events-none flex items-center gap-1 shadow">
                         <span>🔍 Tap to expand</span>
                       </div>
                     </div>
+
                     <div className="flex justify-between items-baseline px-0.5 mb-2">
-                      <span className="font-mono text-xs font-bold text-evidence-red tracking-wide">
+                      <span className="font-mono text-[10px] font-bold text-evidence-red tracking-wider">
                         PERSON OF INTEREST
                       </span>
-                      <span className="font-mono text-xs text-ink font-semibold">
+                      <span className="font-mono text-xs text-ink font-bold">
                         {stageData.crewmate?.name || stageData.crewmate?.id}
                       </span>
                     </div>
+
                     <button
                       type="button"
                       onClick={() => setShowImageModal(true)}
-                      className="w-full py-1.5 px-3 bg-paper border border-ink text-xs font-mono font-semibold text-ink hover:bg-ink hover:text-paper transition-colors flex items-center justify-center gap-1"
+                      className="w-full py-1.5 px-3 bg-paper border border-ink text-xs font-mono font-semibold text-ink hover:bg-ink hover:text-paper active:translate-y-0.5 transition-all flex items-center justify-center gap-1.5"
                     >
-                      🔍 Click to view full image
+                      <span>🔍</span>
+                      <span>Click to view full uncropped image</span>
                     </button>
                   </div>
                 )}
 
-                <div className="text-xs text-ink bg-paper/80 p-2.5 border-l-2 border-evidence-red leading-relaxed">
-                  <div className="font-mono text-[11px] text-evidence-red mb-1 font-semibold">
+                {/* Witness Statement */}
+                <div className="text-xs text-ink bg-paper border-l-2 border-evidence-red p-2.5 leading-relaxed shadow-sm">
+                  <div className="font-mono text-[10px] text-evidence-red mb-1 font-bold">
                     WITNESS STATEMENT:
                   </div>
-                  {stageData.crewmate?.script ||
-                    '“You found me, Detective. I saw someone out here far too late... Here — scrambled, just in case.”'}
+                  <p className="italic font-body">
+                    {stageData.crewmate?.script ||
+                      '“You found me, Detective. I saw someone out here far too late... Here — scrambled, just in case.”'}
+                  </p>
                 </div>
 
+                {/* Field Directive */}
                 <div className="text-xs font-mono bg-paper/90 p-2.5 border border-line text-ink leading-relaxed">
                   <span className="font-bold text-evidence-red block mb-1">FIELD DIRECTIVE:</span>
                   Study this photograph carefully. This person was seen moving across campus. You must locate them on foot, establish contact in character, and obtain the physical scrambled code they are carrying.
@@ -361,26 +441,32 @@ export default function DashboardClient({
             )}
           </section>
 
-          {/* STAGE 3: CLUE 3 */}
+          {/* ============================================================ */}
+          {/* STAGE 3: CLUE 3 (The Scrambled Sighting / Cipher) */}
+          {/* ============================================================ */}
           <section
             id="stage-card-clue3"
-            className={`border p-4 relative transition-colors ${
+            className={`border p-3.5 relative transition-all duration-200 notched-card ${
               currentIndex > 2
-                ? 'border-line bg-paper/40'
+                ? 'border-line/70 bg-paper/50'
                 : currentIndex === 2
-                ? `border-ink bg-paper ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
+                ? `border-2 border-ink bg-paper shadow ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
                 : 'border-dashed border-line/60 bg-paper/20'
             }`}
           >
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs font-mono text-ink-soft">
+              <span className="text-[10px] font-mono text-ink-soft font-semibold tracking-wider">
                 LEAD 03 // SCRAMBLED SIGHTING
               </span>
-              {currentIndex > 2 && (
-                <span className="text-xs font-mono text-verified-teal font-semibold">
-                  ✓ Verified
+              {currentIndex > 2 ? (
+                <span className="rubber-stamp text-verified-teal text-[10px] rotate-[-2deg]">
+                  ✓ DECIPHERED
                 </span>
-              )}
+              ) : currentIndex === 2 ? (
+                <span className="text-[10px] font-mono bg-evidence-red text-paper px-1.5 py-0.5 font-bold animate-pulse">
+                  DECRYPT CIPHER
+                </span>
+              ) : null}
             </div>
 
             <h3 className="font-display text-base text-ink mb-1">
@@ -388,53 +474,69 @@ export default function DashboardClient({
             </h3>
 
             {currentIndex < 2 ? (
-              <p className="text-xs font-mono text-ink-soft/75">
-                Solve Witness to unlock this
+              <p className="text-xs font-mono text-ink-soft/70">
+                🔒 Solve Witness Contact to intercept the encrypted telemetry
               </p>
             ) : currentIndex > 2 ? (
-              <div className="text-xs font-mono text-ink-soft">
-                Intercept deciphered — Next sector lead unlocked
+              <div className="text-xs font-mono text-verified-teal/90 pt-1">
+                ✓ Cipher decrypted — next sector route revealed
               </div>
             ) : (
               <div className="space-y-2.5 mt-2">
                 <p className="text-xs text-ink-soft leading-relaxed font-body">
                   The witness didn’t want to write it plain. Decrypt their dispatch intercept to discover where the suspect fled next.
                 </p>
-                <div className="text-xs font-mono bg-paper/90 p-3 border border-line text-ink space-y-1.5">
-                  <div className="text-ink-soft text-[11px] uppercase tracking-wider font-semibold">
+
+                {/* Intercept Box */}
+                <div className="intercept-box p-3 border border-ink shadow-sm space-y-2">
+                  <div className="text-paper/70 text-[10px] font-mono uppercase tracking-wider font-semibold border-b border-paper/20 pb-1">
                     CLASSIFICATION: {stageData.clue3?.cipherType || 'ENCRYPTED DISPATCH'}
                   </div>
-                  <div className="text-sm font-bold bg-line/20 p-2 border border-line text-center tracking-widest text-evidence-red">
+                  <div className="text-sm md:text-base font-mono font-bold text-center tracking-widest text-evidence-red break-all py-1">
                     {stageData.clue3?.intercept || 'ENCRYPTED DISPATCH'}
                   </div>
-                  <p className="text-xs text-ink leading-relaxed pt-1 border-t border-line/50">
-                    {stageData.clue3?.hint || 'Decode the intercept to reveal the next location name.'}
-                  </p>
+                  {stageData.clue3?.hint && (
+                    <div className="text-[11px] font-mono text-paper/85 pt-1.5 border-t border-paper/20 leading-relaxed">
+                      <span className="text-evidence-red font-bold">💡 HINT: </span>
+                      {stageData.clue3.hint}
+                    </div>
+                  )}
+                </div>
+
+                <div className="text-xs font-mono bg-paper/90 p-2.5 border border-line text-ink leading-relaxed">
+                  <span className="font-bold text-evidence-red block mb-1">FIELD DIRECTIVE:</span>
+                  Use the encryption hint to decipher the message above. Once decoded, submit the plaintext answer below to unlock the coordinates to the next scene.
                 </div>
               </div>
             )}
           </section>
 
-          {/* STAGE 4: CLUE 4 */}
+          {/* ============================================================ */}
+          {/* STAGE 4: CLUE 4 (The Physical Evidence) */}
+          {/* ============================================================ */}
           <section
             id="stage-card-clue4"
-            className={`border p-4 relative transition-colors ${
+            className={`border p-3.5 relative transition-all duration-200 notched-card ${
               currentIndex > 3
-                ? 'border-line bg-paper/40'
+                ? 'border-line/70 bg-paper/50'
                 : currentIndex === 3
-                ? `border-ink bg-paper ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
+                ? `border-2 border-ink bg-paper shadow ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
                 : 'border-dashed border-line/60 bg-paper/20'
             }`}
           >
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs font-mono text-ink-soft">
+              <span className="text-[10px] font-mono text-ink-soft font-semibold tracking-wider">
                 LEAD 04 // PHYSICAL EVIDENCE
               </span>
-              {currentIndex > 3 && (
-                <span className="text-xs font-mono text-verified-teal font-semibold">
-                  ✓ Verified
+              {currentIndex > 3 ? (
+                <span className="rubber-stamp text-verified-teal text-[10px] rotate-[-2deg]">
+                  ✓ SOLVED
                 </span>
-              )}
+              ) : currentIndex === 3 ? (
+                <span className="text-[10px] font-mono bg-evidence-red text-paper px-1.5 py-0.5 font-bold animate-pulse">
+                  SEARCH SECTOR
+                </span>
+              ) : null}
             </div>
 
             <h3 className="font-display text-base text-ink mb-1">
@@ -442,19 +544,24 @@ export default function DashboardClient({
             </h3>
 
             {currentIndex < 3 ? (
-              <p className="text-xs font-mono text-ink-soft/75">
-                Solve Clue 3 to unlock this
+              <p className="text-xs font-mono text-ink-soft/70">
+                🔒 Solve Clue 3 cipher to unlock the final physical coordinates
               </p>
             ) : currentIndex > 3 ? (
-              <div className="text-xs font-mono text-ink-soft">
-                Physical evidence cleared — Final coordinates unlocked
+              <div className="text-xs font-mono text-verified-teal/90 pt-1">
+                ✓ Physical evidence authenticated — Empty stage unlocked!
               </div>
             ) : (
               <div className="space-y-2.5 mt-2">
                 {stageData.clue3?.nextRiddle && (
-                  <p className="text-xs text-ink italic bg-paper/80 p-2.5 border-l-2 border-line leading-relaxed">
-                    &ldquo;{stageData.clue3.nextRiddle}&rdquo;
-                  </p>
+                  <div className="bg-paper border-l-2 border-ink-soft p-2.5 shadow-sm">
+                    <div className="text-[10px] font-mono text-ink-soft mb-1 font-bold">
+                      NEXT SECTOR RIDDLE:
+                    </div>
+                    <p className="text-xs text-ink italic leading-relaxed font-body">
+                      &ldquo;{stageData.clue3.nextRiddle}&rdquo;
+                    </p>
+                  </div>
                 )}
                 <div className="text-xs font-mono bg-paper/90 p-2.5 border border-line text-ink leading-relaxed">
                   <span className="font-bold text-evidence-red block mb-1">FIELD DIRECTIVE:</span>
@@ -464,55 +571,64 @@ export default function DashboardClient({
             )}
           </section>
 
-          {/* FINAL STAGE: EMPTY STAGE */}
+          {/* ============================================================ */}
+          {/* FINAL STAGE: EMPTY STAGE (Podium Resolution) */}
+          {/* ============================================================ */}
           <section
             id="stage-card-final"
-            className={`border p-4 relative transition-colors ${
+            className={`border p-4 relative transition-all duration-200 notched-card ${
               currentStage === 'final'
-                ? 'border-2 border-ink bg-paper'
+                ? 'border-2 border-evidence-red bg-paper shadow-lg'
                 : 'border-dashed border-line/60 bg-paper/20'
             }`}
           >
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs font-mono text-evidence-red font-semibold">
+              <span className="text-[10px] font-mono text-evidence-red font-bold tracking-wider uppercase">
                 CASE RESOLUTION // EMPTY STAGE
               </span>
+              {currentStage === 'final' && (
+                <span className="rubber-stamp text-evidence-red text-[10px] rotate-[-2deg]">
+                  PODIUM SPRINT
+                </span>
+              )}
             </div>
 
-            <h3 className="font-display text-lg text-ink mb-1 transform -rotate-0.5">
-              Final: Empty Stage
+            <h3 className="font-display text-lg text-ink mb-1">
+              Final Destination: Empty Stage
             </h3>
 
             {currentStage !== 'final' ? (
-              <p className="text-xs font-mono text-ink-soft/75">
-                Solve Clue 4 to unlock this
+              <p className="text-xs font-mono text-ink-soft/70">
+                🔒 Solve Clue 4 to unlock the final physical rendezvous
               </p>
             ) : (
               <div className="space-y-3 mt-2">
-                <div className="text-xs font-mono bg-verified-teal/10 border-l-4 border-verified-teal p-3 text-ink">
-                  CASE FILE UPDATED — FINAL LEAD. Whatever went missing that night, it didn’t stay lost for long. Get there before anyone else does.
+                <div className="text-xs font-mono bg-verified-teal/10 border-l-4 border-verified-teal p-3 text-ink shadow-sm">
+                  <span className="font-bold block mb-0.5 text-verified-teal">FINAL DIRECTIVE UNLOCKED:</span>
+                  Whatever went missing that night, it didn’t stay lost for long. Get there before anyone else does.
                 </div>
-                <p className="text-sm font-body italic text-ink border-l-2 border-line pl-3 py-1">
-                  Lights are down. No crowd tonight. Something’s hidden, out of sight. Three places hold what you came to find — the first to claim it leaves the rest behind.
-                </p>
-                <div className="text-xs font-mono bg-ink text-paper p-3">
-                  <div className="font-bold mb-1">FIELD DIRECTIVE:</div>
-                  3 hidden keys backstage at Empty Stage. Bring a key physically to organizers to claim 1st, 2nd, or 3rd place!
+                <div className="text-xs font-body italic text-ink border-l-2 border-line pl-3 py-1 bg-paper/90">
+                  &ldquo;Lights are down. No crowd tonight. Something’s hidden, out of sight. Three places hold what you came to find — the first to claim it leaves the rest behind.&rdquo;
+                </div>
+                <div className="text-xs font-mono bg-ink text-paper p-3 shadow">
+                  <div className="font-bold text-evidence-red mb-1">PHYSICAL SPRINT REQUIRED:</div>
+                  3 hidden keys are located backstage at Empty Stage. The first 3 teams to physically bring a key to the organizers will be confirmed on the podium!
                 </div>
               </div>
             )}
           </section>
+
         </div>
       </div>
 
-      {/* Pinned Input + Submit (lower third of viewport) */}
+      {/* Pinned Input + Submit (Mobile-Optimized Sticky Console) */}
       {currentStage !== 'final' ? (
-        <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-paper border-t-2 border-line px-4 py-3 z-30 shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-paper/95 backdrop-blur-md border-t-2 border-ink px-4 py-3 z-30 shadow-2xl pb-safe">
           <form onSubmit={handleSubmit} className="space-y-2">
-            <div className="flex justify-between items-center text-xs">
+            <div className="flex justify-between items-center text-xs font-mono">
               <label
                 htmlFor="case-answer-input"
-                className="font-mono text-ink-soft uppercase tracking-wider"
+                className="text-ink-soft uppercase tracking-wider text-[11px] font-semibold"
               >
                 {currentStage === 'clue2'
                   ? 'Enter verified codeword:'
@@ -525,12 +641,12 @@ export default function DashboardClient({
                   : 'Enter answer:'}
               </label>
               {lockoutRemaining !== null ? (
-                <span className="font-mono text-lockout-amber font-semibold">
+                <span className="text-evidence-red font-bold animate-pulse">
                   LOCKOUT: {lockoutRemaining}s
                 </span>
               ) : cooldownRemaining !== null ? (
-                <span className="font-mono text-ink-soft">
-                  COOLDOWN: {cooldownRemaining}s
+                <span className="text-ink-soft">
+                  WAIT: {cooldownRemaining}s
                 </span>
               ) : null}
             </div>
@@ -558,7 +674,9 @@ export default function DashboardClient({
                 value={inputValue}
                 disabled={lockoutRemaining !== null || cooldownRemaining !== null || submitting}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="flex-1 bg-paper border-2 border-line px-3 py-2.5 font-mono text-sm text-ink placeholder:text-ink-soft/40 focus:border-ink focus:outline-none transition-colors disabled:opacity-50"
+                className={`flex-1 bg-paper border-2 px-3 py-2 font-mono text-sm uppercase text-ink placeholder:text-ink-soft/40 focus:border-ink focus:outline-none transition-colors disabled:opacity-50 ${
+                  justErrored ? 'border-evidence-red animate-shake' : 'border-line focus:border-ink'
+                }`}
               />
               <button
                 id="submit-answer-button"
@@ -569,7 +687,7 @@ export default function DashboardClient({
                   lockoutRemaining !== null ||
                   cooldownRemaining !== null
                 }
-                className="bg-ink text-paper px-5 py-2.5 font-medium text-sm hover:bg-ink-soft active:translate-y-0.5 disabled:opacity-40 transition-colors"
+                className="bg-ink text-paper px-5 py-2 font-mono font-bold text-xs uppercase tracking-wider hover:bg-ink-soft active:translate-y-0.5 disabled:opacity-40 transition-all shadow"
               >
                 {submitting ? 'Checking...' : 'Submit'}
               </button>
@@ -578,7 +696,7 @@ export default function DashboardClient({
             {errorMsg && (
               <div
                 id="submission-error"
-                className="text-xs font-mono text-evidence-red border-l-2 border-evidence-red pl-2 py-0.5"
+                className="text-xs font-mono text-evidence-red border-l-2 border-evidence-red pl-2 py-0.5 animate-shake"
               >
                 {errorMsg}
               </div>
@@ -586,9 +704,9 @@ export default function DashboardClient({
           </form>
         </div>
       ) : (
-        <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-paper border-t-2 border-ink px-4 py-3 z-30">
-          <div className="text-center font-mono text-xs text-ink py-2 font-medium">
-            CASE ACTIVE AT EMPTY STAGE // PHYSICAL KEY HAND-OFF REQUIRED
+        <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-paper/95 backdrop-blur-md border-t-2 border-evidence-red px-4 py-3 z-30 pb-safe shadow-2xl">
+          <div className="text-center font-mono text-xs text-evidence-red py-1 font-bold">
+            STAGE CLEAR // RETRIEVE BACKSTAGE KEY PHYSICALLY AT EMPTY STAGE
           </div>
         </div>
       )}

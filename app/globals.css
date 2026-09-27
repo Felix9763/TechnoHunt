@@ -19,44 +19,136 @@ body {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Single stamp animation on verified submission */
-@keyframes stamp-settle {
+/* Rubber Stamp Slam Animation (Inked physical impact) */
+@keyframes stampSlam {
   0% {
-    transform: scale(1.08) rotate(-2deg);
-    opacity: 0.7;
+    opacity: 0;
+    transform: scale(2.2) rotate(-8deg);
   }
-  60% {
-    transform: scale(0.96) rotate(1.5deg);
-    opacity: 1;
+  50% {
+    opacity: 0.95;
+    transform: scale(0.92) rotate(-2deg);
+  }
+  75% {
+    transform: scale(1.04) rotate(-3.5deg);
   }
   100% {
-    transform: scale(1) rotate(0.5deg);
+    opacity: 1;
+    transform: scale(1) rotate(-3deg);
+  }
+}
+
+.animate-stamp-slam {
+  animation: stampSlam 280ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  will-change: transform, opacity;
+}
+
+/* Subtle Card Settle Stamp */
+@keyframes stamp-settle {
+  0% {
+    transform: scale(1.05) translateY(-4px);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1) translateY(0);
     opacity: 1;
   }
 }
 
 .animate-stamp {
-  animation: stamp-settle 180ms ease-out forwards;
+  animation: stamp-settle 200ms ease-out forwards;
 }
 
-/* Incorrect flash animation */
+/* Horizontal Shake on Failed Submission */
+@keyframes shakeX {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.animate-shake {
+  animation: shakeX 320ms ease-in-out;
+}
+
+/* Flash Red on Error */
 @keyframes flash-red {
   0%, 100% {
     border-color: #C9BFA0;
   }
   30%, 70% {
     border-color: #A3312B;
-    background-color: rgba(163, 49, 43, 0.05);
+    background-color: rgba(163, 49, 43, 0.08);
   }
 }
 
 .animate-flash-error {
-  animation: flash-red 300ms ease-in-out;
+  animation: flash-red 350ms ease-in-out;
 }
 
-/* Subtle case file clip path */
+/* Tactile Rubber Stamp Badge */
+.rubber-stamp {
+  display: inline-block;
+  text-transform: uppercase;
+  font-family: var(--font-mono), monospace;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 0.25rem 0.6rem;
+  border: 2.5px solid currentColor;
+  border-radius: 3px;
+  mask-image: radial-gradient(circle at 50% 50%, black 75%, rgba(0, 0, 0, 0.65) 100%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 75%, rgba(0, 0, 0, 0.65) 100%);
+  line-height: 1.1;
+}
+
+/* Clipped Case File Corner */
 .clip-case {
-  clip-path: polygon(0% 0%, calc(100% - 10px) 0%, 100% 10px, 100% 100%, 0% 100%);
+  clip-path: polygon(0% 0%, calc(100% - 12px) 0%, 100% 12px, 100% 100%, 0% 100%);
+}
+
+/* Notched Ticket/Dossier Card */
+.notched-card {
+  position: relative;
+  background-color: rgba(234, 226, 204, 0.95);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* Masking Tape Effect on Polaroid */
+.masking-tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 72px;
+  height: 22px;
+  background: rgba(230, 220, 195, 0.75);
+  border-left: 2px dashed rgba(180, 170, 145, 0.4);
+  border-right: 2px dashed rgba(180, 170, 145, 0.4);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(1px);
+  z-index: 10;
+}
+
+/* Polaroid Paper Card */
+.polaroid-frame {
+  background: #FDFBF7;
+  padding: 10px 10px 14px 10px;
+  border: 1px solid #D5C9AB;
+  box-shadow: 0 4px 12px rgba(33, 31, 27, 0.12), 0 1px 3px rgba(33, 31, 27, 0.08);
+  position: relative;
+}
+
+/* Telegram / Typewriter Ribbon Intercept Box */
+.intercept-box {
+  background-color: #1A1815;
+  color: #F0EAD6;
+  border-left: 3px solid #A3312B;
+  letter-spacing: 0.08em;
+}
+
+/* Mobile Safe-Area Bottom Padding Utility */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
 }

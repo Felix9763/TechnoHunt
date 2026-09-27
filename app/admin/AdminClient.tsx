@@ -84,6 +84,8 @@ export default function AdminClient({ initialData, initialTab = 'ops' }: AdminCl
   const [selectedDossierTeam, setSelectedDossierTeam] = useState<string>('A1');
   const [dossierViewMode, setDossierViewMode] = useState<'cards' | 'table'>('cards');
   const [copiedTeam, setCopiedTeam] = useState<string | null>(null);
+  const [tableExpandAll, setTableExpandAll] = useState(false);
+  const [adminPhotoModal, setAdminPhotoModal] = useState<{ url: string; name: string } | null>(null);
 
   const uniqueTracks = Array.from(new Set(data.teams.map((t) => t.track))).filter(Boolean).sort();
 
@@ -234,28 +236,68 @@ export default function AdminClient({ initialData, initialTab = 'ops' }: AdminCl
 
   function copyTeamPathSummary(t: { code: string; pin: string; track: string }, s: any) {
     if (!s) return;
-    const text = `=== TEAM ${t.code} (TRACK ${t.track}) ===
+    const text = `=== TECHNOHUNT CASE PATH // TEAM ${t.code} (TRACK ${t.track}) ===
 PIN: ${t.pin}
-1. CLUE 2 (Physical Codeword):
-   - Location: ${s.clue2?.zone || 'N/A'}
-   - Codeword: ${s.clue2?.codeword || 'N/A'}
-   - Riddle: "${s.clue2?.riddle || ''}"
-2. CREWMATE (Witness Contact):
-   - Crewmate: ${s.crewmate?.name || 'N/A'} (${s.crewmate?.id || ''})
-   - Scrambled Code: ${s.crewmate?.code || 'N/A'}
-3. CLUE 3 (Cipher Intercept):
-   - Classification: ${s.clue3?.cipherType || 'N/A'}
-   - Intercept: ${s.clue3?.intercept || 'N/A'}
-   - Decrypted Answer: ${s.clue3?.answer || 'N/A'}
-   - Next Sector Riddle: "${s.clue3?.nextRiddle || ''}"
-4. CLUE 4 (Physical Evidence):
-   - Sector: ${s.clue4?.zone || 'N/A'}
-   - Calculation/Answer: ${s.clue4?.answer || 'N/A'}
-5. FINALE:
-   - Target: Empty Stage (3 hidden keys backstage)`;
+
+[STAGE 1] CLUE 2 (Physical Codeword):
+- Location Zone: ${s.clue2?.zone || 'N/A'}
+- Riddle: "${s.clue2?.riddle || ''}"
+- Expected Codeword: ${s.clue2?.codeword || 'N/A'}
+
+[STAGE 2] WITNESS CONTACT (Crewmate):
+- Witness Name: ${s.crewmate?.name || 'N/A'} (${s.crewmate?.id || 'CREW'})
+- Photo Path: ${s.crewmate?.photo || 'N/A'}
+- Witness Dialogue Script: "${s.crewmate?.script || ''}"
+- Physical Scrambled Code: ${s.crewmate?.code || 'N/A'}
+
+[STAGE 3] CLUE 3 (Online Cipher):
+- Cipher Type: ${s.clue3?.cipherType || 'N/A'}
+- Intercept: ${s.clue3?.intercept || 'N/A'}
+- Decryption Hint: "${s.clue3?.hint || 'N/A'}"
+- Decrypted Answer: ${s.clue3?.answer || 'N/A'}
+- Next Destination Sector: ${s.clue3?.nextZone || s.clue4?.zone || 'N/A'}
+- Next Destination Riddle: "${s.clue3?.nextRiddle || ''}"
+
+[STAGE 4] CLUE 4 (Physical Evidence):
+- Target Sector: ${s.clue4?.zone || 'N/A'}
+- Physical Puzzle Answer: ${s.clue4?.answer || 'N/A'}
+
+[STAGE 5] FINALE (Resolution):
+- Target: Empty Stage (3 hidden keys backstage for 1st, 2nd, 3rd)`;
 
     navigator.clipboard.writeText(text);
     setCopiedTeam(t.code);
+    setTimeout(() => setCopiedTeam(null), 2500);
+  }
+
+  function copyAllPathsMaster() {
+    const lines = [
+      `# TECHNOHUNT // MASTER CHEAT SHEET (ROUND: ${data.activeRound.toUpperCase()})`,
+      `Generated: ${new Date().toLocaleString()}`,
+      `Total Teams: ${data.teams.length}`,
+      '=====================================================\n',
+    ];
+
+    data.teams.forEach((t) => {
+      const s = stagesData[t.code] || {};
+      lines.push(
+        `=====================================================`,
+        `TEAM ${t.code} (TRACK ${t.track}) | PIN: ${t.pin}`,
+        `1. CLUE 2: Zone: [${s.clue2?.zone || 'N/A'}] | Codeword: [${s.clue2?.codeword || 'N/A'}]`,
+        `   Riddle: "${s.clue2?.riddle || ''}"`,
+        `2. WITNESS: ${s.crewmate?.name || 'N/A'} (${s.crewmate?.id || ''}) | Code: [${s.crewmate?.code || 'N/A'}]`,
+        `   Script: "${s.crewmate?.script || ''}"`,
+        `3. CLUE 3: Cipher: [${s.clue3?.cipherType || 'Cipher'}] | Intercept: [${s.clue3?.intercept || 'N/A'}]`,
+        `   HINT: "${s.clue3?.hint || 'N/A'}"`,
+        `   Answer: [${s.clue3?.answer || 'N/A'}]`,
+        `   Next Riddle: "${s.clue3?.nextRiddle || ''}"`,
+        `4. CLUE 4: Sector: [${s.clue4?.zone || 'N/A'}] | Answer: [${s.clue4?.answer || 'N/A'}]`,
+        `5. FINALE: Empty Stage (3 keys backstage)\n`
+      );
+    });
+
+    navigator.clipboard.writeText(lines.join('\n'));
+    setCopiedTeam('ALL');
     setTimeout(() => setCopiedTeam(null), 2500);
   }
 
@@ -277,9 +319,17 @@ PIN: ${t.pin}
       t.pin.toLowerCase().includes(q) ||
       (s.clue2?.zone && s.clue2.zone.toLowerCase().includes(q)) ||
       (s.clue2?.codeword && s.clue2.codeword.toLowerCase().includes(q)) ||
+      (s.clue2?.riddle && s.clue2.riddle.toLowerCase().includes(q)) ||
       (s.crewmate?.name && s.crewmate.name.toLowerCase().includes(q)) ||
       (s.crewmate?.id && s.crewmate.id.toLowerCase().includes(q)) ||
+      (s.crewmate?.script && s.crewmate.script.toLowerCase().includes(q)) ||
+      (s.crewmate?.code && s.crewmate.code.toLowerCase().includes(q)) ||
+      (s.clue3?.cipherType && s.clue3.cipherType.toLowerCase().includes(q)) ||
+      (s.clue3?.intercept && s.clue3.intercept.toLowerCase().includes(q)) ||
+      (s.clue3?.hint && s.clue3.hint.toLowerCase().includes(q)) ||
       (s.clue3?.answer && s.clue3.answer.toLowerCase().includes(q)) ||
+      (s.clue3?.nextZone && s.clue3.nextZone.toLowerCase().includes(q)) ||
+      (s.clue3?.nextRiddle && s.clue3.nextRiddle.toLowerCase().includes(q)) ||
       (s.clue4?.zone && s.clue4.zone.toLowerCase().includes(q)) ||
       (s.clue4?.answer && s.clue4.answer.toLowerCase().includes(q))
     );
@@ -750,14 +800,22 @@ PIN: ${t.pin}
               ))}
             </div>
 
-            <div className="flex items-center gap-3 w-full md:w-auto">
+            <div className="flex items-center gap-3 w-full md:w-auto flex-wrap">
               <input
                 type="text"
-                placeholder="Search team, crew, codeword, zone..."
+                placeholder="Search team, crew, codeword, zone, hint..."
                 value={dossierSearch}
                 onChange={(e) => setDossierSearch(e.target.value)}
                 className="w-full md:w-64 bg-paper border border-ink px-3 py-1.5 text-xs font-mono placeholder:text-ink-soft/60"
               />
+              <button
+                type="button"
+                onClick={copyAllPathsMaster}
+                className="px-3 py-1.5 bg-paper border border-ink text-xs font-bold hover:bg-ink hover:text-paper transition-colors"
+                title="Copy entire cheat sheet of all teams with all hints, answers, and scripts"
+              >
+                {copiedTeam === 'ALL' ? '✓ Master Copied!' : '📋 Copy All 32 Paths'}
+              </button>
               <div className="flex border border-ink text-xs">
                 <button
                   type="button"
@@ -826,7 +884,7 @@ PIN: ${t.pin}
                       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 pb-4 border-b-2 border-ink">
                         <div>
                           <div className="text-xs text-evidence-red font-bold tracking-wider">
-                            CONFIDENTIAL // MASTER DOSSIER
+                            CONFIDENTIAL // MASTER DOSSIER (ORGANIZER UNREDACTED VIEW)
                           </div>
                           <div className="flex items-baseline gap-3 mt-1">
                             <h2 className="font-display text-2xl md:text-3xl text-ink">
@@ -869,17 +927,20 @@ PIN: ${t.pin}
                               {st.clue2?.zone || 'TBD'}
                             </span>
                           </div>
-                          <div className="text-xs font-mono space-y-1">
+                          <div className="text-xs font-mono space-y-1.5">
                             <div>
                               <span className="text-ink-soft">Expected Codeword: </span>
-                              <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5">
+                              <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5 text-sm font-bold">
                                 {st.clue2?.codeword || 'N/A'}
                               </strong>
                             </div>
                             {st.clue2?.riddle && (
-                              <p className="text-[11px] italic text-ink-soft pt-1 border-t border-line/40">
-                                &ldquo;{st.clue2.riddle}&rdquo;
-                              </p>
+                              <div className="pt-1.5 border-t border-line/40">
+                                <span className="text-[10px] text-evidence-red font-bold block mb-0.5">LOCATION RIDDLE:</span>
+                                <p className="text-[11px] italic text-ink leading-relaxed">
+                                  &ldquo;{st.clue2.riddle}&rdquo;
+                                </p>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -888,32 +949,43 @@ PIN: ${t.pin}
                         <div className="border border-line p-4 bg-paper/60 space-y-2">
                           <div className="flex justify-between items-center border-b border-line pb-1.5">
                             <span className="text-xs font-bold text-evidence-red">
-                              2. WITNESS CONTACT
+                              2. WITNESS CONTACT (CREWMATE)
                             </span>
                             <span className="text-xs bg-line/40 px-2 py-0.5 font-bold">
                               {st.crewmate?.id || 'CREW'}
                             </span>
                           </div>
-                          <div className="flex items-start gap-3">
-                            {st.crewmate?.photo && (
-                              <img
-                                src={st.crewmate.photo}
-                                alt={st.crewmate.name || 'Crewmate'}
-                                className="w-14 h-14 object-contain rounded border border-line bg-neutral-900 shrink-0"
-                              />
-                            )}
-                            <div className="text-xs font-mono space-y-1">
-                              <div>
-                                <span className="text-ink-soft">Person: </span>
-                                <strong>{st.crewmate?.name || 'N/A'}</strong>
-                              </div>
-                              <div>
-                                <span className="text-ink-soft">Physical Code: </span>
-                                <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5 break-all">
-                                  {st.crewmate?.code || 'N/A'}
-                                </strong>
+                          <div className="space-y-2">
+                            <div className="flex items-start gap-3">
+                              {st.crewmate?.photo && (
+                                <img
+                                  src={st.crewmate.photo}
+                                  alt={st.crewmate.name || 'Crewmate'}
+                                  onClick={() => setAdminPhotoModal({ url: st.crewmate.photo, name: st.crewmate.name || st.crewmate.id })}
+                                  className="w-16 h-16 object-contain rounded border border-line bg-neutral-900 shrink-0 cursor-pointer hover:opacity-85 shadow"
+                                  title="Click to view full photo"
+                                />
+                              )}
+                              <div className="text-xs font-mono space-y-1">
+                                <div>
+                                  <span className="text-ink-soft">Person: </span>
+                                  <strong className="text-sm">{st.crewmate?.name || 'N/A'}</strong>
+                                </div>
+                                <div>
+                                  <span className="text-ink-soft">Physical Code: </span>
+                                  <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5 break-all text-xs">
+                                    {st.crewmate?.code || 'N/A'}
+                                  </strong>
+                                </div>
                               </div>
                             </div>
+
+                            {st.crewmate?.script && (
+                              <div className="text-[11px] font-mono text-ink bg-line/20 p-2 border-l-2 border-evidence-red">
+                                <span className="text-evidence-red font-bold block mb-0.5">WITNESS SCRIPT (DIALOGUE):</span>
+                                <p className="italic">&ldquo;{st.crewmate.script}&rdquo;</p>
+                              </div>
+                            )}
                           </div>
                         </div>
 
@@ -927,23 +999,49 @@ PIN: ${t.pin}
                               {st.clue3?.cipherType || 'Cipher'}
                             </span>
                           </div>
-                          <div className="text-xs font-mono space-y-1">
+                          <div className="text-xs font-mono space-y-2">
                             <div>
                               <span className="text-ink-soft">Intercept: </span>
-                              <span className="text-[11px] font-bold text-ink break-all">
+                              <span className="text-xs font-bold text-ink bg-line/20 px-1.5 py-0.5 break-all">
                                 {st.clue3?.intercept || 'N/A'}
                               </span>
                             </div>
+                            
+                            {/* EXPLICIT HINT SHOWN TO ADMINS */}
+                            {st.clue3?.hint && (
+                              <div className="p-2 bg-amber-500/10 border-l-2 border-amber-600 text-ink">
+                                <span className="text-amber-800 font-bold block text-[10px] mb-0.5">
+                                  💡 CIPHER DECRYPTION HINT:
+                                </span>
+                                <p className="text-[11px] leading-relaxed">{st.clue3.hint}</p>
+                              </div>
+                            )}
+
                             <div>
                               <span className="text-ink-soft">Decrypted Answer: </span>
-                              <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5">
+                              <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5 text-sm">
                                 {st.clue3?.answer || 'N/A'}
                               </strong>
                             </div>
+
+                            {st.clue3?.nextZone && (
+                              <div>
+                                <span className="text-ink-soft">Next Zone Target: </span>
+                                <strong className="text-ink bg-line/30 px-1.5 py-0.5">
+                                  {st.clue3.nextZone}
+                                </strong>
+                              </div>
+                            )}
+
                             {st.clue3?.nextRiddle && (
-                              <p className="text-[11px] italic text-ink-soft pt-1 border-t border-line/40">
-                                Next Destination Riddle: &ldquo;{st.clue3.nextRiddle}&rdquo;
-                              </p>
+                              <div className="pt-1.5 border-t border-line/40">
+                                <span className="text-[10px] text-evidence-red font-bold block mb-0.5">
+                                  NEXT SECTOR RIDDLE:
+                                </span>
+                                <p className="text-[11px] italic text-ink leading-relaxed">
+                                  &ldquo;{st.clue3.nextRiddle}&rdquo;
+                                </p>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -958,14 +1056,14 @@ PIN: ${t.pin}
                               {st.clue4?.zone || 'TBD'}
                             </span>
                           </div>
-                          <div className="text-xs font-mono space-y-1">
+                          <div className="text-xs font-mono space-y-2">
                             <div>
                               <span className="text-ink-soft">Escape Sector: </span>
-                              <strong>{st.clue4?.zone || 'N/A'}</strong>
+                              <strong className="text-ink text-sm">{st.clue4?.zone || 'N/A'}</strong>
                             </div>
                             <div>
                               <span className="text-ink-soft">Physical Puzzle Answer: </span>
-                              <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5">
+                              <strong className="text-verified-teal bg-verified-teal/10 px-1.5 py-0.5 text-sm">
                                 {st.clue4?.answer || 'N/A'}
                               </strong>
                             </div>
@@ -977,7 +1075,7 @@ PIN: ${t.pin}
                       <div className="border border-ink bg-paper p-3 text-xs flex justify-between items-center">
                         <div>
                           <strong className="text-evidence-red">5. CASE RESOLUTION: </strong>
-                          <span>Empty Stage // Backstage key retrieval (3 Keys available)</span>
+                          <span>Empty Stage // Backstage key retrieval (3 Keys available for 1st, 2nd, 3rd)</span>
                         </div>
                         <span className="text-ink-soft">Round: {data.activeRound.toUpperCase()}</span>
                       </div>
@@ -990,67 +1088,146 @@ PIN: ${t.pin}
 
           {/* TABLE / MATRIX VIEW */}
           {dossierViewMode === 'table' && (
-            <div className="border-2 border-ink p-4 bg-paper overflow-x-auto">
-              <table className="w-full text-xs text-left border-collapse min-w-[900px]">
-                <thead>
-                  <tr className="border-b-2 border-ink bg-line/20 font-bold">
-                    <th className="p-2">TEAM</th>
-                    <th className="p-2">TRACK</th>
-                    <th className="p-2">PIN</th>
-                    <th className="p-2">LIVE</th>
-                    <th className="p-2">CLUE 2 (ZONE & CODEWORD)</th>
-                    <th className="p-2">CREWMATE (NAME & CODE)</th>
-                    <th className="p-2">CLUE 3 (CIPHER & ANS)</th>
-                    <th className="p-2">CLUE 4 (ZONE & ANS)</th>
-                    <th className="p-2 text-right">ACTION</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dossierFilteredTeams.map((team) => {
-                    const st = stagesData[team.code] || {};
-                    const live = data.progress[team.code]?.current_stage || 'clue2';
+            <div className="border-2 border-ink p-4 bg-paper space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-ink">
+                  Total Matching Teams: {dossierFilteredTeams.length}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setTableExpandAll(!tableExpandAll)}
+                  className="text-xs font-bold bg-line/30 hover:bg-line/50 border border-ink px-3 py-1"
+                >
+                  {tableExpandAll ? '▼ Collapse Matrix Details' : '▶ Expand All Hints & Riddles'}
+                </button>
+              </div>
 
-                    return (
-                      <tr key={team.code} className="border-b border-line hover:bg-line/10 font-mono">
-                        <td className="p-2 font-bold">{team.code}</td>
-                        <td className="p-2">{team.track}</td>
-                        <td className="p-2 text-ink-soft">{team.pin}</td>
-                        <td className="p-2">
-                          <span className="bg-line px-1.5 py-0.5 text-[10px] font-bold">
-                            {STAGE_LABELS[live] || live}
-                          </span>
-                        </td>
-                        <td className="p-2">
-                          <div><strong>{st.clue2?.zone}</strong></div>
-                          <div className="text-verified-teal">{st.clue2?.codeword}</div>
-                        </td>
-                        <td className="p-2">
-                          <div><strong>{st.crewmate?.name}</strong> ({st.crewmate?.id})</div>
-                          <div className="text-ink-soft text-[10px] truncate max-w-[140px]">{st.crewmate?.code}</div>
-                        </td>
-                        <td className="p-2">
-                          <div className="text-[10px] text-ink-soft">{st.clue3?.cipherType}</div>
-                          <div className="text-verified-teal font-bold">{st.clue3?.answer}</div>
-                        </td>
-                        <td className="p-2">
-                          <div><strong>{st.clue4?.zone}</strong></div>
-                          <div className="text-verified-teal">{st.clue4?.answer}</div>
-                        </td>
-                        <td className="p-2 text-right">
-                          <button
-                            onClick={() => copyTeamPathSummary(team, st)}
-                            className="text-[10px] underline hover:text-evidence-red"
-                          >
-                            {copiedTeam === team.code ? 'Copied' : 'Copy'}
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs text-left border-collapse min-w-[1000px]">
+                  <thead>
+                    <tr className="border-b-2 border-ink bg-line/20 font-bold">
+                      <th className="p-2">TEAM</th>
+                      <th className="p-2">TRACK</th>
+                      <th className="p-2">PIN</th>
+                      <th className="p-2">LIVE</th>
+                      <th className="p-2">CLUE 2 (ZONE, CODE & RIDDLE)</th>
+                      <th className="p-2">CREWMATE (NAME, CODE & SCRIPT)</th>
+                      <th className="p-2">CLUE 3 (CIPHER, HINT & ANS)</th>
+                      <th className="p-2">CLUE 4 (ZONE & ANS)</th>
+                      <th className="p-2 text-right">ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dossierFilteredTeams.map((team) => {
+                      const st = stagesData[team.code] || {};
+                      const live = data.progress[team.code]?.current_stage || 'clue2';
+
+                      return (
+                        <tr key={team.code} className="border-b border-line hover:bg-line/10 font-mono align-top">
+                          <td className="p-2 font-bold text-sm">{team.code}</td>
+                          <td className="p-2">{team.track}</td>
+                          <td className="p-2 text-ink-soft">{team.pin}</td>
+                          <td className="p-2">
+                            <span className="bg-line px-1.5 py-0.5 text-[10px] font-bold">
+                              {STAGE_LABELS[live] || live}
+                            </span>
+                          </td>
+                          <td className="p-2 max-w-[220px]">
+                            <div><strong>{st.clue2?.zone}</strong></div>
+                            <div className="text-verified-teal font-bold">{st.clue2?.codeword}</div>
+                            {tableExpandAll && st.clue2?.riddle && (
+                              <div className="text-[10px] italic text-ink-soft mt-1 bg-line/20 p-1 border-l border-line">
+                                &ldquo;{st.clue2.riddle}&rdquo;
+                              </div>
+                            )}
+                          </td>
+                          <td className="p-2 max-w-[220px]">
+                            <div className="flex items-center gap-1.5">
+                              {st.crewmate?.photo && (
+                                <img
+                                  src={st.crewmate.photo}
+                                  alt={st.crewmate.name}
+                                  onClick={() => setAdminPhotoModal({ url: st.crewmate.photo, name: st.crewmate.name })}
+                                  className="w-7 h-7 object-contain rounded border border-line bg-neutral-900 cursor-pointer shrink-0"
+                                />
+                              )}
+                              <div>
+                                <strong>{st.crewmate?.name}</strong>
+                                <div className="text-[10px] text-ink-soft">({st.crewmate?.id})</div>
+                              </div>
+                            </div>
+                            <div className="text-verified-teal font-bold text-[10px] break-all mt-0.5">{st.crewmate?.code}</div>
+                            {tableExpandAll && st.crewmate?.script && (
+                              <div className="text-[10px] italic text-ink-soft mt-1 bg-line/20 p-1 border-l border-evidence-red">
+                                &ldquo;{st.crewmate.script}&rdquo;
+                              </div>
+                            )}
+                          </td>
+                          <td className="p-2 max-w-[260px]">
+                            <div className="text-[10px] text-ink-soft">{st.clue3?.cipherType}</div>
+                            <div className="text-verified-teal font-bold">{st.clue3?.answer}</div>
+                            <div className="text-[10px] text-ink-soft truncate">{st.clue3?.intercept}</div>
+                            {/* HINT SHOWN IN MATRIX */}
+                            {st.clue3?.hint && (
+                              <div className={`text-[10px] text-amber-800 bg-amber-500/15 p-1 border-l-2 border-amber-600 mt-1 ${tableExpandAll ? '' : 'truncate'}`}>
+                                💡 {st.clue3.hint}
+                              </div>
+                            )}
+                            {tableExpandAll && st.clue3?.nextRiddle && (
+                              <div className="text-[10px] italic text-ink-soft mt-1 bg-line/20 p-1 border-l border-line">
+                                Next: &ldquo;{st.clue3.nextRiddle}&rdquo;
+                              </div>
+                            )}
+                          </td>
+                          <td className="p-2">
+                            <div><strong>{st.clue4?.zone}</strong></div>
+                            <div className="text-verified-teal font-bold">{st.clue4?.answer}</div>
+                          </td>
+                          <td className="p-2 text-right">
+                            <button
+                              onClick={() => copyTeamPathSummary(team, st)}
+                              className="text-[10px] px-2 py-1 bg-ink text-paper hover:bg-ink-soft font-bold rounded"
+                            >
+                              {copiedTeam === team.code ? 'Copied' : 'Copy'}
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Admin Photo Modal */}
+      {adminPhotoModal && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 flex flex-col justify-between p-4"
+          onClick={() => setAdminPhotoModal(null)}
+        >
+          <div className="flex justify-between items-center text-paper font-mono text-xs pb-3 border-b border-white/20">
+            <span className="text-evidence-red font-bold">WITNESS PHOTOGRAPH // {adminPhotoModal.name}</span>
+            <button
+              type="button"
+              onClick={() => setAdminPhotoModal(null)}
+              className="px-3 py-1 bg-white/20 text-white rounded font-mono text-xs"
+            >
+              ✕ Close
+            </button>
+          </div>
+          <div className="flex-1 flex items-center justify-center p-4">
+            <img
+              src={adminPhotoModal.url}
+              alt={adminPhotoModal.name}
+              className="max-h-[80vh] max-w-[95vw] object-contain rounded border border-white/20 shadow-2xl"
+            />
+          </div>
+          <div className="text-center text-xs font-mono text-white/60 pb-2">
+            Click anywhere to close
+          </div>
         </div>
       )}
     </div>
