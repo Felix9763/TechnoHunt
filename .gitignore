@@ -1,0 +1,18 @@
+# Next.js
+.next/
+out/
+
+# Dependencies
+node_modules/
+
+# Environment variables
+.env*.local
+.env
+
+# Scratch and debug files
+scratch/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

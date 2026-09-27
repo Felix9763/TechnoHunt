@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-paper: #EAE2CC;
+  --color-ink: #211F1B;
+  --color-ink-soft: #5B564A;
+  --color-evidence-red: #A3312B;
+  --color-verified-teal: #2E5F59;
+  --color-lockout-amber: #B8822E;
+  --color-line: #C9BFA0;
+}
+
+body {
+  background-color: #EAE2CC;
+  color: #211F1B;
+  font-family: var(--font-body), sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Single stamp animation on verified submission */
+@keyframes stamp-settle {
+  0% {
+    transform: scale(1.08) rotate(-2deg);
+    opacity: 0.7;
+  }
+  60% {
+    transform: scale(0.96) rotate(1.5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0.5deg);
+    opacity: 1;
+  }
+}
+
+.animate-stamp {
+  animation: stamp-settle 180ms ease-out forwards;
+}
+
+/* Incorrect flash animation */
+@keyframes flash-red {
+  0%, 100% {
+    border-color: #C9BFA0;
+  }
+  30%, 70% {
+    border-color: #A3312B;
+    background-color: rgba(163, 49, 43, 0.05);
+  }
+}
+
+.animate-flash-error {
+  animation: flash-red 300ms ease-in-out;
+}
+
+/* Subtle case file clip path */
+.clip-case {
+  clip-path: polygon(0% 0%, calc(100% - 10px) 0%, 100% 10px, 100% 100%, 0% 100%);
+}
