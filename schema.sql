@@ -42,9 +42,29 @@ create table if not exists finale_submissions (
   primary key (round, team_code)
 );
 
--- Enable Row Level Security (RLS) or grant permissions for service role
--- Since service role key is used server-side, service role bypasses RLS.
+-- STRICT DATABASE LOCKDOWN (Zero Direct Access via Supabase REST / Anon Key)
+-- 1. Enable Row Level Security (RLS) on all tables (denies all operations by default)
 alter table event_state enable row level security;
 alter table team_progress enable row level security;
 alter table attempts enable row level security;
 alter table finale_submissions enable row level security;
+
+-- 2. Explicitly REVOKE ALL permissions from anon, authenticated, and public roles
+revoke all on table event_state from anon, authenticated, public;
+revoke all on table team_progress from anon, authenticated, public;
+revoke all on table attempts from anon, authenticated, public;
+revoke all on table finale_submissions from anon, authenticated, public;
+
+revoke all on all sequences in schema public from anon, authenticated, public;
+revoke all on all routines in schema public from anon, authenticated, public;
+
+-- 3. Prevent auto-granting permissions on future tables/sequences
+alter default privileges in schema public revoke all on tables from anon, authenticated, public;
+alter default privileges in schema public revoke all on sequences from anon, authenticated, public;
+alter default privileges in schema public revoke all on routines from anon, authenticated, public;
+
+-- 4. Grant full operational access strictly to service_role and postgres (used on server-side only)
+grant all on all tables in schema public to service_role, postgres;
+grant all on all sequences in schema public to service_role, postgres;
+grant all on all routines in schema public to service_role, postgres;
+

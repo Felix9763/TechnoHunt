@@ -50,6 +50,84 @@ export interface StageData {
   [key: string]: any;
 }
 
+export interface SanitizedStageData {
+  clue2?: {
+    zone: string;
+    riddle?: string;
+  };
+  crewmate?: {
+    id?: string;
+    name?: string;
+    photo?: string;
+    script?: string;
+  };
+  clue3?: {
+    cipherType?: string;
+    intercept?: string;
+    hint?: string;
+    nextZone?: string;
+    nextRiddle?: string;
+  };
+  clue4?: {
+    zone: string;
+  };
+}
+
+export function getSanitizedStageData(
+  fullData: StageData | null | undefined,
+  currentStage: string
+): SanitizedStageData {
+  if (!fullData) return {};
+
+  const sanitized: SanitizedStageData = {};
+
+  // 1. Clue 2 is always unlocked from the start
+  if (fullData.clue2) {
+    sanitized.clue2 = {
+      zone: fullData.clue2.zone || '',
+      ...(currentStage === 'clue2' ? { riddle: fullData.clue2.riddle } : {}),
+    };
+  }
+
+  // 2. Crewmate unlocks once clue 2 is completed (currentStage is crewmate, clue3, clue4, or final)
+  if (['crewmate', 'clue3', 'clue4', 'final'].includes(currentStage) && fullData.crewmate) {
+    sanitized.crewmate = {
+      id: fullData.crewmate.id,
+      name: fullData.crewmate.name,
+      photo: fullData.crewmate.photo,
+      ...(currentStage === 'crewmate' ? { script: fullData.crewmate.script } : {}),
+    };
+    // Note: crewmate code is NEVER provided to client (crewmate gives it in person)
+  }
+
+  // 3. Clue 3 unlocks once crewmate code is entered (currentStage is clue3, clue4, or final)
+  if (['clue3', 'clue4', 'final'].includes(currentStage) && fullData.clue3) {
+    sanitized.clue3 = {
+      cipherType: fullData.clue3.cipherType,
+      intercept: fullData.clue3.intercept,
+      hint: fullData.clue3.hint,
+      // nextZone and nextRiddle are only revealed AFTER clue 3 is solved (at clue4 or final)
+      ...(['clue4', 'final'].includes(currentStage)
+        ? {
+            nextZone: fullData.clue3.nextZone,
+            nextRiddle: fullData.clue3.nextRiddle,
+          }
+        : {}),
+    };
+    // Note: clue3 answer is NEVER provided to client
+  }
+
+  // 4. Clue 4 unlocks once clue3 is solved (currentStage is clue4 or final)
+  if (['clue4', 'final'].includes(currentStage) && fullData.clue4) {
+    sanitized.clue4 = {
+      zone: fullData.clue4.zone || fullData.clue3?.nextZone || '',
+    };
+    // Note: clue4 answer is NEVER provided to client
+  }
+
+  return sanitized;
+}
+
 export function getSettings(): Settings {
   try {
     const filePath = path.join(process.cwd(), 'config', 'settings.json');

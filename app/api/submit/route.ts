@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getTeamSession } from '@/lib/auth';
-import { getLiveActiveRound, getStagesForRound, getSettings } from '@/lib/round';
+import { getLiveActiveRound, getStagesForRound, getSettings, getSanitizedStageData } from '@/lib/round';
 import { fetchTeamProgress, updateTeamProgress, logAttempt } from '@/lib/db';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { isAnswerCorrect } from '@/lib/answerMatch';
@@ -134,9 +134,13 @@ export async function POST(req: NextRequest) {
 
     await updateTeamProgress(activeRound, teamCode, nextStage);
 
+    // Securely return sanitized next stage data so client never gets answers or future stages
+    const nextSanitizedData = getSanitizedStageData(teamStages, nextStage);
+
     return NextResponse.json({
       correct: true,
       currentStage: nextStage,
+      stageData: nextSanitizedData,
       message: 'Verified',
       completed: nextStage === 'final',
     });

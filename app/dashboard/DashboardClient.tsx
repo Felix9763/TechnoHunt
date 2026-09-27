@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { StageData } from '@/lib/round';
+import { SanitizedStageData } from '@/lib/round';
 
 interface DashboardClientProps {
   teamCode: string;
   track: string;
   round: string;
   initialStage: string;
-  stageData: StageData;
+  initialStageData: SanitizedStageData;
 }
 
 const STAGES = [
@@ -25,10 +25,11 @@ export default function DashboardClient({
   track,
   round,
   initialStage,
-  stageData,
+  initialStageData,
 }: DashboardClientProps) {
   const router = useRouter();
   const [currentStage, setCurrentStage] = useState(initialStage);
+  const [stageData, setStageData] = useState<SanitizedStageData>(initialStageData);
   const [inputValue, setInputValue] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -39,6 +40,15 @@ export default function DashboardClient({
   const [cooldownRemaining, setCooldownRemaining] = useState<number | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Sync with initial props if revalidated by server
+  useEffect(() => {
+    setCurrentStage(initialStage);
+  }, [initialStage]);
+
+  useEffect(() => {
+    setStageData(initialStageData);
+  }, [initialStageData]);
 
   // Lockout countdown timer
   useEffect(() => {
@@ -131,6 +141,10 @@ export default function DashboardClient({
       setJustVerified(true);
       setInputValue('');
       setCurrentStage(data.currentStage);
+      if (data.stageData) {
+        setStageData(data.stageData);
+      }
+      router.refresh();
 
       // Settle the animation
       setTimeout(() => {
@@ -376,7 +390,7 @@ export default function DashboardClient({
                     CLASSIFICATION: {stageData.clue3?.cipherType || 'ENCRYPTED DISPATCH'}
                   </div>
                   <div className="text-sm font-bold bg-line/20 p-2 border border-line text-center tracking-widest text-evidence-red">
-                    {stageData.clue3?.intercept || stageData.crewmate?.code}
+                    {stageData.clue3?.intercept || 'ENCRYPTED DISPATCH'}
                   </div>
                   <p className="text-xs text-ink leading-relaxed pt-1 border-t border-line/50">
                     {stageData.clue3?.hint || 'Decode the intercept to reveal the next location name.'}

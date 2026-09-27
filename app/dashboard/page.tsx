@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getTeamSession } from '@/lib/auth';
-import { getLiveActiveRound, getStagesForRound } from '@/lib/round';
+import { getLiveActiveRound, getStagesForRound, getSanitizedStageData } from '@/lib/round';
 import { fetchTeamProgress } from '@/lib/db';
 import DashboardClient from './DashboardClient';
 
@@ -40,6 +40,7 @@ export default async function DashboardPage() {
   const currentStage = await fetchTeamProgress(activeRound, session.teamCode);
   const stages = getStagesForRound(activeRound);
   const teamStages = stages[session.teamCode] || {};
+  const sanitizedStages = getSanitizedStageData(teamStages, currentStage);
 
   return (
     <DashboardClient
@@ -47,7 +48,7 @@ export default async function DashboardPage() {
       track={session.track}
       round={activeRound}
       initialStage={currentStage}
-      stageData={teamStages}
+      initialStageData={sanitizedStages}
     />
   );
 }
