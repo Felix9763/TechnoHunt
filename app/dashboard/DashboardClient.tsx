@@ -242,7 +242,7 @@ export default function DashboardClient({
 
             {currentIndex > 0 ? (
               <div className="text-xs font-mono text-ink-soft">
-                Zone: {stageData.clue2?.zone} — Codeword recorded
+                Zone: {stageData.clue2?.zone} — Codeword verified
               </div>
             ) : (
               <div className="space-y-2 mt-2">
@@ -251,14 +251,10 @@ export default function DashboardClient({
                     &ldquo;{stageData.clue2.riddle}&rdquo;
                   </p>
                 )}
-                <p className="text-xs text-ink-soft leading-normal">
-                  Something’s here — dropped, torn, or forgotten. A word survives. Work it out, and the case file updates.
-                </p>
-                {stageData.clue2?.prompt && (
-                  <div className="text-xs font-mono bg-paper p-2 border border-line text-ink">
-                    Puzzle: {stageData.clue2.prompt}
-                  </div>
-                )}
+                <div className="text-xs font-mono bg-paper/90 p-2.5 border border-line text-ink leading-relaxed">
+                  <span className="font-bold text-evidence-red block mb-1">FIELD DIRECTIVE:</span>
+                  Proceed to <span className="font-semibold underline">{stageData.clue2?.zone}</span>. The suspect left a physical trace at the scene. Search the area, locate the handwritten card, solve the puzzle on site, and enter the verified codeword below.
+                </div>
               </div>
             )}
           </section>
@@ -295,20 +291,43 @@ export default function DashboardClient({
               </p>
             ) : currentIndex > 1 ? (
               <div className="text-xs font-mono text-ink-soft">
-                Witness statement confirmed — code received
+                Witness statement recorded — scrambled code confirmed
               </div>
             ) : (
-              <div className="space-y-2.5 mt-2">
+              <div className="space-y-3 mt-2">
+                {/* Crewmate Photo Card */}
+                {stageData.crewmate?.photo && (
+                  <div className="border-2 border-ink p-1.5 bg-paper/90">
+                    <div className="relative w-full aspect-[4/3] max-h-52 overflow-hidden bg-line/30 mb-1.5 border border-line">
+                      <img
+                        src={stageData.crewmate.photo}
+                        alt="Person of Interest"
+                        className="w-full h-full object-cover object-top"
+                      />
+                    </div>
+                    <div className="flex justify-between items-baseline px-0.5">
+                      <span className="font-mono text-xs font-bold text-evidence-red tracking-wide">
+                        PERSON OF INTEREST
+                      </span>
+                      <span className="font-mono text-[11px] text-ink-soft font-semibold">
+                        {stageData.crewmate?.name || stageData.crewmate?.id}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
                 <div className="text-xs text-ink bg-paper/80 p-2.5 border-l-2 border-evidence-red leading-relaxed">
-                  <div className="font-mono text-xs text-evidence-red mb-1 font-semibold">
-                    WITNESS: {stageData.crewmate?.id || 'CREWMATE'}
+                  <div className="font-mono text-[11px] text-evidence-red mb-1 font-semibold">
+                    WITNESS STATEMENT:
                   </div>
                   {stageData.crewmate?.script ||
-                    'You found me, Detective. I saw someone out here far too late... Here — scrambled, just in case.'}
+                    '“You found me, Detective. I saw someone out here far too late... Here — scrambled, just in case.”'}
                 </div>
-                <p className="text-xs text-ink-soft">
-                  Locate the Crewmate near your current sector. Enter the scrambled code they hand to you.
-                </p>
+
+                <div className="text-xs font-mono bg-paper/90 p-2.5 border border-line text-ink leading-relaxed">
+                  <span className="font-bold text-evidence-red block mb-1">FIELD DIRECTIVE:</span>
+                  Study this photograph carefully. This person was seen moving across campus. You must locate them on foot, establish contact in character, and obtain the physical scrambled code they are carrying.
+                </div>
               </div>
             )}
           </section>
@@ -348,15 +367,21 @@ export default function DashboardClient({
                 Decoded lead pointing toward {stageData.clue3?.nextZone || 'next sector'}
               </div>
             ) : (
-              <div className="space-y-2 mt-2">
-                <p className="text-xs text-ink-soft leading-relaxed">
-                  The witness didn’t want to write it plain. Decode it — you’ll know exactly where this leads next.
+              <div className="space-y-2.5 mt-2">
+                <p className="text-xs text-ink-soft leading-relaxed font-body">
+                  The witness didn’t want to write it plain. Decrypt their dispatch intercept to discover where the suspect fled next.
                 </p>
-                {stageData.clue3?.prompt && (
-                  <div className="text-xs font-mono bg-paper p-2.5 border border-line text-ink">
-                    Cipher: {stageData.clue3.prompt}
+                <div className="text-xs font-mono bg-paper/90 p-3 border border-line text-ink space-y-1.5">
+                  <div className="text-ink-soft text-[11px] uppercase tracking-wider font-semibold">
+                    CLASSIFICATION: {stageData.clue3?.cipherType || 'ENCRYPTED DISPATCH'}
                   </div>
-                )}
+                  <div className="text-sm font-bold bg-line/20 p-2 border border-line text-center tracking-widest text-evidence-red">
+                    {stageData.clue3?.intercept || stageData.crewmate?.code}
+                  </div>
+                  <p className="text-xs text-ink leading-relaxed pt-1 border-t border-line/50">
+                    {stageData.clue3?.hint || 'Decode the intercept to reveal the next location name.'}
+                  </p>
+                </div>
               </div>
             )}
           </section>
@@ -393,26 +418,22 @@ export default function DashboardClient({
               </p>
             ) : currentIndex > 3 ? (
               <div className="text-xs font-mono text-ink-soft">
-                Final physical clue cleared at {stageData.clue4?.zone}
+                Physical evidence cleared at {stageData.clue4?.zone}
               </div>
             ) : (
-              <div className="space-y-2 mt-2">
+              <div className="space-y-2.5 mt-2">
                 <div className="text-xs font-mono text-ink-soft">
-                  Location: <span className="text-ink font-semibold">{stageData.clue4?.zone}</span>
+                  Destination Sector: <span className="text-ink font-bold">{stageData.clue4?.zone}</span>
                 </div>
                 {stageData.clue3?.nextRiddle && (
                   <p className="text-xs text-ink italic bg-paper/80 p-2.5 border-l-2 border-line leading-relaxed">
                     &ldquo;{stageData.clue3.nextRiddle}&rdquo;
                   </p>
                 )}
-                <p className="text-xs text-ink-soft leading-relaxed">
-                  Something’s here too — left behind in the scramble. A number, not written plain. Work it out.
-                </p>
-                {stageData.clue4?.prompt && (
-                  <div className="text-xs font-mono bg-paper p-2.5 border border-line text-ink">
-                    Puzzle: {stageData.clue4.prompt}
-                  </div>
-                )}
+                <div className="text-xs font-mono bg-paper/90 p-2.5 border border-line text-ink leading-relaxed">
+                  <span className="font-bold text-evidence-red block mb-1">FIELD DIRECTIVE:</span>
+                  Proceed immediately to <span className="font-semibold underline">{stageData.clue4?.zone}</span>. The suspect dropped evidence during their escape. Search the sector on site, find the hidden puzzle, solve the calculation, and enter the final result below.
+                </div>
               </div>
             )}
           </section>
@@ -467,9 +488,15 @@ export default function DashboardClient({
                 htmlFor="case-answer-input"
                 className="font-mono text-ink-soft uppercase tracking-wider"
               >
-                {currentStage === 'crewmate'
-                  ? 'Enter scrambled code:'
-                  : `Enter answer for ${STAGES[currentIndex]?.name}:`}
+                {currentStage === 'clue2'
+                  ? `Enter codeword found at ${stageData.clue2?.zone || 'sector'}:`
+                  : currentStage === 'crewmate'
+                  ? 'Enter code handed by witness:'
+                  : currentStage === 'clue3'
+                  ? 'Enter decrypted lead:'
+                  : currentStage === 'clue4'
+                  ? `Enter answer found at ${stageData.clue4?.zone || 'sector'}:`
+                  : 'Enter answer:'}
               </label>
               {lockoutRemaining !== null ? (
                 <span className="font-mono text-lockout-amber font-semibold">
@@ -492,6 +519,14 @@ export default function DashboardClient({
                 placeholder={
                   lockoutRemaining !== null
                     ? `Locked out (${lockoutRemaining}s)`
+                    : currentStage === 'clue2'
+                    ? 'Codeword from zone...'
+                    : currentStage === 'crewmate'
+                    ? 'Code from witness slip...'
+                    : currentStage === 'clue3'
+                    ? 'Decrypted lead...'
+                    : currentStage === 'clue4'
+                    ? 'Answer from physical card...'
                     : 'Type answer here...'
                 }
                 value={inputValue}

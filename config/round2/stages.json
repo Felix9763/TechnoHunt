@@ -3,23 +3,25 @@
     "clue2": {
       "zone": "Football Net",
       "riddle": "Where a ball forgets to fall asleep, netted still, its silence deep \u2014 someone crossed here, soft and fast, gone before the moment passed.",
-      "prompt": "Convert 84 69 67 72 using ASCII.",
       "codeword": "TECH"
     },
     "crewmate": {
       "id": "CM-A1",
+      "name": "Abhinav",
+      "photo": "/assets/team/Abhinav.jpg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "84 69 67 72"
     },
     "clue3": {
-      "prompt": "Convert 84 69 67 72 using ASCII.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encrypted their sighting using 8-bit character mapping. Decrypt the decimal bytes to reveal where the suspect headed.",
+      "intercept": "84 69 67 72",
       "answer": "TECH",
       "nextZone": "Garden",
       "nextRiddle": "Two patches green, on either side, where someone waited, stepped, and tried \u2014 the fast food light, she knew too well, to time her steps and never tell."
     },
     "clue4": {
       "zone": "Garden",
-      "prompt": "for(int i=5;i>=1;i--) printf(\"%d \", i); \u2014 what prints?",
       "answer": "5 4 3 2 1"
     }
   },
@@ -27,23 +29,25 @@
     "clue2": {
       "zone": "Garden",
       "riddle": "Two patches green, on either side, where someone waited, stepped, and tried \u2014 the fast food light, she knew too well, to time her steps and never tell.",
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
       "codeword": "CODE"
     },
     "crewmate": {
       "id": "CM-A2",
+      "name": "Abhinay",
+      "photo": "/assets/team/Abhinay_Kumar_CPP_Colead.jpeg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "FRGH"
     },
     "clue3": {
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness applied a 3-step Caesar reverse shift to disguise the sighting. Realign the alphabet to decipher the lead.",
+      "intercept": "FRGH",
       "answer": "CODE",
       "nextZone": "Placement Banner",
       "nextRiddle": "Where futures hang, printed and proud, she waited here, alone, unbowed \u2014 scrolling one thing, again, again, until the courage came to enter in."
     },
     "clue4": {
       "zone": "Placement Banner",
-      "prompt": "int a[]={2,4,6,8,10}; for(i=0;i<5;i++) printf(\"%d \", a[i]+1); \u2014 what prints, and the sum?",
       "answer": "3 5 7 9 11, sum 35"
     }
   },
@@ -51,23 +55,25 @@
     "clue2": {
       "zone": "Placement Banner",
       "riddle": "Where futures hang, printed and proud, she waited here, alone, unbowed \u2014 scrolling one thing, again, again, until the courage came to enter in.",
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
       "codeword": "HELLO"
     },
     "crewmate": {
       "id": "CM-A3",
+      "name": "Afrah Khan",
+      "photo": "/assets/team/Afrah Khan_Media.jpeg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "KHOOR"
     },
     "clue3": {
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness disguised their sighting with a 3-step reverse rotation. Shift backwards to decode the true dispatch.",
+      "intercept": "KHOOR",
       "answer": "HELLO",
       "nextZone": "Student Parking",
       "nextRiddle": "Wheels rest here, riders long gone, she never lingered, kept moving on \u2014 just passed the edge, and kept her pace, nowhere close to a resting place."
     },
     "clue4": {
       "zone": "Student Parking",
-      "prompt": "Find the next number: 2, 5, 11, 23, 47, ?",
       "answer": "95"
     }
   },
@@ -75,23 +81,25 @@
     "clue2": {
       "zone": "Student Parking",
       "riddle": "Wheels rest here, riders long gone, she never lingered, kept moving on \u2014 just passed the edge, and kept her pace, nowhere close to a resting place.",
-      "prompt": "Using Atbash (A\u2194Z, B\u2194Y\u2026), decode XLWV.",
       "codeword": "CODE"
     },
     "crewmate": {
       "id": "CM-A4",
+      "name": "Akshata Malik",
+      "photo": "/assets/team/Akshata Malik_General_Secretary.png",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "72 73"
     },
     "clue3": {
-      "prompt": "Using ASCII, decode 72 73.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encoded the lead into decimal byte values. Translate the numerical pairs into letters to uncover the next sector.",
+      "intercept": "72 73",
       "answer": "HI",
       "nextZone": "Badminton Court",
       "nextRiddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing \u2014 not sport tonight, just panic\u2019s flight, caught in netting, out of sight."
     },
     "clue4": {
       "zone": "Badminton Court",
-      "prompt": "int a[]={5,10,15,20}; printf(\"%d\", a[2]); \u2014 what prints?",
       "answer": "15"
     }
   },
@@ -99,23 +107,25 @@
     "clue2": {
       "zone": "Canteen",
       "riddle": "Where hunger goes to disappear, she entered soft, drawing near \u2014 a door, a crash, a startled sound, and something rolling on the ground.",
-      "prompt": "Using ASCII, decode 72 73.",
       "codeword": "HI"
     },
     "crewmate": {
       "id": "CM-A5",
+      "name": "Ardha Sudhir",
+      "photo": "/assets/team/Ardha Sudhir_Vice President.jpeg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "84 69 67 72"
     },
     "clue3": {
-      "prompt": "Convert 84 69 67 72 using ASCII.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encrypted their sighting using 8-bit character mapping. Decrypt the decimal bytes to reveal where the suspect headed.",
+      "intercept": "84 69 67 72",
       "answer": "TECH",
       "nextZone": "New Stairs",
       "nextRiddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet \u2014 steps that lead toward open air, not the way she chose, but almost there."
     },
     "clue4": {
       "zone": "New Stairs",
-      "prompt": "A=1, B=0. Evaluate (A AND B) OR NOT(B).",
       "answer": "1"
     }
   },
@@ -123,23 +133,25 @@
     "clue2": {
       "zone": "New Stairs",
       "riddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet \u2014 steps that lead toward open air, not the way she chose, but almost there.",
-      "prompt": "Start with 7. Perform \u00d72, +6, \u00f72, +5. What\u2019s the final value?",
       "codeword": "15"
     },
     "crewmate": {
       "id": "CM-A6",
+      "name": "Asmi Deshpande",
+      "photo": "/assets/team/Asmi Deshpande_Lead Python .png",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "FRGH"
     },
     "clue3": {
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness applied a 3-step Caesar reverse shift to disguise the sighting. Realign the alphabet to decipher the lead.",
+      "intercept": "FRGH",
       "answer": "CODE",
       "nextZone": "Main Gate",
       "nextRiddle": "Where the campus breathes its last goodbye, she never came or went thereby \u2014 but someone did, in a hurry, unseen, gone before the gate\u2019s routine."
     },
     "clue4": {
       "zone": "Main Gate",
-      "prompt": "How many times does for(int i=0;i<5;i++) execute?",
       "answer": "5"
     }
   },
@@ -147,23 +159,25 @@
     "clue2": {
       "zone": "Badminton Court",
       "riddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing \u2014 not sport tonight, just panic\u2019s flight, caught in netting, out of sight.",
-      "prompt": "ASCII value of A?",
       "codeword": "65"
     },
     "crewmate": {
       "id": "CM-A7",
+      "name": "B. Rajeswara Rao",
+      "photo": "/assets/team/B. Rajeswara Rao_colead(web dev).jpg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "KHOOR"
     },
     "clue3": {
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness disguised their sighting with a 3-step reverse rotation. Shift backwards to decode the true dispatch.",
+      "intercept": "KHOOR",
       "answer": "HELLO",
       "nextZone": "Football Net",
       "nextRiddle": "Where a ball forgets to fall asleep, netted still, its silence deep \u2014 someone crossed here, soft and fast, gone before the moment passed."
     },
     "clue4": {
       "zone": "Football Net",
-      "prompt": "for(int i=1;i<=3;i++) printf(\"%d\",i); \u2014 what prints?",
       "answer": "123"
     }
   },
@@ -171,23 +185,25 @@
     "clue2": {
       "zone": "Main Gate",
       "riddle": "Where the campus breathes its last goodbye, she never came or went thereby \u2014 but someone did, in a hurry, unseen, gone before the gate\u2019s routine.",
-      "prompt": "ASCII value of Z?",
       "codeword": "90"
     },
     "crewmate": {
       "id": "CM-A8",
+      "name": "B.Samanvitha",
+      "photo": "/assets/team/B.Samanvitha_java.jpg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "72 73"
     },
     "clue3": {
-      "prompt": "Using ASCII, decode 72 73.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encoded the lead into decimal byte values. Translate the numerical pairs into letters to uncover the next sector.",
+      "intercept": "72 73",
       "answer": "HI",
       "nextZone": "Ground",
       "nextRiddle": "Where a hundred feet run every morning, empty now, silent, no warning \u2014 she crossed it once, then turned away, chose a different path to stray."
     },
     "clue4": {
       "zone": "Ground",
-      "prompt": "Find the next number: 4, 8, 16, 32, ?",
       "answer": "64"
     }
   },
@@ -195,23 +211,25 @@
     "clue2": {
       "zone": "Ground",
       "riddle": "Where a hundred feet run every morning, empty now, silent, no warning \u2014 she crossed it once, then turned away, chose a different path to stray.",
-      "prompt": "Convert 84 69 67 72 using ASCII.",
       "codeword": "TECH"
     },
     "crewmate": {
       "id": "CM-A9",
+      "name": "Brundhavani",
+      "photo": "/assets/team/Brundhavani_marketing lead.jpg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "84 69 67 72"
     },
     "clue3": {
-      "prompt": "Convert 84 69 67 72 using ASCII.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encrypted their sighting using 8-bit character mapping. Decrypt the decimal bytes to reveal where the suspect headed.",
+      "intercept": "84 69 67 72",
       "answer": "TECH",
       "nextZone": "Canteen",
       "nextRiddle": "Where hunger goes to disappear, she entered soft, drawing near \u2014 a door, a crash, a startled sound, and something rolling on the ground."
     },
     "clue4": {
       "zone": "Canteen",
-      "prompt": "Find the next number: 1, 4, 9, 16, ?",
       "answer": "25"
     }
   },
@@ -219,23 +237,25 @@
     "clue2": {
       "zone": "Football Net",
       "riddle": "Where a ball forgets to fall asleep, netted still, its silence deep \u2014 someone crossed here, soft and fast, gone before the moment passed.",
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
       "codeword": "CODE"
     },
     "crewmate": {
       "id": "CM-A10",
+      "name": "Ch. Saanvi Reddy",
+      "photo": "/assets/team/Ch. Saanvi Reddy - Marketing team member.jpg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "FRGH"
     },
     "clue3": {
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness applied a 3-step Caesar reverse shift to disguise the sighting. Realign the alphabet to decipher the lead.",
+      "intercept": "FRGH",
       "answer": "CODE",
       "nextZone": "New Stairs",
       "nextRiddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet \u2014 steps that lead toward open air, not the way she chose, but almost there."
     },
     "clue4": {
       "zone": "New Stairs",
-      "prompt": "Find the next number: 3, 6, 10, 15, ?",
       "answer": "21"
     }
   },
@@ -243,23 +263,25 @@
     "clue2": {
       "zone": "Garden",
       "riddle": "Two patches green, on either side, where someone waited, stepped, and tried \u2014 the fast food light, she knew too well, to time her steps and never tell.",
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
       "codeword": "HELLO"
     },
     "crewmate": {
       "id": "CM-A11",
+      "name": "D Amrutha",
+      "photo": "/assets/team/D Amrutha, Web development_.jpg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "KHOOR"
     },
     "clue3": {
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness disguised their sighting with a 3-step reverse rotation. Shift backwards to decode the true dispatch.",
+      "intercept": "KHOOR",
       "answer": "HELLO",
       "nextZone": "Badminton Court",
       "nextRiddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing \u2014 not sport tonight, just panic\u2019s flight, caught in netting, out of sight."
     },
     "clue4": {
       "zone": "Badminton Court",
-      "prompt": "int a[]={10,20,30,40}; \u2014 what is a[0]?",
       "answer": "10"
     }
   },
@@ -267,23 +289,25 @@
     "clue2": {
       "zone": "Placement Banner",
       "riddle": "Where futures hang, printed and proud, she waited here, alone, unbowed \u2014 scrolling one thing, again, again, until the courage came to enter in.",
-      "prompt": "Using Atbash (A\u2194Z, B\u2194Y\u2026), decode XLWV.",
       "codeword": "CODE"
     },
     "crewmate": {
       "id": "CM-A12",
+      "name": "D Aswin (Python)",
+      "photo": "/assets/team/D Aswin (Python).jpg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "72 73"
     },
     "clue3": {
-      "prompt": "Using ASCII, decode 72 73.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encoded the lead into decimal byte values. Translate the numerical pairs into letters to uncover the next sector.",
+      "intercept": "72 73",
       "answer": "HI",
       "nextZone": "Main Gate",
       "nextRiddle": "Where the campus breathes its last goodbye, she never came or went thereby \u2014 but someone did, in a hurry, unseen, gone before the gate\u2019s routine."
     },
     "clue4": {
       "zone": "Main Gate",
-      "prompt": "int a[]={5,10,15}; \u2014 what is a[1]+a[2]?",
       "answer": "25"
     }
   },
@@ -291,23 +315,25 @@
     "clue2": {
       "zone": "Student Parking",
       "riddle": "Wheels rest here, riders long gone, she never lingered, kept moving on \u2014 just passed the edge, and kept her pace, nowhere close to a resting place.",
-      "prompt": "Using ASCII, decode 72 73.",
       "codeword": "HI"
     },
     "crewmate": {
       "id": "CM-A13",
+      "name": "DANDU BHAVADESH GOUD",
+      "photo": "/assets/team/DANDU BHAVADESH GOUD_ JAVA LEAD.jpg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "84 69 67 72"
     },
     "clue3": {
-      "prompt": "Convert 84 69 67 72 using ASCII.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encrypted their sighting using 8-bit character mapping. Decrypt the decimal bytes to reveal where the suspect headed.",
+      "intercept": "84 69 67 72",
       "answer": "TECH",
       "nextZone": "Garden",
       "nextRiddle": "Two patches green, on either side, where someone waited, stepped, and tried \u2014 the fast food light, she knew too well, to time her steps and never tell."
     },
     "clue4": {
       "zone": "Garden",
-      "prompt": "for(int i=5;i>=1;i--) printf(\"%d \", i); \u2014 what prints?",
       "answer": "5 4 3 2 1"
     }
   },
@@ -315,23 +341,25 @@
     "clue2": {
       "zone": "Badminton Court",
       "riddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing \u2014 not sport tonight, just panic\u2019s flight, caught in netting, out of sight.",
-      "prompt": "Start with 7. Perform \u00d72, +6, \u00f72, +5. What\u2019s the final value?",
       "codeword": "15"
     },
     "crewmate": {
       "id": "CM-A14",
+      "name": "Deekshita B",
+      "photo": "/assets/team/Deekshita B_Events&LogisticsMember.jpg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "FRGH"
     },
     "clue3": {
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness applied a 3-step Caesar reverse shift to disguise the sighting. Realign the alphabet to decipher the lead.",
+      "intercept": "FRGH",
       "answer": "CODE",
       "nextZone": "Football Net",
       "nextRiddle": "Where a ball forgets to fall asleep, netted still, its silence deep \u2014 someone crossed here, soft and fast, gone before the moment passed."
     },
     "clue4": {
       "zone": "Football Net",
-      "prompt": "int a[]={2,4,6,8,10}; for(i=0;i<5;i++) printf(\"%d \", a[i]+1); \u2014 what prints, and the sum?",
       "answer": "3 5 7 9 11, sum 35"
     }
   },
@@ -339,23 +367,25 @@
     "clue2": {
       "zone": "New Stairs",
       "riddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet \u2014 steps that lead toward open air, not the way she chose, but almost there.",
-      "prompt": "ASCII value of A?",
       "codeword": "65"
     },
     "crewmate": {
       "id": "CM-A15",
+      "name": "Dhanush",
+      "photo": "/assets/team/Dhanush_c++_lead.jpg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "KHOOR"
     },
     "clue3": {
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness disguised their sighting with a 3-step reverse rotation. Shift backwards to decode the true dispatch.",
+      "intercept": "KHOOR",
       "answer": "HELLO",
       "nextZone": "Placement Banner",
       "nextRiddle": "Where futures hang, printed and proud, she waited here, alone, unbowed \u2014 scrolling one thing, again, again, until the courage came to enter in."
     },
     "clue4": {
       "zone": "Placement Banner",
-      "prompt": "Find the next number: 2, 5, 11, 23, 47, ?",
       "answer": "95"
     }
   },
@@ -363,23 +393,25 @@
     "clue2": {
       "zone": "Main Gate",
       "riddle": "Where the campus breathes its last goodbye, she never came or went thereby \u2014 but someone did, in a hurry, unseen, gone before the gate\u2019s routine.",
-      "prompt": "ASCII value of Z?",
       "codeword": "90"
     },
     "crewmate": {
       "id": "CM-A16",
+      "name": "Eesha Akshaya",
+      "photo": "/assets/team/Eesha Akshaya_Events & Logistics.jpeg",
       "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "72 73"
     },
     "clue3": {
-      "prompt": "Using ASCII, decode 72 73.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encoded the lead into decimal byte values. Translate the numerical pairs into letters to uncover the next sector.",
+      "intercept": "72 73",
       "answer": "HI",
       "nextZone": "Student Parking",
       "nextRiddle": "Wheels rest here, riders long gone, she never lingered, kept moving on \u2014 just passed the edge, and kept her pace, nowhere close to a resting place."
     },
     "clue4": {
       "zone": "Student Parking",
-      "prompt": "int a[]={5,10,15,20}; printf(\"%d\", a[2]); \u2014 what prints?",
       "answer": "15"
     }
   },
@@ -387,23 +419,25 @@
     "clue2": {
       "zone": "Canteen",
       "riddle": "Where hunger goes to disappear, and gossip\u2019s louder than the cheer \u2014 he passed here fast, not stopping to eat, something crashed close by, near his feet.",
-      "prompt": "Using ASCII, decode 72 73.",
       "codeword": "HI"
     },
     "crewmate": {
       "id": "CM-B1",
+      "name": "Enoch Micheal",
+      "photo": "/assets/team/Enoch Micheal_Marketing.jpg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "84 69 67 72"
     },
     "clue3": {
-      "prompt": "Convert 84 69 67 72 using ASCII.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encrypted their sighting using 8-bit character mapping. Decrypt the decimal bytes to reveal where the suspect headed.",
+      "intercept": "84 69 67 72",
       "answer": "TECH",
       "nextZone": "Football Net",
       "nextRiddle": "Where a net catches all it\u2019s thrown, and no one plays this late alone \u2014 a fence stood sagged, a sleeve was torn, before the whistle, before the dawn."
     },
     "clue4": {
       "zone": "Football Net",
-      "prompt": "A=1, B=0. Evaluate (A AND B) OR NOT(B).",
       "answer": "1"
     }
   },
@@ -411,23 +445,25 @@
     "clue2": {
       "zone": "Badminton Court",
       "riddle": "Where shuttles fly and rackets sing, he barely noticed anything \u2014 ran straight past, not stopping to see, a net, a court, an empty referee.",
-      "prompt": "Start with 7. Perform \u00d72, +6, \u00f72, +5. What\u2019s the final value?",
       "codeword": "15"
     },
     "crewmate": {
       "id": "CM-B2",
+      "name": "Gnaneshwar",
+      "photo": "/assets/team/Gnaneshwar_Design.jpeg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "FRGH"
     },
     "clue3": {
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness applied a 3-step Caesar reverse shift to disguise the sighting. Realign the alphabet to decipher the lead.",
+      "intercept": "FRGH",
       "answer": "CODE",
       "nextZone": "Garden",
       "nextRiddle": "Two patches green, no flowers grow, just grass that watched him rush and go \u2014 past the smell of fast food\u2019s stand, straight for the gate, straight off this land."
     },
     "clue4": {
       "zone": "Garden",
-      "prompt": "How many times does for(int i=0;i<5;i++) execute?",
       "answer": "5"
     }
   },
@@ -435,23 +471,25 @@
     "clue2": {
       "zone": "Main Gate",
       "riddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi \u2014 he never scanned, he climbed instead, a fence that sagged, a torn sleeve\u2019s thread.",
-      "prompt": "ASCII value of A?",
       "codeword": "65"
     },
     "crewmate": {
       "id": "CM-B3",
+      "name": "Gyanendra Sethi",
+      "photo": "/assets/team/Gyanendra Sethi__Python.jpg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "KHOOR"
     },
     "clue3": {
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness disguised their sighting with a 3-step reverse rotation. Shift backwards to decode the true dispatch.",
+      "intercept": "KHOOR",
       "answer": "HELLO",
       "nextZone": "Placement Banner",
       "nextRiddle": "Where futures hang, printed and proud, a promise made, sworn out loud \u2014 he passed it once, not stopping to read, a man with debts and desperate need."
     },
     "clue4": {
       "zone": "Placement Banner",
-      "prompt": "for(int i=1;i<=3;i++) printf(\"%d\",i); \u2014 what prints?",
       "answer": "123"
     }
   },
@@ -459,23 +497,25 @@
     "clue2": {
       "zone": "Football Net",
       "riddle": "Where a net catches all it\u2019s thrown, and no one plays this late alone \u2014 a fence stood sagged, a sleeve was torn, before the whistle, before the dawn.",
-      "prompt": "ASCII value of Z?",
       "codeword": "90"
     },
     "crewmate": {
       "id": "CM-B4",
+      "name": "Himani Joshi",
+      "photo": "/assets/team/Himani Joshi_Events & Logistics Lead.jpeg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "72 73"
     },
     "clue3": {
-      "prompt": "Using ASCII, decode 72 73.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encoded the lead into decimal byte values. Translate the numerical pairs into letters to uncover the next sector.",
+      "intercept": "72 73",
       "answer": "HI",
       "nextZone": "New Stairs",
       "nextRiddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street \u2014 the shortest path back toward the gate, a man who couldn\u2019t afford to wait."
     },
     "clue4": {
       "zone": "New Stairs",
-      "prompt": "Find the next number: 4, 8, 16, 32, ?",
       "answer": "64"
     }
   },
@@ -483,23 +523,25 @@
     "clue2": {
       "zone": "Ground",
       "riddle": "Where a hundred feet run every morning, empty now, no crowd, no warning \u2014 he crossed it fast, along the top, a walkway\u2019s slope he didn\u2019t stop.",
-      "prompt": "Convert 84 69 67 72 using ASCII.",
       "codeword": "TECH"
     },
     "crewmate": {
       "id": "CM-B5",
+      "name": "Jishnesh Reddy",
+      "photo": "/assets/team/Jishnesh Reddy, Marketing_.jpg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "84 69 67 72"
     },
     "clue3": {
-      "prompt": "Convert 84 69 67 72 using ASCII.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encrypted their sighting using 8-bit character mapping. Decrypt the decimal bytes to reveal where the suspect headed.",
+      "intercept": "84 69 67 72",
       "answer": "TECH",
       "nextZone": "Student Parking",
       "nextRiddle": "Wheels rest here, riders long gone, silence stretched from dusk till dawn \u2014 mud on a shoe, a shadow\u2019s trace, the last stop before he left this place."
     },
     "clue4": {
       "zone": "Student Parking",
-      "prompt": "Find the next number: 1, 4, 9, 16, ?",
       "answer": "25"
     }
   },
@@ -507,23 +549,25 @@
     "clue2": {
       "zone": "Garden",
       "riddle": "Two patches green, no flowers grow, just grass that watched him rush and go \u2014 past the smell of fast food\u2019s stand, straight for the gate, straight off this land.",
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
       "codeword": "CODE"
     },
     "crewmate": {
       "id": "CM-B6",
+      "name": "K SRIVALLI REDDY",
+      "photo": "/assets/team/K SRIVALLI REDDY_ C++.jpeg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "FRGH"
     },
     "clue3": {
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness applied a 3-step Caesar reverse shift to disguise the sighting. Realign the alphabet to decipher the lead.",
+      "intercept": "FRGH",
       "answer": "CODE",
       "nextZone": "Badminton Court",
       "nextRiddle": "Where shuttles fly and rackets sing, he barely noticed anything \u2014 ran straight past, not stopping to see, a net, a court, an empty referee."
     },
     "clue4": {
       "zone": "Badminton Court",
-      "prompt": "Find the next number: 3, 6, 10, 15, ?",
       "answer": "21"
     }
   },
@@ -531,23 +575,25 @@
     "clue2": {
       "zone": "Placement Banner",
       "riddle": "Where futures hang, printed and proud, a promise made, sworn out loud \u2014 he passed it once, not stopping to read, a man with debts and desperate need.",
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
       "codeword": "HELLO"
     },
     "crewmate": {
       "id": "CM-B7",
+      "name": "K. Pujitha Sri",
+      "photo": "/assets/team/K. Pujitha Sri - java team member.jpg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "KHOOR"
     },
     "clue3": {
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness disguised their sighting with a 3-step reverse rotation. Shift backwards to decode the true dispatch.",
+      "intercept": "KHOOR",
       "answer": "HELLO",
       "nextZone": "Main Gate",
       "nextRiddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi \u2014 he never scanned, he climbed instead, a fence that sagged, a torn sleeve\u2019s thread."
     },
     "clue4": {
       "zone": "Main Gate",
-      "prompt": "int a[]={10,20,30,40}; \u2014 what is a[0]?",
       "answer": "10"
     }
   },
@@ -555,23 +601,25 @@
     "clue2": {
       "zone": "New Stairs",
       "riddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street \u2014 the shortest path back toward the gate, a man who couldn\u2019t afford to wait.",
-      "prompt": "Using Atbash (A\u2194Z, B\u2194Y\u2026), decode XLWV.",
       "codeword": "CODE"
     },
     "crewmate": {
       "id": "CM-B8",
+      "name": "K. Siri Chandana",
+      "photo": "/assets/team/K. Siri Chandana_CoLead(Java).jpg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "72 73"
     },
     "clue3": {
-      "prompt": "Using ASCII, decode 72 73.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encoded the lead into decimal byte values. Translate the numerical pairs into letters to uncover the next sector.",
+      "intercept": "72 73",
       "answer": "HI",
       "nextZone": "Canteen",
       "nextRiddle": "Where hunger goes to disappear, and gossip\u2019s louder than the cheer \u2014 he passed here fast, not stopping to eat, something crashed close by, near his feet."
     },
     "clue4": {
       "zone": "Canteen",
-      "prompt": "int a[]={5,10,15}; \u2014 what is a[1]+a[2]?",
       "answer": "25"
     }
   },
@@ -579,23 +627,25 @@
     "clue2": {
       "zone": "Student Parking",
       "riddle": "Wheels rest here, riders long gone, silence stretched from dusk till dawn \u2014 mud on a shoe, a shadow\u2019s trace, the last stop before he left this place.",
-      "prompt": "Using ASCII, decode 72 73.",
       "codeword": "HI"
     },
     "crewmate": {
       "id": "CM-B9",
+      "name": "Khyathi Anand",
+      "photo": "/assets/team/Khyathi Anand_marketing_colead.PNG",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "84 69 67 72"
     },
     "clue3": {
-      "prompt": "Convert 84 69 67 72 using ASCII.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encrypted their sighting using 8-bit character mapping. Decrypt the decimal bytes to reveal where the suspect headed.",
+      "intercept": "84 69 67 72",
       "answer": "TECH",
       "nextZone": "Ground",
       "nextRiddle": "Where a hundred feet run every morning, empty now, no crowd, no warning \u2014 he crossed it fast, along the top, a walkway\u2019s slope he didn\u2019t stop."
     },
     "clue4": {
       "zone": "Ground",
-      "prompt": "for(int i=5;i>=1;i--) printf(\"%d \", i); \u2014 what prints?",
       "answer": "5 4 3 2 1"
     }
   },
@@ -603,23 +653,25 @@
     "clue2": {
       "zone": "Football Net",
       "riddle": "Where a net catches all it\u2019s thrown, and no one plays this late alone \u2014 a fence stood sagged, a sleeve was torn, before the whistle, before the dawn.",
-      "prompt": "Start with 7. Perform \u00d72, +6, \u00f72, +5. What\u2019s the final value?",
       "codeword": "15"
     },
     "crewmate": {
       "id": "CM-B10",
+      "name": "M.Manas web",
+      "photo": "/assets/team/M.Manas web-dev member.jpg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "FRGH"
     },
     "clue3": {
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness applied a 3-step Caesar reverse shift to disguise the sighting. Realign the alphabet to decipher the lead.",
+      "intercept": "FRGH",
       "answer": "CODE",
       "nextZone": "Badminton Court",
       "nextRiddle": "Where shuttles fly and rackets sing, he barely noticed anything \u2014 ran straight past, not stopping to see, a net, a court, an empty referee."
     },
     "clue4": {
       "zone": "Badminton Court",
-      "prompt": "int a[]={2,4,6,8,10}; for(i=0;i<5;i++) printf(\"%d \", a[i]+1); \u2014 what prints, and the sum?",
       "answer": "3 5 7 9 11, sum 35"
     }
   },
@@ -627,23 +679,25 @@
     "clue2": {
       "zone": "Garden",
       "riddle": "Two patches green, no flowers grow, just grass that watched him rush and go \u2014 past the smell of fast food\u2019s stand, straight for the gate, straight off this land.",
-      "prompt": "ASCII value of A?",
       "codeword": "65"
     },
     "crewmate": {
       "id": "CM-B11",
+      "name": "Maniyanga Vedaang",
+      "photo": "/assets/team/Maniyanga Vedaang_C++.png",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "KHOOR"
     },
     "clue3": {
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness disguised their sighting with a 3-step reverse rotation. Shift backwards to decode the true dispatch.",
+      "intercept": "KHOOR",
       "answer": "HELLO",
       "nextZone": "New Stairs",
       "nextRiddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street \u2014 the shortest path back toward the gate, a man who couldn\u2019t afford to wait."
     },
     "clue4": {
       "zone": "New Stairs",
-      "prompt": "Find the next number: 2, 5, 11, 23, 47, ?",
       "answer": "95"
     }
   },
@@ -651,23 +705,25 @@
     "clue2": {
       "zone": "Main Gate",
       "riddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi \u2014 he never scanned, he climbed instead, a fence that sagged, a torn sleeve\u2019s thread.",
-      "prompt": "ASCII value of Z?",
       "codeword": "90"
     },
     "crewmate": {
       "id": "CM-B12",
+      "name": "Mohit choudhury",
+      "photo": "/assets/team/Mohit choudhury,Operational lead.jpg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "72 73"
     },
     "clue3": {
-      "prompt": "Using ASCII, decode 72 73.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encoded the lead into decimal byte values. Translate the numerical pairs into letters to uncover the next sector.",
+      "intercept": "72 73",
       "answer": "HI",
       "nextZone": "Football Net",
       "nextRiddle": "Where a net catches all it\u2019s thrown, and no one plays this late alone \u2014 a fence stood sagged, a sleeve was torn, before the whistle, before the dawn."
     },
     "clue4": {
       "zone": "Football Net",
-      "prompt": "int a[]={5,10,15,20}; printf(\"%d\", a[2]); \u2014 what prints?",
       "answer": "15"
     }
   },
@@ -675,23 +731,25 @@
     "clue2": {
       "zone": "Canteen",
       "riddle": "Where hunger goes to disappear, and gossip\u2019s louder than the cheer \u2014 he passed here fast, not stopping to eat, something crashed close by, near his feet.",
-      "prompt": "Convert 84 69 67 72 using ASCII.",
       "codeword": "TECH"
     },
     "crewmate": {
       "id": "CM-B13",
+      "name": "Naineeth co lead event and logistics",
+      "photo": "/assets/team/Naineeth co lead event and logistics.jpg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "84 69 67 72"
     },
     "clue3": {
-      "prompt": "Convert 84 69 67 72 using ASCII.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encrypted their sighting using 8-bit character mapping. Decrypt the decimal bytes to reveal where the suspect headed.",
+      "intercept": "84 69 67 72",
       "answer": "TECH",
       "nextZone": "Garden",
       "nextRiddle": "Two patches green, no flowers grow, just grass that watched him rush and go \u2014 past the smell of fast food\u2019s stand, straight for the gate, straight off this land."
     },
     "clue4": {
       "zone": "Garden",
-      "prompt": "A=1, B=0. Evaluate (A AND B) OR NOT(B).",
       "answer": "1"
     }
   },
@@ -699,23 +757,25 @@
     "clue2": {
       "zone": "Badminton Court",
       "riddle": "Where shuttles fly and rackets sing, he barely noticed anything \u2014 ran straight past, not stopping to see, a net, a court, an empty referee.",
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
       "codeword": "CODE"
     },
     "crewmate": {
       "id": "CM-B14",
+      "name": "Nanda Kishore",
+      "photo": "/assets/team/Nanda Kishore_Design.jpeg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "FRGH"
     },
     "clue3": {
-      "prompt": "Decode FRGH using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness applied a 3-step Caesar reverse shift to disguise the sighting. Realign the alphabet to decipher the lead.",
+      "intercept": "FRGH",
       "answer": "CODE",
       "nextZone": "Student Parking",
       "nextRiddle": "Wheels rest here, riders long gone, silence stretched from dusk till dawn \u2014 mud on a shoe, a shadow\u2019s trace, the last stop before he left this place."
     },
     "clue4": {
       "zone": "Student Parking",
-      "prompt": "How many times does for(int i=0;i<5;i++) execute?",
       "answer": "5"
     }
   },
@@ -723,23 +783,25 @@
     "clue2": {
       "zone": "Placement Banner",
       "riddle": "Where futures hang, printed and proud, a promise made, sworn out loud \u2014 he passed it once, not stopping to read, a man with debts and desperate need.",
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
       "codeword": "HELLO"
     },
     "crewmate": {
       "id": "CM-B15",
+      "name": "Nisa Afreen",
+      "photo": "/assets/team/Nisa Afreen_Documentations Advisor.jpg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "KHOOR"
     },
     "clue3": {
-      "prompt": "Decode KHOOR using a Caesar shift of -3.",
+      "cipherType": "Caesar Rotation Cipher",
+      "hint": "The witness disguised their sighting with a 3-step reverse rotation. Shift backwards to decode the true dispatch.",
+      "intercept": "KHOOR",
       "answer": "HELLO",
       "nextZone": "Main Gate",
       "nextRiddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi \u2014 he never scanned, he climbed instead, a fence that sagged, a torn sleeve\u2019s thread."
     },
     "clue4": {
       "zone": "Main Gate",
-      "prompt": "for(int i=1;i<=3;i++) printf(\"%d\",i); \u2014 what prints?",
       "answer": "123"
     }
   },
@@ -747,23 +809,25 @@
     "clue2": {
       "zone": "New Stairs",
       "riddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street \u2014 the shortest path back toward the gate, a man who couldn\u2019t afford to wait.",
-      "prompt": "Using Atbash (A\u2194Z, B\u2194Y\u2026), decode XLWV.",
       "codeword": "CODE"
     },
     "crewmate": {
       "id": "CM-B16",
+      "name": "Pravallika web development",
+      "photo": "/assets/team/Pravallika web development_.jpg",
       "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
       "code": "72 73"
     },
     "clue3": {
-      "prompt": "Using ASCII, decode 72 73.",
+      "cipherType": "ASCII Decimal Sequence",
+      "hint": "The witness encoded the lead into decimal byte values. Translate the numerical pairs into letters to uncover the next sector.",
+      "intercept": "72 73",
       "answer": "HI",
       "nextZone": "Placement Banner",
       "nextRiddle": "Where futures hang, printed and proud, a promise made, sworn out loud \u2014 he passed it once, not stopping to read, a man with debts and desperate need."
     },
     "clue4": {
       "zone": "Placement Banner",
-      "prompt": "Find the next number: 4, 8, 16, 32, ?",
       "answer": "64"
     }
   }

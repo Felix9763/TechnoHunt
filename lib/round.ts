@@ -29,12 +29,17 @@ export interface StageData {
   crewmate?: {
     code: string;
     id?: string;
+    name?: string;
+    photo?: string;
     script?: string;
   };
   clue3?: {
     answer: string;
     nextZone: string;
     prompt?: string;
+    cipherType?: string;
+    hint?: string;
+    intercept?: string;
     nextRiddle?: string;
   };
   clue4?: {
