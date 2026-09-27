@@ -351,3 +351,34 @@ export async function markFinaleSubmission(round: string, teamCode: string) {
   saveLocalDb(db);
   return { success: true, position: newPosition, alreadySubmitted: false };
 }
+
+export async function resetRoundData(round: string): Promise<boolean> {
+  const sb = getSupabase();
+  if (sb) {
+    try {
+      await sb.from('team_progress').delete().eq('round', round);
+      await sb.from('attempts').delete().eq('round', round);
+      await sb.from('finale_submissions').delete().eq('round', round);
+    } catch (e) {
+      console.warn('Supabase resetRoundData error:', e);
+    }
+  }
+
+  const db = getLocalDb();
+  // Clear team_progress for this round
+  Object.keys(db.team_progress).forEach((key) => {
+    if (db.team_progress[key].round === round) {
+      delete db.team_progress[key];
+    }
+  });
+  // Clear attempts for this round
+  db.attempts = db.attempts.filter((a) => a.round !== round);
+  // Clear finale_submissions for this round
+  Object.keys(db.finale_submissions).forEach((key) => {
+    if (db.finale_submissions[key].round === round) {
+      delete db.finale_submissions[key];
+    }
+  });
+  saveLocalDb(db);
+  return true;
+}

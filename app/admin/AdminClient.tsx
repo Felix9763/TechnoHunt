@@ -188,6 +188,28 @@ export default function AdminClient({ initialData }: AdminClientProps) {
     }
   }
 
+  async function handleResetRound() {
+    if (!window.confirm(`Are you sure you want to reset all test data (progress, attempts, finale) for ${data.activeRound.toUpperCase()}?`)) {
+      return;
+    }
+    setLoading(true);
+    setActionMsg(null);
+    try {
+      const res = await fetch('/api/admin/reset', { method: 'POST' });
+      const resData = await res.json();
+      if (!res.ok) {
+        setActionMsg({ text: resData.error || 'Reset failed', error: true });
+      } else {
+        setActionMsg({ text: `Reset complete for ${data.activeRound.toUpperCase()}. All teams are back to initial stage.` });
+        await refreshData();
+      }
+    } catch (e) {
+      setActionMsg({ text: 'Error during reset.', error: true });
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function handleLogout() {
     await fetch('/api/admin/logout', { method: 'POST' });
     router.push('/admin/login');
@@ -215,6 +237,13 @@ export default function AdminClient({ initialData }: AdminClientProps) {
             className="text-xs bg-paper border border-ink px-3 py-1.5 hover:bg-ink hover:text-paper transition-colors disabled:opacity-50"
           >
             {loading ? 'Refreshing...' : 'Refresh'}
+          </button>
+          <button
+            onClick={handleResetRound}
+            disabled={loading}
+            className="text-xs bg-paper border border-evidence-red text-evidence-red px-3 py-1.5 hover:bg-evidence-red hover:text-paper transition-colors disabled:opacity-50"
+          >
+            Reset Test Data
           </button>
           <button
             onClick={handleLogout}
