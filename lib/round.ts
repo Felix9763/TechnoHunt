@@ -52,7 +52,6 @@ export interface StageData {
 
 export interface SanitizedStageData {
   clue2?: {
-    zone: string;
     riddle?: string;
   };
   crewmate?: {
@@ -65,12 +64,9 @@ export interface SanitizedStageData {
     cipherType?: string;
     intercept?: string;
     hint?: string;
-    nextZone?: string;
     nextRiddle?: string;
   };
-  clue4?: {
-    zone: string;
-  };
+  clue4?: Record<string, never>;
 }
 
 export function getSanitizedStageData(
@@ -81,10 +77,9 @@ export function getSanitizedStageData(
 
   const sanitized: SanitizedStageData = {};
 
-  // 1. Clue 2 is always unlocked from the start
+  // 1. Clue 2 is always unlocked from the start (only riddle provided, location is never revealed)
   if (fullData.clue2) {
     sanitized.clue2 = {
-      zone: fullData.clue2.zone || '',
       ...(currentStage === 'clue2' ? { riddle: fullData.clue2.riddle } : {}),
     };
   }
@@ -106,23 +101,20 @@ export function getSanitizedStageData(
       cipherType: fullData.clue3.cipherType,
       intercept: fullData.clue3.intercept,
       hint: fullData.clue3.hint,
-      // nextZone and nextRiddle are only revealed AFTER clue 3 is solved (at clue4 or final)
+      // nextRiddle is revealed AFTER clue 3 is solved so detectives can deduce the clue4 location
       ...(['clue4', 'final'].includes(currentStage)
         ? {
-            nextZone: fullData.clue3.nextZone,
             nextRiddle: fullData.clue3.nextRiddle,
           }
         : {}),
     };
-    // Note: clue3 answer is NEVER provided to client
+    // Note: clue3 answer and location names are NEVER provided to client
   }
 
   // 4. Clue 4 unlocks once clue3 is solved (currentStage is clue4 or final)
   if (['clue4', 'final'].includes(currentStage) && fullData.clue4) {
-    sanitized.clue4 = {
-      zone: fullData.clue4.zone || fullData.clue3?.nextZone || '',
-    };
-    // Note: clue4 answer is NEVER provided to client
+    sanitized.clue4 = {};
+    // Note: clue4 answer and zone are NEVER provided to client
   }
 
   return sanitized;

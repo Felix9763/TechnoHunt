@@ -2,14 +2,14 @@
   "A1": {
     "clue2": {
       "zone": "Football Net",
-      "riddle": "Where a ball forgets to fall asleep, netted still, its silence deep \u2014 someone crossed here, soft and fast, gone before the moment passed.",
+      "riddle": "Where a ball forgets to fall asleep, netted still, its silence deep — someone crossed here, soft and fast, gone before the moment passed.",
       "codeword": "VECTOR"
     },
     "crewmate": {
-      "id": "CM-A1",
-      "name": "Abhinav",
-      "photo": "/assets/team/Abhinav.jpg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C1",
+      "name": "Bannur Jishnesh Reddy",
+      "photo": "/assets/round2/Bannur Jishnesh Reddy.jpg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01000011 01001111 01000100 01000101"
     },
     "clue3": {
@@ -18,7 +18,7 @@
       "intercept": "01000011 01001111 01000100 01000101",
       "answer": "CODE",
       "nextZone": "Garden",
-      "nextRiddle": "Two patches green, on either side, where someone waited, stepped, and tried \u2014 the fast food light, she knew too well, to time her steps and never tell."
+      "nextRiddle": "Two patches green, on either side, where someone waited, stepped, and tried — the fast food light, she knew too well, to time her steps and never tell."
     },
     "clue4": {
       "zone": "Garden",
@@ -28,14 +28,14 @@
   "A2": {
     "clue2": {
       "zone": "Garden",
-      "riddle": "Two patches green, on either side, where someone waited, stepped, and tried \u2014 the fast food light, she knew too well, to time her steps and never tell.",
+      "riddle": "Two patches green, on either side, where someone waited, stepped, and tried — the fast food light, she knew too well, to time her steps and never tell.",
       "codeword": "SIGNAL"
     },
     "crewmate": {
-      "id": "CM-A2",
-      "name": "Abhinay",
-      "photo": "/assets/team/Abhinay_Kumar_CPP_Colead.jpeg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C2",
+      "name": "Enoch Michael",
+      "photo": "/assets/round2/Enoch Michael.jpg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01001000 01000101 01001100 01001100 01001111"
     },
     "clue3": {
@@ -44,7 +44,7 @@
       "intercept": "01001000 01000101 01001100 01001100 01001111",
       "answer": "HELLO",
       "nextZone": "Placement Banner",
-      "nextRiddle": "Where futures hang, printed and proud, she waited here, alone, unbowed \u2014 scrolling one thing, again, again, until the courage came to enter in."
+      "nextRiddle": "Where futures hang, printed and proud, she waited here, alone, unbowed — scrolling one thing, again, again, until the courage came to enter in."
     },
     "clue4": {
       "zone": "Placement Banner",
@@ -54,14 +54,14 @@
   "A3": {
     "clue2": {
       "zone": "Placement Banner",
-      "riddle": "Where futures hang, printed and proud, she waited here, alone, unbowed \u2014 scrolling one thing, again, again, until the courage came to enter in.",
+      "riddle": "Where futures hang, printed and proud, she waited here, alone, unbowed — scrolling one thing, again, again, until the courage came to enter in.",
       "codeword": "SHADOW"
     },
     "crewmate": {
-      "id": "CM-A3",
-      "name": "Afrah Khan",
-      "photo": "/assets/team/Afrah Khan_Media.jpeg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C3",
+      "name": "Rohit Pranav Naidu",
+      "photo": "/assets/round2/Rohit Pranav Naidu.jpeg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "2-4-7-4-3-7"
     },
     "clue3": {
@@ -70,7 +70,7 @@
       "intercept": "2-4-7-4-3-7",
       "answer": "CIPHER",
       "nextZone": "Student Parking",
-      "nextRiddle": "Wheels rest here, riders long gone, she never lingered, kept moving on \u2014 just passed the edge, and kept her pace, nowhere close to a resting place."
+      "nextRiddle": "Wheels rest here, riders long gone, she never lingered, kept moving on — just passed the edge, and kept her pace, nowhere close to a resting place."
     },
     "clue4": {
       "zone": "Student Parking",
@@ -80,14 +80,14 @@
   "A4": {
     "clue2": {
       "zone": "Student Parking",
-      "riddle": "Wheels rest here, riders long gone, she never lingered, kept moving on \u2014 just passed the edge, and kept her pace, nowhere close to a resting place.",
+      "riddle": "Wheels rest here, riders long gone, she never lingered, kept moving on — just passed the edge, and kept her pace, nowhere close to a resting place.",
       "codeword": "CIPHER"
     },
     "crewmate": {
-      "id": "CM-A4",
-      "name": "Akshata Malik",
-      "photo": "/assets/team/Akshata Malik_General_Secretary.png",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C4",
+      "name": "Gnaneshwar",
+      "photo": "/assets/round2/Gnaneshwar.jpeg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "7-2-2-5-3-8"
     },
     "clue3": {
@@ -96,7 +96,7 @@
       "intercept": "7-2-2-5-3-8",
       "answer": "PACKET",
       "nextZone": "Badminton Court",
-      "nextRiddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing \u2014 not sport tonight, just panic\u2019s flight, caught in netting, out of sight."
+      "nextRiddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing — not sport tonight, just panic’s flight, caught in netting, out of sight."
     },
     "clue4": {
       "zone": "Badminton Court",
@@ -106,14 +106,14 @@
   "A5": {
     "clue2": {
       "zone": "Canteen",
-      "riddle": "Where hunger goes to disappear, she entered soft, drawing near \u2014 a door, a crash, a startled sound, and something rolling on the ground.",
+      "riddle": "Where hunger goes to disappear, she entered soft, drawing near — a door, a crash, a startled sound, and something rolling on the ground.",
       "codeword": "MATRIX"
     },
     "crewmate": {
-      "id": "CM-A5",
-      "name": "Ardha Sudhir",
-      "photo": "/assets/team/Ardha Sudhir_Vice President.jpeg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C5",
+      "name": "Venkata Sai Kiran",
+      "photo": "/assets/round2/Venkata Sai Kiran.jpg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01010011 01001000 01000001 01000100 01001111 01010111"
     },
     "clue3": {
@@ -122,7 +122,7 @@
       "intercept": "01010011 01001000 01000001 01000100 01001111 01010111",
       "answer": "SHADOW",
       "nextZone": "New Stairs",
-      "nextRiddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet \u2014 steps that lead toward open air, not the way she chose, but almost there."
+      "nextRiddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet — steps that lead toward open air, not the way she chose, but almost there."
     },
     "clue4": {
       "zone": "New Stairs",
@@ -132,14 +132,14 @@
   "A6": {
     "clue2": {
       "zone": "New Stairs",
-      "riddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet \u2014 steps that lead toward open air, not the way she chose, but almost there.",
+      "riddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet — steps that lead toward open air, not the way she chose, but almost there.",
       "codeword": "SOCKET"
     },
     "crewmate": {
-      "id": "CM-A6",
-      "name": "Asmi Deshpande",
-      "photo": "/assets/team/Asmi Deshpande_Lead Python .png",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C6",
+      "name": "Ailneni Naineeth",
+      "photo": "/assets/round2/Ailneni Naineeth.jpg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "54 52 41 43 45"
     },
     "clue3": {
@@ -148,7 +148,7 @@
       "intercept": "54 52 41 43 45",
       "answer": "TRACE",
       "nextZone": "Main Gate",
-      "nextRiddle": "Where the campus breathes its last goodbye, she never came or went thereby \u2014 but someone did, in a hurry, unseen, gone before the gate\u2019s routine."
+      "nextRiddle": "Where the campus breathes its last goodbye, she never came or went thereby — but someone did, in a hurry, unseen, gone before the gate’s routine."
     },
     "clue4": {
       "zone": "Main Gate",
@@ -158,14 +158,14 @@
   "A7": {
     "clue2": {
       "zone": "Badminton Court",
-      "riddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing \u2014 not sport tonight, just panic\u2019s flight, caught in netting, out of sight.",
+      "riddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing — not sport tonight, just panic’s flight, caught in netting, out of sight.",
       "codeword": "PACKET"
     },
     "crewmate": {
-      "id": "CM-A7",
-      "name": "B. Rajeswara Rao",
-      "photo": "/assets/team/B. Rajeswara Rao_colead(web dev).jpg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C7",
+      "name": "K. Sahitya",
+      "photo": "/assets/round2/K. Sahitya.jpeg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "4C 4F 47 49 43"
     },
     "clue3": {
@@ -174,7 +174,7 @@
       "intercept": "4C 4F 47 49 43",
       "answer": "LOGIC",
       "nextZone": "Football Net",
-      "nextRiddle": "Where a ball forgets to fall asleep, netted still, its silence deep \u2014 someone crossed here, soft and fast, gone before the moment passed."
+      "nextRiddle": "Where a ball forgets to fall asleep, netted still, its silence deep — someone crossed here, soft and fast, gone before the moment passed."
     },
     "clue4": {
       "zone": "Football Net",
@@ -184,14 +184,14 @@
   "A8": {
     "clue2": {
       "zone": "Main Gate",
-      "riddle": "Where the campus breathes its last goodbye, she never came or went thereby \u2014 but someone did, in a hurry, unseen, gone before the gate\u2019s routine.",
+      "riddle": "Where the campus breathes its last goodbye, she never came or went thereby — but someone did, in a hurry, unseen, gone before the gate’s routine.",
       "codeword": "BINARY"
     },
     "crewmate": {
-      "id": "CM-A8",
-      "name": "B.Samanvitha",
-      "photo": "/assets/team/B.Samanvitha_java.jpg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C8",
+      "name": "Saanvi Reddy",
+      "photo": "/assets/round2/Saanvi Reddy.jpg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "53 48 49 46 54"
     },
     "clue3": {
@@ -200,7 +200,7 @@
       "intercept": "53 48 49 46 54",
       "answer": "SHIFT",
       "nextZone": "Ground",
-      "nextRiddle": "Where a hundred feet run every morning, empty now, silent, no warning \u2014 she crossed it once, then turned away, chose a different path to stray."
+      "nextRiddle": "Where a hundred feet run every morning, empty now, silent, no warning — she crossed it once, then turned away, chose a different path to stray."
     },
     "clue4": {
       "zone": "Ground",
@@ -210,14 +210,14 @@
   "A9": {
     "clue2": {
       "zone": "Ground",
-      "riddle": "Where a hundred feet run every morning, empty now, silent, no warning \u2014 she crossed it once, then turned away, chose a different path to stray.",
+      "riddle": "Where a hundred feet run every morning, empty now, silent, no warning — she crossed it once, then turned away, chose a different path to stray.",
       "codeword": "TRACE"
     },
     "crewmate": {
-      "id": "CM-A9",
-      "name": "Brundhavani",
-      "photo": "/assets/team/Brundhavani_marketing lead.jpg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C1",
+      "name": "Bannur Jishnesh Reddy",
+      "photo": "/assets/round2/Bannur Jishnesh Reddy.jpg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "56 45 43 54 4F 52"
     },
     "clue3": {
@@ -226,7 +226,7 @@
       "intercept": "56 45 43 54 4F 52",
       "answer": "VECTOR",
       "nextZone": "Canteen",
-      "nextRiddle": "Where hunger goes to disappear, she entered soft, drawing near \u2014 a door, a crash, a startled sound, and something rolling on the ground."
+      "nextRiddle": "Where hunger goes to disappear, she entered soft, drawing near — a door, a crash, a startled sound, and something rolling on the ground."
     },
     "clue4": {
       "zone": "Canteen",
@@ -236,14 +236,14 @@
   "A10": {
     "clue2": {
       "zone": "Football Net",
-      "riddle": "Where a ball forgets to fall asleep, netted still, its silence deep \u2014 someone crossed here, soft and fast, gone before the moment passed.",
+      "riddle": "Where a ball forgets to fall asleep, netted still, its silence deep — someone crossed here, soft and fast, gone before the moment passed.",
       "codeword": "CODE"
     },
     "crewmate": {
-      "id": "CM-A10",
-      "name": "Ch. Saanvi Reddy",
-      "photo": "/assets/team/Ch. Saanvi Reddy - Marketing team member.jpg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C2",
+      "name": "Enoch Michael",
+      "photo": "/assets/round2/Enoch Michael.jpg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "4D 41 54 52 49 58"
     },
     "clue3": {
@@ -252,7 +252,7 @@
       "intercept": "4D 41 54 52 49 58",
       "answer": "MATRIX",
       "nextZone": "New Stairs",
-      "nextRiddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet \u2014 steps that lead toward open air, not the way she chose, but almost there."
+      "nextRiddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet — steps that lead toward open air, not the way she chose, but almost there."
     },
     "clue4": {
       "zone": "New Stairs",
@@ -262,14 +262,14 @@
   "A11": {
     "clue2": {
       "zone": "Garden",
-      "riddle": "Two patches green, on either side, where someone waited, stepped, and tried \u2014 the fast food light, she knew too well, to time her steps and never tell.",
+      "riddle": "Two patches green, on either side, where someone waited, stepped, and tried — the fast food light, she knew too well, to time her steps and never tell.",
       "codeword": "HELLO"
     },
     "crewmate": {
-      "id": "CM-A11",
-      "name": "D Amrutha",
-      "photo": "/assets/team/D Amrutha, Web development_.jpg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C3",
+      "name": "Rohit Pranav Naidu",
+      "photo": "/assets/round2/Rohit Pranav Naidu.jpeg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01001011 01000101 01011001"
     },
     "clue3": {
@@ -278,7 +278,7 @@
       "intercept": "01001011 01000101 01011001",
       "answer": "KEY",
       "nextZone": "Badminton Court",
-      "nextRiddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing \u2014 not sport tonight, just panic\u2019s flight, caught in netting, out of sight."
+      "nextRiddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing — not sport tonight, just panic’s flight, caught in netting, out of sight."
     },
     "clue4": {
       "zone": "Badminton Court",
@@ -288,14 +288,14 @@
   "A12": {
     "clue2": {
       "zone": "Placement Banner",
-      "riddle": "Where futures hang, printed and proud, she waited here, alone, unbowed \u2014 scrolling one thing, again, again, until the courage came to enter in.",
+      "riddle": "Where futures hang, printed and proud, she waited here, alone, unbowed — scrolling one thing, again, again, until the courage came to enter in.",
       "codeword": "SYNTAX"
     },
     "crewmate": {
-      "id": "CM-A12",
-      "name": "D Aswin (Python)",
-      "photo": "/assets/team/D Aswin (Python).jpg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C4",
+      "name": "Gnaneshwar",
+      "photo": "/assets/round2/Gnaneshwar.jpeg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "8-3-2-2-4"
     },
     "clue3": {
@@ -304,7 +304,7 @@
       "intercept": "8-3-2-2-4",
       "answer": "TECH",
       "nextZone": "Main Gate",
-      "nextRiddle": "Where the campus breathes its last goodbye, she never came or went thereby \u2014 but someone did, in a hurry, unseen, gone before the gate\u2019s routine."
+      "nextRiddle": "Where the campus breathes its last goodbye, she never came or went thereby — but someone did, in a hurry, unseen, gone before the gate’s routine."
     },
     "clue4": {
       "zone": "Main Gate",
@@ -314,14 +314,14 @@
   "A13": {
     "clue2": {
       "zone": "Student Parking",
-      "riddle": "Wheels rest here, riders long gone, she never lingered, kept moving on \u2014 just passed the edge, and kept her pace, nowhere close to a resting place.",
+      "riddle": "Wheels rest here, riders long gone, she never lingered, kept moving on — just passed the edge, and kept her pace, nowhere close to a resting place.",
       "codeword": "KERNEL"
     },
     "crewmate": {
-      "id": "CM-A13",
-      "name": "DANDU BHAVADESH GOUD",
-      "photo": "/assets/team/DANDU BHAVADESH GOUD_ JAVA LEAD.jpg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C5",
+      "name": "Venkata Sai Kiran",
+      "photo": "/assets/round2/Venkata Sai Kiran.jpg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "72 73"
     },
     "clue3": {
@@ -330,7 +330,7 @@
       "intercept": "72 73",
       "answer": "HI",
       "nextZone": "Garden",
-      "nextRiddle": "Two patches green, on either side, where someone waited, stepped, and tried \u2014 the fast food light, she knew too well, to time her steps and never tell."
+      "nextRiddle": "Two patches green, on either side, where someone waited, stepped, and tried — the fast food light, she knew too well, to time her steps and never tell."
     },
     "clue4": {
       "zone": "Garden",
@@ -340,14 +340,14 @@
   "A14": {
     "clue2": {
       "zone": "Badminton Court",
-      "riddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing \u2014 not sport tonight, just panic\u2019s flight, caught in netting, out of sight.",
+      "riddle": "Where shuttles fly and rackets sing, something landed, an unplanned thing — not sport tonight, just panic’s flight, caught in netting, out of sight.",
       "codeword": "TOKEN"
     },
     "crewmate": {
-      "id": "CM-A14",
-      "name": "Deekshita B",
-      "photo": "/assets/team/Deekshita B_Events&LogisticsMember.jpg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C6",
+      "name": "Ailneni Naineeth",
+      "photo": "/assets/round2/Ailneni Naineeth.jpg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01010011 01001001 01000111 01001110 01000001 01001100"
     },
     "clue3": {
@@ -356,7 +356,7 @@
       "intercept": "01010011 01001001 01000111 01001110 01000001 01001100",
       "answer": "SIGNAL",
       "nextZone": "Football Net",
-      "nextRiddle": "Where a ball forgets to fall asleep, netted still, its silence deep \u2014 someone crossed here, soft and fast, gone before the moment passed."
+      "nextRiddle": "Where a ball forgets to fall asleep, netted still, its silence deep — someone crossed here, soft and fast, gone before the moment passed."
     },
     "clue4": {
       "zone": "Football Net",
@@ -366,14 +366,14 @@
   "A15": {
     "clue2": {
       "zone": "New Stairs",
-      "riddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet \u2014 steps that lead toward open air, not the way she chose, but almost there.",
+      "riddle": "Fresh paint, barely worn by feet, she passed close by, unsure, discreet — steps that lead toward open air, not the way she chose, but almost there.",
       "codeword": "BUFFER"
     },
     "crewmate": {
-      "id": "CM-A15",
-      "name": "Dhanush",
-      "photo": "/assets/team/Dhanush_c++_lead.jpg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C7",
+      "name": "K. Sahitya",
+      "photo": "/assets/round2/K. Sahitya.jpeg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01010011 01001111 01000011 01001011 01000101 01010100"
     },
     "clue3": {
@@ -382,7 +382,7 @@
       "intercept": "01010011 01001111 01000011 01001011 01000101 01010100",
       "answer": "SOCKET",
       "nextZone": "Placement Banner",
-      "nextRiddle": "Where futures hang, printed and proud, she waited here, alone, unbowed \u2014 scrolling one thing, again, again, until the courage came to enter in."
+      "nextRiddle": "Where futures hang, printed and proud, she waited here, alone, unbowed — scrolling one thing, again, again, until the courage came to enter in."
     },
     "clue4": {
       "zone": "Placement Banner",
@@ -392,14 +392,14 @@
   "A16": {
     "clue2": {
       "zone": "Main Gate",
-      "riddle": "Where the campus breathes its last goodbye, she never came or went thereby \u2014 but someone did, in a hurry, unseen, gone before the gate\u2019s routine.",
+      "riddle": "Where the campus breathes its last goodbye, she never came or went thereby — but someone did, in a hurry, unseen, gone before the gate’s routine.",
       "codeword": "SCRIPT"
     },
     "crewmate": {
-      "id": "CM-A16",
-      "name": "Eesha Akshaya",
-      "photo": "/assets/team/Eesha Akshaya_Events & Logistics.jpeg",
-      "script": "\u201cYou found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C8",
+      "name": "Saanvi Reddy",
+      "photo": "/assets/round2/Saanvi Reddy.jpg",
+      "script": "“You found me, Detective. I saw someone out here far too late, moving carefully, like she knew the campus better than most. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "53 59 4E 54 41 58"
     },
     "clue3": {
@@ -408,7 +408,7 @@
       "intercept": "53 59 4E 54 41 58",
       "answer": "SYNTAX",
       "nextZone": "Student Parking",
-      "nextRiddle": "Wheels rest here, riders long gone, she never lingered, kept moving on \u2014 just passed the edge, and kept her pace, nowhere close to a resting place."
+      "nextRiddle": "Wheels rest here, riders long gone, she never lingered, kept moving on — just passed the edge, and kept her pace, nowhere close to a resting place."
     },
     "clue4": {
       "zone": "Student Parking",
@@ -418,14 +418,14 @@
   "B1": {
     "clue2": {
       "zone": "Canteen",
-      "riddle": "Where hunger goes to disappear, and gossip\u2019s louder than the cheer \u2014 he passed here fast, not stopping to eat, something crashed close by, near his feet.",
+      "riddle": "Where hunger goes to disappear, and gossip’s louder than the cheer — he passed here fast, not stopping to eat, something crashed close by, near his feet.",
       "codeword": "BONUS"
     },
     "crewmate": {
-      "id": "CM-B1",
-      "name": "Enoch Micheal",
-      "photo": "/assets/team/Enoch Micheal_Marketing.jpg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C1",
+      "name": "Bannur Jishnesh Reddy",
+      "photo": "/assets/round2/Bannur Jishnesh Reddy.jpg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01000011 01001111 01000100 01000101"
     },
     "clue3": {
@@ -434,7 +434,7 @@
       "intercept": "01000011 01001111 01000100 01000101",
       "answer": "CODE",
       "nextZone": "Football Net",
-      "nextRiddle": "Where a net catches all it\u2019s thrown, and no one plays this late alone \u2014 a fence stood sagged, a sleeve was torn, before the whistle, before the dawn."
+      "nextRiddle": "Where a net catches all it’s thrown, and no one plays this late alone — a fence stood sagged, a sleeve was torn, before the whistle, before the dawn."
     },
     "clue4": {
       "zone": "Football Net",
@@ -444,14 +444,14 @@
   "B2": {
     "clue2": {
       "zone": "Badminton Court",
-      "riddle": "Where shuttles fly and rackets sing, he barely noticed anything \u2014 ran straight past, not stopping to see, a net, a court, an empty referee.",
+      "riddle": "Where shuttles fly and rackets sing, he barely noticed anything — ran straight past, not stopping to see, a net, a court, an empty referee.",
       "codeword": "TASK"
     },
     "crewmate": {
-      "id": "CM-B2",
-      "name": "Gnaneshwar",
-      "photo": "/assets/team/Gnaneshwar_Design.jpeg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C2",
+      "name": "Enoch Michael",
+      "photo": "/assets/round2/Enoch Michael.jpg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01001000 01000101 01001100 01001100 01001111"
     },
     "clue3": {
@@ -460,7 +460,7 @@
       "intercept": "01001000 01000101 01001100 01001100 01001111",
       "answer": "HELLO",
       "nextZone": "Garden",
-      "nextRiddle": "Two patches green, no flowers grow, just grass that watched him rush and go \u2014 past the smell of fast food\u2019s stand, straight for the gate, straight off this land."
+      "nextRiddle": "Two patches green, no flowers grow, just grass that watched him rush and go — past the smell of fast food’s stand, straight for the gate, straight off this land."
     },
     "clue4": {
       "zone": "Garden",
@@ -470,14 +470,14 @@
   "B3": {
     "clue2": {
       "zone": "Main Gate",
-      "riddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi \u2014 he never scanned, he climbed instead, a fence that sagged, a torn sleeve\u2019s thread.",
+      "riddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi — he never scanned, he climbed instead, a fence that sagged, a torn sleeve’s thread.",
       "codeword": "PATH"
     },
     "crewmate": {
-      "id": "CM-B3",
-      "name": "Gyanendra Sethi",
-      "photo": "/assets/team/Gyanendra Sethi__Python.jpg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C3",
+      "name": "Rohit Pranav Naidu",
+      "photo": "/assets/round2/Rohit Pranav Naidu.jpeg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "2-4-7-4-3-7"
     },
     "clue3": {
@@ -486,7 +486,7 @@
       "intercept": "2-4-7-4-3-7",
       "answer": "CIPHER",
       "nextZone": "Placement Banner",
-      "nextRiddle": "Where futures hang, printed and proud, a promise made, sworn out loud \u2014 he passed it once, not stopping to read, a man with debts and desperate need."
+      "nextRiddle": "Where futures hang, printed and proud, a promise made, sworn out loud — he passed it once, not stopping to read, a man with debts and desperate need."
     },
     "clue4": {
       "zone": "Placement Banner",
@@ -496,14 +496,14 @@
   "B4": {
     "clue2": {
       "zone": "Football Net",
-      "riddle": "Where a net catches all it\u2019s thrown, and no one plays this late alone \u2014 a fence stood sagged, a sleeve was torn, before the whistle, before the dawn.",
+      "riddle": "Where a net catches all it’s thrown, and no one plays this late alone — a fence stood sagged, a sleeve was torn, before the whistle, before the dawn.",
       "codeword": "GATE"
     },
     "crewmate": {
-      "id": "CM-B4",
-      "name": "Himani Joshi",
-      "photo": "/assets/team/Himani Joshi_Events & Logistics Lead.jpeg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C4",
+      "name": "Gnaneshwar",
+      "photo": "/assets/round2/Gnaneshwar.jpeg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "7-2-2-5-3-8"
     },
     "clue3": {
@@ -512,7 +512,7 @@
       "intercept": "7-2-2-5-3-8",
       "answer": "PACKET",
       "nextZone": "New Stairs",
-      "nextRiddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street \u2014 the shortest path back toward the gate, a man who couldn\u2019t afford to wait."
+      "nextRiddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street — the shortest path back toward the gate, a man who couldn’t afford to wait."
     },
     "clue4": {
       "zone": "New Stairs",
@@ -522,14 +522,14 @@
   "B5": {
     "clue2": {
       "zone": "Ground",
-      "riddle": "Where a hundred feet run every morning, empty now, no crowd, no warning \u2014 he crossed it fast, along the top, a walkway\u2019s slope he didn\u2019t stop.",
+      "riddle": "Where a hundred feet run every morning, empty now, no crowd, no warning — he crossed it fast, along the top, a walkway’s slope he didn’t stop.",
       "codeword": "MEMORY"
     },
     "crewmate": {
-      "id": "CM-B5",
-      "name": "Jishnesh Reddy",
-      "photo": "/assets/team/Jishnesh Reddy, Marketing_.jpg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C5",
+      "name": "Venkata Sai Kiran",
+      "photo": "/assets/round2/Venkata Sai Kiran.jpg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01010011 01001000 01000001 01000100 01001111 01010111"
     },
     "clue3": {
@@ -538,7 +538,7 @@
       "intercept": "01010011 01001000 01000001 01000100 01001111 01010111",
       "answer": "SHADOW",
       "nextZone": "Student Parking",
-      "nextRiddle": "Wheels rest here, riders long gone, silence stretched from dusk till dawn \u2014 mud on a shoe, a shadow\u2019s trace, the last stop before he left this place."
+      "nextRiddle": "Wheels rest here, riders long gone, silence stretched from dusk till dawn — mud on a shoe, a shadow’s trace, the last stop before he left this place."
     },
     "clue4": {
       "zone": "Student Parking",
@@ -548,14 +548,14 @@
   "B6": {
     "clue2": {
       "zone": "Garden",
-      "riddle": "Two patches green, no flowers grow, just grass that watched him rush and go \u2014 past the smell of fast food\u2019s stand, straight for the gate, straight off this land.",
+      "riddle": "Two patches green, no flowers grow, just grass that watched him rush and go — past the smell of fast food’s stand, straight for the gate, straight off this land.",
       "codeword": "LOGIC"
     },
     "crewmate": {
-      "id": "CM-B6",
-      "name": "K SRIVALLI REDDY",
-      "photo": "/assets/team/K SRIVALLI REDDY_ C++.jpeg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C6",
+      "name": "Ailneni Naineeth",
+      "photo": "/assets/round2/Ailneni Naineeth.jpg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "54 52 41 43 45"
     },
     "clue3": {
@@ -564,7 +564,7 @@
       "intercept": "54 52 41 43 45",
       "answer": "TRACE",
       "nextZone": "Badminton Court",
-      "nextRiddle": "Where shuttles fly and rackets sing, he barely noticed anything \u2014 ran straight past, not stopping to see, a net, a court, an empty referee."
+      "nextRiddle": "Where shuttles fly and rackets sing, he barely noticed anything — ran straight past, not stopping to see, a net, a court, an empty referee."
     },
     "clue4": {
       "zone": "Badminton Court",
@@ -574,14 +574,14 @@
   "B7": {
     "clue2": {
       "zone": "Placement Banner",
-      "riddle": "Where futures hang, printed and proud, a promise made, sworn out loud \u2014 he passed it once, not stopping to read, a man with debts and desperate need.",
+      "riddle": "Where futures hang, printed and proud, a promise made, sworn out loud — he passed it once, not stopping to read, a man with debts and desperate need.",
       "codeword": "GIVE"
     },
     "crewmate": {
-      "id": "CM-B7",
-      "name": "K. Pujitha Sri",
-      "photo": "/assets/team/K. Pujitha Sri - java team member.jpg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C7",
+      "name": "K. Sahitya",
+      "photo": "/assets/round2/K. Sahitya.jpeg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "4C 4F 47 49 43"
     },
     "clue3": {
@@ -590,7 +590,7 @@
       "intercept": "4C 4F 47 49 43",
       "answer": "LOGIC",
       "nextZone": "Main Gate",
-      "nextRiddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi \u2014 he never scanned, he climbed instead, a fence that sagged, a torn sleeve\u2019s thread."
+      "nextRiddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi — he never scanned, he climbed instead, a fence that sagged, a torn sleeve’s thread."
     },
     "clue4": {
       "zone": "Main Gate",
@@ -600,14 +600,14 @@
   "B8": {
     "clue2": {
       "zone": "New Stairs",
-      "riddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street \u2014 the shortest path back toward the gate, a man who couldn\u2019t afford to wait.",
+      "riddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street — the shortest path back toward the gate, a man who couldn’t afford to wait.",
       "codeword": "RECOIL"
     },
     "crewmate": {
-      "id": "CM-B8",
-      "name": "K. Siri Chandana",
-      "photo": "/assets/team/K. Siri Chandana_CoLead(Java).jpg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C8",
+      "name": "Saanvi Reddy",
+      "photo": "/assets/round2/Saanvi Reddy.jpg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "53 48 49 46 54"
     },
     "clue3": {
@@ -616,7 +616,7 @@
       "intercept": "53 48 49 46 54",
       "answer": "SHIFT",
       "nextZone": "Canteen",
-      "nextRiddle": "Where hunger goes to disappear, and gossip\u2019s louder than the cheer \u2014 he passed here fast, not stopping to eat, something crashed close by, near his feet."
+      "nextRiddle": "Where hunger goes to disappear, and gossip’s louder than the cheer — he passed here fast, not stopping to eat, something crashed close by, near his feet."
     },
     "clue4": {
       "zone": "Canteen",
@@ -626,14 +626,14 @@
   "B9": {
     "clue2": {
       "zone": "Student Parking",
-      "riddle": "Wheels rest here, riders long gone, silence stretched from dusk till dawn \u2014 mud on a shoe, a shadow\u2019s trace, the last stop before he left this place.",
+      "riddle": "Wheels rest here, riders long gone, silence stretched from dusk till dawn — mud on a shoe, a shadow’s trace, the last stop before he left this place.",
       "codeword": "TECH"
     },
     "crewmate": {
-      "id": "CM-B9",
-      "name": "Khyathi Anand",
-      "photo": "/assets/team/Khyathi Anand_marketing_colead.PNG",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C1",
+      "name": "Bannur Jishnesh Reddy",
+      "photo": "/assets/round2/Bannur Jishnesh Reddy.jpg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "56 45 43 54 4F 52"
     },
     "clue3": {
@@ -642,7 +642,7 @@
       "intercept": "56 45 43 54 4F 52",
       "answer": "VECTOR",
       "nextZone": "Ground",
-      "nextRiddle": "Where a hundred feet run every morning, empty now, no crowd, no warning \u2014 he crossed it fast, along the top, a walkway\u2019s slope he didn\u2019t stop."
+      "nextRiddle": "Where a hundred feet run every morning, empty now, no crowd, no warning — he crossed it fast, along the top, a walkway’s slope he didn’t stop."
     },
     "clue4": {
       "zone": "Ground",
@@ -652,14 +652,14 @@
   "B10": {
     "clue2": {
       "zone": "Football Net",
-      "riddle": "Where a net catches all it\u2019s thrown, and no one plays this late alone \u2014 a fence stood sagged, a sleeve was torn, before the whistle, before the dawn.",
+      "riddle": "Where a net catches all it’s thrown, and no one plays this late alone — a fence stood sagged, a sleeve was torn, before the whistle, before the dawn.",
       "codeword": "START"
     },
     "crewmate": {
-      "id": "CM-B10",
-      "name": "M.Manas web",
-      "photo": "/assets/team/M.Manas web-dev member.jpg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C2",
+      "name": "Enoch Michael",
+      "photo": "/assets/round2/Enoch Michael.jpg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "4D 41 54 52 49 58"
     },
     "clue3": {
@@ -668,7 +668,7 @@
       "intercept": "4D 41 54 52 49 58",
       "answer": "MATRIX",
       "nextZone": "Badminton Court",
-      "nextRiddle": "Where shuttles fly and rackets sing, he barely noticed anything \u2014 ran straight past, not stopping to see, a net, a court, an empty referee."
+      "nextRiddle": "Where shuttles fly and rackets sing, he barely noticed anything — ran straight past, not stopping to see, a net, a court, an empty referee."
     },
     "clue4": {
       "zone": "Badminton Court",
@@ -678,14 +678,14 @@
   "B11": {
     "clue2": {
       "zone": "Garden",
-      "riddle": "Two patches green, no flowers grow, just grass that watched him rush and go \u2014 past the smell of fast food\u2019s stand, straight for the gate, straight off this land.",
+      "riddle": "Two patches green, no flowers grow, just grass that watched him rush and go — past the smell of fast food’s stand, straight for the gate, straight off this land.",
       "codeword": "LOOK"
     },
     "crewmate": {
-      "id": "CM-B11",
-      "name": "Maniyanga Vedaang",
-      "photo": "/assets/team/Maniyanga Vedaang_C++.png",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C3",
+      "name": "Rohit Pranav Naidu",
+      "photo": "/assets/round2/Rohit Pranav Naidu.jpeg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01001011 01000101 01011001"
     },
     "clue3": {
@@ -694,7 +694,7 @@
       "intercept": "01001011 01000101 01011001",
       "answer": "KEY",
       "nextZone": "New Stairs",
-      "nextRiddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street \u2014 the shortest path back toward the gate, a man who couldn\u2019t afford to wait."
+      "nextRiddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street — the shortest path back toward the gate, a man who couldn’t afford to wait."
     },
     "clue4": {
       "zone": "New Stairs",
@@ -704,14 +704,14 @@
   "B12": {
     "clue2": {
       "zone": "Main Gate",
-      "riddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi \u2014 he never scanned, he climbed instead, a fence that sagged, a torn sleeve\u2019s thread.",
+      "riddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi — he never scanned, he climbed instead, a fence that sagged, a torn sleeve’s thread.",
       "codeword": "FIND"
     },
     "crewmate": {
-      "id": "CM-B12",
-      "name": "Mohit choudhury",
-      "photo": "/assets/team/Mohit choudhury,Operational lead.jpg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C4",
+      "name": "Gnaneshwar",
+      "photo": "/assets/round2/Gnaneshwar.jpeg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "8-3-2-2-4"
     },
     "clue3": {
@@ -720,7 +720,7 @@
       "intercept": "8-3-2-2-4",
       "answer": "TECH",
       "nextZone": "Football Net",
-      "nextRiddle": "Where a net catches all it\u2019s thrown, and no one plays this late alone \u2014 a fence stood sagged, a sleeve was torn, before the whistle, before the dawn."
+      "nextRiddle": "Where a net catches all it’s thrown, and no one plays this late alone — a fence stood sagged, a sleeve was torn, before the whistle, before the dawn."
     },
     "clue4": {
       "zone": "Football Net",
@@ -730,14 +730,14 @@
   "B13": {
     "clue2": {
       "zone": "Canteen",
-      "riddle": "Where hunger goes to disappear, and gossip\u2019s louder than the cheer \u2014 he passed here fast, not stopping to eat, something crashed close by, near his feet.",
+      "riddle": "Where hunger goes to disappear, and gossip’s louder than the cheer — he passed here fast, not stopping to eat, something crashed close by, near his feet.",
       "codeword": "MOVE"
     },
     "crewmate": {
-      "id": "CM-B13",
-      "name": "Naineeth co lead event and logistics",
-      "photo": "/assets/team/Naineeth co lead event and logistics.jpg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C5",
+      "name": "Venkata Sai Kiran",
+      "photo": "/assets/round2/Venkata Sai Kiran.jpg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "72 73"
     },
     "clue3": {
@@ -746,7 +746,7 @@
       "intercept": "72 73",
       "answer": "HI",
       "nextZone": "Garden",
-      "nextRiddle": "Two patches green, no flowers grow, just grass that watched him rush and go \u2014 past the smell of fast food\u2019s stand, straight for the gate, straight off this land."
+      "nextRiddle": "Two patches green, no flowers grow, just grass that watched him rush and go — past the smell of fast food’s stand, straight for the gate, straight off this land."
     },
     "clue4": {
       "zone": "Garden",
@@ -756,14 +756,14 @@
   "B14": {
     "clue2": {
       "zone": "Badminton Court",
-      "riddle": "Where shuttles fly and rackets sing, he barely noticed anything \u2014 ran straight past, not stopping to see, a net, a court, an empty referee.",
+      "riddle": "Where shuttles fly and rackets sing, he barely noticed anything — ran straight past, not stopping to see, a net, a court, an empty referee.",
       "codeword": "STOP"
     },
     "crewmate": {
-      "id": "CM-B14",
-      "name": "Nanda Kishore",
-      "photo": "/assets/team/Nanda Kishore_Design.jpeg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C6",
+      "name": "Ailneni Naineeth",
+      "photo": "/assets/round2/Ailneni Naineeth.jpg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01010011 01001001 01000111 01001110 01000001 01001100"
     },
     "clue3": {
@@ -772,7 +772,7 @@
       "intercept": "01010011 01001001 01000111 01001110 01000001 01001100",
       "answer": "SIGNAL",
       "nextZone": "Student Parking",
-      "nextRiddle": "Wheels rest here, riders long gone, silence stretched from dusk till dawn \u2014 mud on a shoe, a shadow\u2019s trace, the last stop before he left this place."
+      "nextRiddle": "Wheels rest here, riders long gone, silence stretched from dusk till dawn — mud on a shoe, a shadow’s trace, the last stop before he left this place."
     },
     "clue4": {
       "zone": "Student Parking",
@@ -782,14 +782,14 @@
   "B15": {
     "clue2": {
       "zone": "Placement Banner",
-      "riddle": "Where futures hang, printed and proud, a promise made, sworn out loud \u2014 he passed it once, not stopping to read, a man with debts and desperate need.",
+      "riddle": "Where futures hang, printed and proud, a promise made, sworn out loud — he passed it once, not stopping to read, a man with debts and desperate need.",
       "codeword": "WORK"
     },
     "crewmate": {
-      "id": "CM-B15",
-      "name": "Nisa Afreen",
-      "photo": "/assets/team/Nisa Afreen_Documentations Advisor.jpg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C7",
+      "name": "K. Sahitya",
+      "photo": "/assets/round2/K. Sahitya.jpeg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "01010011 01001111 01000011 01001011 01000101 01010100"
     },
     "clue3": {
@@ -798,7 +798,7 @@
       "intercept": "01010011 01001111 01000011 01001011 01000101 01010100",
       "answer": "SOCKET",
       "nextZone": "Main Gate",
-      "nextRiddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi \u2014 he never scanned, he climbed instead, a fence that sagged, a torn sleeve\u2019s thread."
+      "nextRiddle": "Where the campus breathes its last goodbye, and every soul must swipe or say hi — he never scanned, he climbed instead, a fence that sagged, a torn sleeve’s thread."
     },
     "clue4": {
       "zone": "Main Gate",
@@ -808,14 +808,14 @@
   "B16": {
     "clue2": {
       "zone": "New Stairs",
-      "riddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street \u2014 the shortest path back toward the gate, a man who couldn\u2019t afford to wait.",
+      "riddle": "Fresh paint, barely worn by feet, he never climbed them, only fled the street — the shortest path back toward the gate, a man who couldn’t afford to wait.",
       "codeword": "HOME"
     },
     "crewmate": {
-      "id": "CM-B16",
-      "name": "Pravallika web development",
-      "photo": "/assets/team/Pravallika web development_.jpg",
-      "script": "\u201cYou found me, Detective. I heard someone moving late that night \u2014 didn\u2019t see his face, but I remember the sound. Not saying it out loud. Here \u2014 scrambled, just in case.\u201d",
+      "id": "C8",
+      "name": "Saanvi Reddy",
+      "photo": "/assets/round2/Saanvi Reddy.jpg",
+      "script": "“You found me, Detective. I heard someone moving late that night — didn’t see his face, but I remember the sound. Not saying it out loud. Here — scrambled, just in case.”",
       "code": "53 59 4E 54 41 58"
     },
     "clue3": {
@@ -824,7 +824,7 @@
       "intercept": "53 59 4E 54 41 58",
       "answer": "SYNTAX",
       "nextZone": "Placement Banner",
-      "nextRiddle": "Where futures hang, printed and proud, a promise made, sworn out loud \u2014 he passed it once, not stopping to read, a man with debts and desperate need."
+      "nextRiddle": "Where futures hang, printed and proud, a promise made, sworn out loud — he passed it once, not stopping to read, a man with debts and desperate need."
     },
     "clue4": {
       "zone": "Placement Banner",

@@ -38,6 +38,7 @@ export default function DashboardClient({
   const [justErrored, setJustErrored] = useState(false);
   const [lockoutRemaining, setLockoutRemaining] = useState<number | null>(null);
   const [cooldownRemaining, setCooldownRemaining] = useState<number | null>(null);
+  const [showImageModal, setShowImageModal] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -241,7 +242,7 @@ export default function DashboardClient({
           >
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-xs font-mono text-ink-soft">
-                LEAD 01 // {stageData.clue2?.zone || 'LOCATION'}
+                LEAD 01 // PHYSICAL TRACE
               </span>
               {currentIndex > 0 && (
                 <span className="text-xs font-mono text-verified-teal font-semibold">
@@ -256,7 +257,7 @@ export default function DashboardClient({
 
             {currentIndex > 0 ? (
               <div className="text-xs font-mono text-ink-soft">
-                Zone: {stageData.clue2?.zone} — Codeword verified
+                Lead 01 cleared — Codeword verified
               </div>
             ) : (
               <div className="space-y-2 mt-2">
@@ -267,7 +268,7 @@ export default function DashboardClient({
                 )}
                 <div className="text-xs font-mono bg-paper/90 p-2.5 border border-line text-ink leading-relaxed">
                   <span className="font-bold text-evidence-red block mb-1">FIELD DIRECTIVE:</span>
-                  Proceed to <span className="font-semibold underline">{stageData.clue2?.zone}</span>. The suspect left a physical trace at the scene. Search the area, locate the handwritten card, solve the puzzle on site, and enter the verified codeword below.
+                  Study the lead riddle above carefully to deduce the location of the scene. Search the area on site, find the hidden clue card, solve the on-site puzzle, and enter the verified codeword below.
                 </div>
               </div>
             )}
@@ -311,22 +312,36 @@ export default function DashboardClient({
               <div className="space-y-3 mt-2">
                 {/* Crewmate Photo Card */}
                 {stageData.crewmate?.photo && (
-                  <div className="border-2 border-ink p-1.5 bg-paper/90">
-                    <div className="relative w-full aspect-[4/3] max-h-52 overflow-hidden bg-line/30 mb-1.5 border border-line">
+                  <div className="border-2 border-ink p-2 bg-paper/90 shadow-sm">
+                    <div
+                      onClick={() => setShowImageModal(true)}
+                      className="relative w-full min-h-[17rem] max-h-96 bg-neutral-950 flex items-center justify-center p-2 mb-2 border border-line cursor-pointer group overflow-hidden"
+                      title="Click to view full image"
+                    >
                       <img
                         src={stageData.crewmate.photo}
-                        alt="Person of Interest"
-                        className="w-full h-full object-cover object-top"
+                        alt={stageData.crewmate?.name || 'Person of Interest'}
+                        className="max-h-88 w-auto max-w-full object-contain mx-auto transition-transform duration-200 group-hover:scale-[1.02]"
                       />
+                      <div className="absolute bottom-2 right-2 bg-black/85 text-white font-mono text-[10px] px-2 py-0.5 border border-white/20 backdrop-blur-sm pointer-events-none flex items-center gap-1 shadow">
+                        <span>🔍 Tap to expand</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between items-baseline px-0.5">
+                    <div className="flex justify-between items-baseline px-0.5 mb-2">
                       <span className="font-mono text-xs font-bold text-evidence-red tracking-wide">
                         PERSON OF INTEREST
                       </span>
-                      <span className="font-mono text-[11px] text-ink-soft font-semibold">
+                      <span className="font-mono text-xs text-ink font-semibold">
                         {stageData.crewmate?.name || stageData.crewmate?.id}
                       </span>
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowImageModal(true)}
+                      className="w-full py-1.5 px-3 bg-paper border border-ink text-xs font-mono font-semibold text-ink hover:bg-ink hover:text-paper transition-colors flex items-center justify-center gap-1"
+                    >
+                      🔍 Click to view full image
+                    </button>
                   </div>
                 )}
 
@@ -378,7 +393,7 @@ export default function DashboardClient({
               </p>
             ) : currentIndex > 2 ? (
               <div className="text-xs font-mono text-ink-soft">
-                Decoded lead pointing toward {stageData.clue3?.nextZone || 'next sector'}
+                Intercept deciphered — Next sector lead unlocked
               </div>
             ) : (
               <div className="space-y-2.5 mt-2">
@@ -413,7 +428,7 @@ export default function DashboardClient({
           >
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-xs font-mono text-ink-soft">
-                LEAD 04 // {stageData.clue4?.zone || 'LOCATION'}
+                LEAD 04 // PHYSICAL EVIDENCE
               </span>
               {currentIndex > 3 && (
                 <span className="text-xs font-mono text-verified-teal font-semibold">
@@ -432,13 +447,10 @@ export default function DashboardClient({
               </p>
             ) : currentIndex > 3 ? (
               <div className="text-xs font-mono text-ink-soft">
-                Physical evidence cleared at {stageData.clue4?.zone}
+                Physical evidence cleared — Final coordinates unlocked
               </div>
             ) : (
               <div className="space-y-2.5 mt-2">
-                <div className="text-xs font-mono text-ink-soft">
-                  Destination Sector: <span className="text-ink font-bold">{stageData.clue4?.zone}</span>
-                </div>
                 {stageData.clue3?.nextRiddle && (
                   <p className="text-xs text-ink italic bg-paper/80 p-2.5 border-l-2 border-line leading-relaxed">
                     &ldquo;{stageData.clue3.nextRiddle}&rdquo;
@@ -446,7 +458,7 @@ export default function DashboardClient({
                 )}
                 <div className="text-xs font-mono bg-paper/90 p-2.5 border border-line text-ink leading-relaxed">
                   <span className="font-bold text-evidence-red block mb-1">FIELD DIRECTIVE:</span>
-                  Proceed immediately to <span className="font-semibold underline">{stageData.clue4?.zone}</span>. The suspect dropped evidence during their escape. Search the sector on site, find the hidden puzzle, solve the calculation, and enter the final result below.
+                  Decode the riddle above to determine where the suspect fled. Search the sector on site, find the hidden puzzle left behind, solve the calculation, and enter the final result below.
                 </div>
               </div>
             )}
@@ -503,13 +515,13 @@ export default function DashboardClient({
                 className="font-mono text-ink-soft uppercase tracking-wider"
               >
                 {currentStage === 'clue2'
-                  ? `Enter codeword found at ${stageData.clue2?.zone || 'sector'}:`
+                  ? 'Enter verified codeword:'
                   : currentStage === 'crewmate'
                   ? 'Enter code handed by witness:'
                   : currentStage === 'clue3'
                   ? 'Enter decrypted lead:'
                   : currentStage === 'clue4'
-                  ? `Enter answer found at ${stageData.clue4?.zone || 'sector'}:`
+                  ? 'Enter final verified answer:'
                   : 'Enter answer:'}
               </label>
               {lockoutRemaining !== null ? (
@@ -577,6 +589,44 @@ export default function DashboardClient({
         <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-paper border-t-2 border-ink px-4 py-3 z-30">
           <div className="text-center font-mono text-xs text-ink py-2 font-medium">
             CASE ACTIVE AT EMPTY STAGE // PHYSICAL KEY HAND-OFF REQUIRED
+          </div>
+        </div>
+      )}
+
+      {/* Fullscreen Lightbox Modal for Crewmate Photo */}
+      {showImageModal && stageData.crewmate?.photo && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between p-4"
+          onClick={() => setShowImageModal(false)}
+        >
+          <div className="flex justify-between items-center text-paper font-mono text-xs pb-3 border-b border-white/20">
+            <span className="text-evidence-red font-bold tracking-wider">
+              CASE #0426 // PERSON OF INTEREST
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowImageModal(false)}
+              className="px-3 py-1 bg-white/20 hover:bg-white/30 text-white rounded font-mono text-xs transition-colors"
+            >
+              ✕ Close
+            </button>
+          </div>
+
+          <div className="flex-1 flex items-center justify-center py-4 overflow-hidden">
+            <img
+              src={stageData.crewmate.photo}
+              alt={stageData.crewmate?.name || 'Person of Interest'}
+              className="max-h-[75vh] max-w-[95vw] object-contain rounded border border-white/20 shadow-2xl"
+            />
+          </div>
+
+          <div className="text-center pb-2">
+            <div className="font-display text-lg text-white font-semibold">
+              {stageData.crewmate.name || stageData.crewmate.id}
+            </div>
+            <div className="text-xs font-mono text-white/60 mt-1">
+              Tap anywhere to return to case file
+            </div>
           </div>
         </div>
       )}
