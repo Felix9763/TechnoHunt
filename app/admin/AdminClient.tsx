@@ -46,6 +46,16 @@ const STAGE_LABELS: Record<string, string> = {
   final: 'Finale (Empty Stage)',
 };
 
+function formatTime(iso: string): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  const seconds = String(d.getSeconds()).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+}
+
 export default function AdminClient({ initialData }: AdminClientProps) {
   const router = useRouter();
   const [data, setData] = useState(initialData);
@@ -360,8 +370,8 @@ export default function AdminClient({ initialData }: AdminClientProps) {
                     </span>
                     <span className="font-bold">Team {sub.team_code}</span>
                   </div>
-                  <span className="text-[11px] text-ink-soft">
-                    {new Date(sub.submitted_at).toLocaleTimeString()}
+                  <span suppressHydrationWarning className="text-[11px] text-ink-soft">
+                    {formatTime(sub.submitted_at)}
                   </span>
                 </div>
               ))
@@ -506,9 +516,9 @@ export default function AdminClient({ initialData }: AdminClientProps) {
                           {STAGE_LABELS[stage] || stage}
                         </span>
                       </td>
-                      <td className="py-2.5 px-2 text-ink-soft text-[11px]">
+                      <td suppressHydrationWarning className="py-2.5 px-2 text-ink-soft text-[11px]">
                         {p?.last_updated
-                          ? new Date(p.last_updated).toLocaleTimeString()
+                          ? formatTime(p.last_updated)
                           : 'Not started'}
                       </td>
                       <td className="py-2.5 px-2 text-right">
@@ -588,8 +598,8 @@ export default function AdminClient({ initialData }: AdminClientProps) {
                     &ldquo;{att.submitted_answer}&rdquo;
                   </span>
                 </div>
-                <span className="text-[10px] text-ink-soft shrink-0">
-                  {new Date(att.created_at).toLocaleTimeString()}
+                <span suppressHydrationWarning className="text-[10px] text-ink-soft shrink-0">
+                  {formatTime(att.created_at)}
                 </span>
               </div>
             ))
