@@ -287,6 +287,8 @@ export default function AdminClient({ initialData, initialTab = 'ops' }: AdminCl
   }
 
   async function handleLogout() {
+    const ok = window.confirm('Are you sure you want to sign out of the Admin Control Room?');
+    if (!ok) return;
     await fetch('/api/admin/logout', { method: 'POST' });
     router.push('/admin/login');
     router.refresh();

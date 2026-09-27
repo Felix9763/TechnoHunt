@@ -61,6 +61,7 @@ export default function DashboardClient({
   const [lockoutRemaining, setLockoutRemaining] = useState<number | null>(null);
   const [cooldownRemaining, setCooldownRemaining] = useState<number | null>(null);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -142,7 +143,13 @@ export default function DashboardClient({
 
   const currentIndex = STAGES.findIndex((s) => s.key === currentStage);
 
+  function promptLogout() {
+    triggerHaptic('tap');
+    setShowLogoutConfirm(true);
+  }
+
   async function handleLogout() {
+    setShowLogoutConfirm(false);
     triggerHaptic('tap');
     await fetch('/api/logout', { method: 'POST' });
     router.push('/login');
@@ -360,13 +367,51 @@ export default function DashboardClient({
         {/* Footer */}
         <footer className="mt-8 pt-3 border-t border-line text-[11px] font-mono font-bold text-ink-soft flex justify-between items-center">
           <button
-            onClick={handleLogout}
+            type="button"
+            onClick={promptLogout}
             className="hover:underline text-ink"
           >
             ← Sign out / Switch envelope
           </button>
           <span className="text-evidence-red">AWAITING ORGANIZER</span>
         </footer>
+
+        {/* Logout Confirmation Modal for Standby Screen */}
+        {showLogoutConfirm && (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="news-card border-2 border-ink p-5 max-w-sm w-full space-y-4 shadow-2xl animate-stamp">
+              <div className="flex justify-between items-center pb-2 border-b border-line-light">
+                <span className="font-mono text-xs font-bold text-evidence-red uppercase tracking-wider">
+                  CONFIRM SIGN OUT
+                </span>
+                <span className="text-xs font-mono font-bold text-ink-soft">
+                  Unit {teamCode}
+                </span>
+              </div>
+              
+              <p className="font-serif text-sm text-ink leading-relaxed font-medium">
+                Are you sure you want to sign out? You will need your envelope PIN to return to this screen.
+              </p>
+
+              <div className="flex gap-2.5 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setShowLogoutConfirm(false)}
+                  className="flex-1 py-2.5 px-3 border-2 border-ink bg-paper text-ink font-mono text-xs font-bold uppercase tracking-wider hover:bg-line/20 active:scale-95 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex-1 py-2.5 px-3 bg-evidence-red text-paper font-mono text-xs font-bold uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all shadow"
+                >
+                  Yes, Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     );
   }
@@ -404,12 +449,6 @@ export default function DashboardClient({
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <button
-              onClick={handleLogout}
-              className="text-xs font-mono text-ink-mid hover:text-ink font-bold hover:underline py-1 transition-colors"
-            >
-              Sign out
-            </button>
           </div>
         </div>
       </header>
@@ -847,8 +886,24 @@ export default function DashboardClient({
               </div>
             )}
           </section>
-
         </div>
+
+        {/* Terminal Footer with Sign Out Button at the very bottom */}
+        <footer className="pt-8 pb-4 text-center space-y-2 border-t border-line-light mt-8">
+          <div>
+            <button
+              type="button"
+              onClick={promptLogout}
+              className="text-xs font-mono font-bold text-ink-soft hover:text-evidence-red hover:underline py-2 px-4 border border-line-light hover:border-evidence-red inline-flex items-center gap-1.5 transition-colors bg-paper-inset/40 active:scale-95 shadow-xs"
+            >
+              <span>🔒</span>
+              <span>Sign Out of Terminal</span>
+            </button>
+          </div>
+          <div className="text-[10px] font-mono text-ink-soft">
+            TechnoHunt Dispatch Portal · Unit {teamCode}
+          </div>
+        </footer>
       </div>
 
       {/* Pinned Input + Submit (Mobile-Optimized Sticky Console) */}
@@ -974,6 +1029,43 @@ export default function DashboardClient({
             </div>
             <div className="text-xs font-mono text-paper/70 mt-1 font-semibold">
               Tap anywhere to return to case file
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Logout Confirmation Modal for Active Dashboard View */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="news-card border-2 border-ink p-5 max-w-sm w-full space-y-4 shadow-2xl animate-stamp">
+            <div className="flex justify-between items-center pb-2 border-b border-line-light">
+              <span className="font-mono text-xs font-bold text-evidence-red uppercase tracking-wider">
+                CONFIRM SIGN OUT // TERMINAL LOCK
+              </span>
+              <span className="text-xs font-mono font-bold text-ink-soft">
+                Unit {teamCode}
+              </span>
+            </div>
+            
+            <p className="font-serif text-sm text-ink leading-relaxed font-medium">
+              Are you sure you want to sign out of this case terminal? You will need your team envelope PIN to log back in.
+            </p>
+
+            <div className="flex gap-2.5 pt-1">
+              <button
+                type="button"
+                onClick={() => setShowLogoutConfirm(false)}
+                className="flex-1 py-2.5 px-3 border-2 border-ink bg-paper text-ink font-mono text-xs font-bold uppercase tracking-wider hover:bg-line/20 active:scale-95 transition-all"
+              >
+                Cancel / Return
+              </button>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="flex-1 py-2.5 px-3 bg-evidence-red text-paper font-mono text-xs font-bold uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all shadow"
+              >
+                Yes, Sign Out
+              </button>
             </div>
           </div>
         </div>
