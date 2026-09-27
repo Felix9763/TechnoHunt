@@ -2,171 +2,193 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   TECHNOHUNT — Classic Detective Case File & Vintage Newspaper
+   Unified, authentic warm sepia & aged broadsheet palette.
+   No jarring bright neon accents. Natural paper blending.
+   ============================================================ */
+
 :root {
-  /* High-Contrast Crisp Parchment Theme (Default) */
-  --color-paper: #F3EFE6;
-  --color-paper-card: #FFFFFF;
-  --color-ink: #11100D;
-  --color-ink-soft: #2B2722;
-  --color-evidence-red: #B91C1C;
-  --color-verified-teal: #047857;
-  --color-lockout-amber: #B45309;
-  --color-line: #7E7462;
+  /* Aged broadsheet newsprint & manila dossier stock */
+  --color-paper:        #EAE1CA;  /* Background: authentic warm aged newsprint */
+  --color-paper-card:   #F4ECDA;  /* Card surface: subtle warm stationery */
+  --color-paper-inset:  #E0D5BC;  /* Inset well: quotes, lead riddles, directives */
+
+  /* Printer's Ink — deep sepia-charcoal, ultra-readable */
+  --color-ink:          #1A150F;  /* Primary ink: sharp letterpress contrast */
+  --color-ink-mid:      #3D3224;  /* Medium ink: labels, field names */
+  --color-ink-soft:     #63543F;  /* Soft ink: typewriter secondary notes */
+
+  /* Linotype Rules & Dividers */
+  --color-line:         #827157;  /* Standard printer's rule */
+  --color-line-light:   #B8A88E;  /* Fine column divider */
+
+  /* Authentic Rubber Stamp Inks (used only for status badges & alerts) */
+  --color-evidence-red: #8B1E1E;  /* Oxblood typewriter ribbon / urgent lead */
+  --color-verified-teal:#225438;  /* Archive forest green / solved mark */
+  --color-lockout-amber:#755018;  /* Deep antique brass / lockout */
 }
 
+/* Vintage Detective Darkroom Theme (for dark mode toggle) */
 [data-theme="dark"] {
-  /* High-Contrast Sleek Detective Night Mode */
-  --color-paper: #0D1117;
-  --color-paper-card: #161B22;
-  --color-ink: #F0F6FC;
-  --color-ink-soft: #C9D1D9;
-  --color-evidence-red: #F85149;
-  --color-verified-teal: #3FB950;
-  --color-lockout-amber: #F0883E;
-  --color-line: #38414A;
+  --color-paper:        #14110C;
+  --color-paper-card:   #1E1912;
+  --color-paper-inset:  #17130E;
+
+  --color-ink:          #EDE3CC;
+  --color-ink-mid:      #C9BA9C;
+  --color-ink-soft:     #9E8F76;
+
+  --color-line:         #473B2B;
+  --color-line-light:   #332A1E;
+
+  --color-evidence-red: #D44A4A;
+  --color-verified-teal:#4AA371;
+  --color-lockout-amber:#D4A355;
 }
 
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Rubber Stamp Slam Animation (Inked physical impact) */
-@keyframes stampSlam {
-  0% {
-    opacity: 0;
-    transform: scale(2.2) rotate(-8deg);
-  }
-  50% {
-    opacity: 0.95;
-    transform: scale(0.92) rotate(-2deg);
-  }
-  75% {
-    transform: scale(1.04) rotate(-3.5deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(-3deg);
-  }
+/* ============================================================
+   CLASSIC NEWSPAPER & CASE FILE COMPONENTS
+   ============================================================ */
+
+/* Newspaper masthead double rule */
+.border-double-rule {
+  border-top: 3px double var(--color-ink);
+  border-bottom: 3px double var(--color-ink);
 }
 
-.animate-stamp-slam {
-  animation: stampSlam 280ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-  will-change: transform, opacity;
+.border-single-rule {
+  border-bottom: 1.5px solid var(--color-line);
 }
 
-/* Subtle Card Settle Stamp */
-@keyframes stamp-settle {
-  0% {
-    transform: scale(1.05) translateY(-4px);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-  }
+/* Authentic Newsprint Case Card */
+.news-card {
+  background-color: var(--color-paper-card);
+  border: 1.5px solid var(--color-line);
+  box-shadow: 0 1px 4px rgba(26, 21, 15, 0.08);
 }
 
-.animate-stamp {
-  animation: stamp-settle 200ms ease-out forwards;
+.news-card-active {
+  background-color: var(--color-paper-card);
+  border: 2px solid var(--color-ink);
+  box-shadow: 0 3px 10px rgba(26, 21, 15, 0.12);
 }
 
-/* Horizontal Shake on Failed Submission */
-@keyframes shakeX {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
+.news-card-cleared {
+  background-color: var(--color-paper-card);
+  border: 1.5px solid var(--color-line-light);
+  opacity: 0.85;
 }
 
-.animate-shake {
-  animation: shakeX 320ms ease-in-out;
+.news-card-locked {
+  background-color: transparent;
+  border: 1.5px dashed var(--color-line-light);
+  opacity: 0.55;
 }
 
-/* Flash Red on Error */
-@keyframes flash-red {
-  0%, 100% {
-    border-color: var(--color-line);
-  }
-  30%, 70% {
-    border-color: var(--color-evidence-red);
-    background-color: rgba(185, 28, 28, 0.08);
-  }
+/* Newspaper Editorial Pullquote / Riddle */
+.newspaper-quote {
+  background-color: var(--color-paper-inset);
+  border-left: 3.5px solid var(--color-ink);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--color-ink);
 }
 
-.animate-flash-error {
-  animation: flash-red 350ms ease-in-out;
+/* Official Detective Directive Box — harmonious, no neon amber clash */
+.detective-directive {
+  background-color: var(--color-paper-inset);
+  border: 1.5px solid var(--color-line);
+  border-left: 4px solid var(--color-evidence-red);
+  color: var(--color-ink);
+  font-family: var(--font-mono), monospace;
 }
 
-/* Tactile Rubber Stamp Badge */
+/* Telegram / Intercept Box — authentic vintage dispatch */
+.telegraph-dispatch {
+  background-color: #231E17;  /* Vintage letterpress zinc slate */
+  color: #F5E8CB;             /* Aged typewriter buff text */
+  border: 2px solid var(--color-line);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.telegraph-cipher {
+  color: #E2B26C;             /* Warm vintage amber telegraph ink */
+  font-family: var(--font-mono), 'Courier New', monospace;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+
+/* Rubber Stamp Badges */
 .rubber-stamp {
   display: inline-block;
-  text-transform: uppercase;
   font-family: var(--font-mono), monospace;
   font-weight: 800;
-  letter-spacing: 0.12em;
-  padding: 0.25rem 0.6rem;
-  border: 2.5px solid currentColor;
-  border-radius: 3px;
-  line-height: 1.1;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border: 2px solid currentColor;
+  border-radius: 2px;
+  line-height: 1.2;
 }
 
-/* Clipped Case File Corner */
-.clip-case {
-  clip-path: polygon(0% 0%, calc(100% - 14px) 0%, 100% 14px, 100% 100%, 0% 100%);
-}
-
-/* High Contrast Card */
-.notched-card {
-  position: relative;
+/* Polaroid Photo Frame */
+.polaroid-frame {
   background-color: var(--color-paper-card);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1.5px solid var(--color-line);
+  box-shadow: 0 4px 12px rgba(26, 21, 15, 0.15);
+  position: relative;
 }
 
-/* Masking Tape Effect on Polaroid */
 .masking-tape {
   position: absolute;
   top: -10px;
   left: 50%;
-  transform: translateX(-50%) rotate(-1deg);
-  width: 76px;
-  height: 22px;
-  background: rgba(220, 210, 185, 0.85);
-  border-left: 2px dashed rgba(160, 150, 125, 0.5);
-  border-right: 2px dashed rgba(160, 150, 125, 0.5);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  transform: translateX(-50%) rotate(-1.5deg);
+  width: 70px;
+  height: 20px;
+  background: rgba(214, 203, 175, 0.85);
+  border-left: 2px dashed rgba(160, 145, 115, 0.5);
+  border-right: 2px dashed rgba(160, 145, 115, 0.5);
+  box-shadow: 0 1px 3px rgba(26, 21, 15, 0.12);
   z-index: 10;
 }
 
-[data-theme="dark"] .masking-tape {
-  background: rgba(60, 68, 78, 0.85);
-  border-left: 2px dashed rgba(100, 110, 125, 0.5);
-  border-right: 2px dashed rgba(100, 110, 125, 0.5);
-}
-
-/* Polaroid Paper Card */
-.polaroid-frame {
-  background: var(--color-paper-card);
-  padding: 12px 12px 16px 12px;
-  border: 2px solid var(--color-line);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
-  position: relative;
-}
-
-/* Telegram / Typewriter Ribbon Intercept Box */
-.intercept-box {
-  background-color: #0E1014;
-  color: #F0F6FC;
-  border-left: 4px solid var(--color-evidence-red);
-  letter-spacing: 0.08em;
-}
-
-/* Mobile Safe-Area Bottom Padding Utility */
+/* Safe Area helper for mobile */
 .pb-safe {
-  padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 1.25rem));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
+}
+
+/* Subtle micro-animations */
+@keyframes stampSettle {
+  0%   { transform: scale(1.08) rotate(-2deg); opacity: 0.7; }
+  60%  { transform: scale(0.97) rotate(0.5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.animate-stamp {
+  animation: stampSettle 250ms ease-out forwards;
+}
+
+@keyframes shakeLead {
+  0%, 100% { transform: translateX(0); }
+  20%, 60%  { transform: translateX(-4px); }
+  40%, 80%  { transform: translateX(4px); }
+}
+
+.animate-shake {
+  animation: shakeLead 300ms ease-in-out;
 }

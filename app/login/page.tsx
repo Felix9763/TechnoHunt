@@ -42,56 +42,67 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen bg-paper text-ink px-4 py-8 flex flex-col justify-between max-w-md mx-auto">
       <div>
-        {/* Header with Case stamp aesthetic & Theme Toggle */}
-        <header className="mb-6 pt-2 flex justify-between items-start">
-          <div>
-            <div className="inline-block border-2 border-ink px-2.5 py-1 mb-2 text-xs font-mono font-bold tracking-wider text-ink bg-paper-card">
-              CONFIDENTIAL // FIELD DOSSIER
+        {/* Newspaper Style Dateline Header */}
+        <div className="flex justify-between items-center text-[10px] font-mono font-bold text-ink-mid pb-1.5 border-b border-line-light uppercase tracking-widest">
+          <span>SPECIAL INVESTIGATION DISPATCH</span>
+          <span className="text-evidence-red">EDITION 01</span>
+        </div>
+
+        {/* Newspaper Masthead */}
+        <header className="mb-6 pt-3">
+          <div className="flex justify-between items-start">
+            <div>
+              <div className="inline-block border border-line px-2 py-0.5 mb-2 text-[10px] font-mono font-bold tracking-widest text-ink-mid bg-paper-inset uppercase">
+                CONFIDENTIAL // CASE DOSSIER
+              </div>
+              <h1 className="font-serif text-3xl md:text-4xl tracking-tight leading-tight text-ink font-bold">
+                The Case File
+              </h1>
+              <p className="text-xs md:text-sm font-serif text-ink-mid mt-1.5 leading-relaxed">
+                Official investigation portal. Enter team credentials from your dispatch envelope to access your active lead.
+              </p>
             </div>
-            <h1 className="font-display text-3xl md:text-4xl tracking-tight leading-tight text-ink font-bold">
-              The Case File
-            </h1>
-            <p className="text-sm font-medium text-ink mt-1.5 font-body">
-              Official investigation portal. Enter team credentials to access your active lead.
-            </p>
+            <div className="pt-1">
+              <ThemeToggle />
+            </div>
           </div>
-          <ThemeToggle />
         </header>
 
-        {/* Case File Form */}
-        <section className="border-2 border-ink bg-paper-card p-6 clip-case relative shadow-md">
-          <div className="text-xs font-mono font-bold text-evidence-red mb-4 pb-2 border-b-2 border-line tracking-wider">
-            CASE CHECK-IN // DETECTIVE VERIFICATION
+        {/* Case File Check-In Card */}
+        <section className="news-card p-6 relative shadow-md">
+          <div className="text-xs font-mono font-bold text-evidence-red mb-4 pb-2 border-b border-line-light tracking-wider flex justify-between items-center uppercase">
+            <span>DETECTIVE IDENTIFICATION</span>
+            <span className="text-ink-soft text-[10px]">SEC-AUTH</span>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label
                 htmlFor="team-code"
-                className="block text-sm font-bold text-ink mb-1.5 uppercase font-mono"
+                className="block text-xs font-bold text-ink mb-1.5 uppercase font-mono tracking-wider"
               >
-                Team code
+                Team Code
               </label>
               <input
                 id="team-code"
                 type="text"
                 autoComplete="off"
                 spellCheck="false"
-                placeholder="e.g. A1 or B1"
+                placeholder="e.g. A1, B2..."
                 value={teamCode}
                 onChange={(e) => setTeamCode(e.target.value.toUpperCase())}
-                className="w-full bg-paper border-2 border-ink px-3.5 py-2.5 font-mono text-base font-bold text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none transition-colors"
+                className="w-full bg-paper border-2 border-line px-3.5 py-2.5 font-mono text-base font-bold text-ink placeholder:text-ink-soft/40 focus:border-ink focus:outline-none transition-colors"
                 required
               />
-              <span className="text-xs font-mono font-semibold text-ink-soft mt-1.5 block">
-                Found on your dispatch envelope
+              <span className="text-[11px] font-mono text-ink-soft mt-1 block">
+                Found on your team dispatch envelope
               </span>
             </div>
 
             <div>
               <label
                 htmlFor="team-pin"
-                className="block text-sm font-bold text-ink mb-1.5 uppercase font-mono"
+                className="block text-xs font-bold text-ink mb-1.5 uppercase font-mono tracking-wider"
               >
                 Passcode PIN
               </label>
@@ -103,7 +114,7 @@ export default function LoginPage() {
                 placeholder="4-digit PIN"
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                className="w-full bg-paper border-2 border-ink px-3.5 py-2.5 font-mono text-base font-bold text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none transition-colors"
+                className="w-full bg-paper border-2 border-line px-3.5 py-2.5 font-mono text-base font-bold text-ink placeholder:text-ink-soft/40 focus:border-ink focus:outline-none transition-colors"
                 required
               />
             </div>
@@ -111,7 +122,7 @@ export default function LoginPage() {
             {error && (
               <div
                 id="login-error"
-                className="text-xs md:text-sm font-mono text-evidence-red border-l-4 border-evidence-red pl-3 py-1.5 font-bold bg-evidence-red/10"
+                className="text-xs md:text-sm font-mono text-evidence-red border-l-4 border-evidence-red pl-3 py-1.5 font-bold bg-paper-inset"
               >
                 {error}
               </div>
@@ -121,7 +132,7 @@ export default function LoginPage() {
               id="login-submit-button"
               type="submit"
               disabled={submitting}
-              className="w-full bg-ink text-paper py-3 font-mono font-bold text-sm uppercase tracking-wider hover:bg-ink-soft active:scale-95 transition-all disabled:opacity-50 shadow-md"
+              className="w-full bg-ink text-paper py-3 font-mono font-bold text-sm uppercase tracking-wider hover:bg-ink-mid active:scale-95 transition-all disabled:opacity-50 shadow-md mt-2"
             >
               {submitting ? 'Authenticating...' : 'Access Case File'}
             </button>
@@ -130,9 +141,9 @@ export default function LoginPage() {
       </div>
 
       {/* Footer Info */}
-      <footer className="mt-8 pt-4 border-t-2 border-line text-xs font-mono font-bold text-ink flex justify-between items-center">
-        <span>COLLEGE CAMPUS // LIVE EVENT</span>
-        <span className="text-evidence-red font-bold">STRICTLY TIMED</span>
+      <footer className="mt-8 pt-3 border-t border-line text-[11px] font-mono font-bold text-ink-soft flex justify-between items-center">
+        <span>CAMPUS EVENT // DETECTIVE DIVISION</span>
+        <span className="text-evidence-red">STRICTLY TIMED</span>
       </footer>
     </main>
   );

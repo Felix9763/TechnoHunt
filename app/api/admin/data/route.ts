@@ -11,7 +11,10 @@ import {
   fetchAllTeamProgress,
   fetchAllAttempts,
   fetchFinaleSubmissions,
+  fetchAllTeamRegistrations,
 } from '@/lib/db';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   const session = await getAdminSession(req);
@@ -29,7 +32,6 @@ export async function GET(req: NextRequest) {
     const finale = await fetchFinaleSubmissions(activeRound);
     const settings = getSettings();
 
-    // Map progress by teamCode for fast lookup
     const progressMap: Record<string, { current_stage: string; last_updated: string }> = {};
     progressList.forEach((p) => {
       progressMap[p.team_code] = {
@@ -39,6 +41,7 @@ export async function GET(req: NextRequest) {
     });
 
     const stages = getStagesForRound(activeRound);
+    const registrations = await fetchAllTeamRegistrations(activeRound);
 
     return NextResponse.json({
       activeRound,
@@ -47,6 +50,7 @@ export async function GET(req: NextRequest) {
       teams,
       stages,
       progress: progressMap,
+      registrations,
       attempts,
       finale,
       settings,

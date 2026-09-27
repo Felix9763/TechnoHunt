@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getTeamSession } from '@/lib/auth';
 import { getLiveActiveRound, getStagesForRound, getSettings, getSanitizedStageData } from '@/lib/round';
-import { fetchTeamProgress, updateTeamProgress, logAttempt } from '@/lib/db';
+import { fetchTeamProgress, updateTeamProgress, logAttempt, fetchTeamRegistration } from '@/lib/db';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { isAnswerCorrect } from '@/lib/answerMatch';
 
@@ -31,6 +31,19 @@ export async function POST(req: NextRequest) {
     }
 
     const { teamCode } = session;
+
+    // Check if team has been approved by admin
+    const reg = await fetchTeamRegistration(activeRound, teamCode);
+    if (!reg || !reg.confirmed) {
+      return NextResponse.json(
+        {
+          error: 'Your team journey has not yet been activated by event dispatch. Please assign your Team Name at the registration desk.',
+          notConfirmed: true,
+        },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
     const answer = (body.answer || '').toString().trim();
 

@@ -26,6 +26,15 @@ interface FinaleSubmission {
   submitted_at: string;
 }
 
+interface TeamRegistration {
+  round: string;
+  team_code: string;
+  team_name: string;
+  confirmed: boolean;
+  checked_in_at: string;
+  confirmed_at?: string;
+}
+
 interface AdminClientProps {
   initialData: {
     activeRound: string;
@@ -34,6 +43,7 @@ interface AdminClientProps {
     teams: Array<{ code: string; pin: string; track: string }>;
     stages?: Record<string, any>;
     progress: Record<string, TeamProgressInfo>;
+    registrations?: Record<string, TeamRegistration>;
     attempts: Attempt[];
     finale: FinaleSubmission[];
     settings: any;
@@ -89,6 +99,14 @@ export default function AdminClient({ initialData, initialTab = 'ops' }: AdminCl
   const [adminPhotoModal, setAdminPhotoModal] = useState<{ url: string; name: string } | null>(null);
 
   const uniqueTracks = Array.from(new Set(data.teams.map((t) => t.track))).filter(Boolean).sort();
+
+  // Team registration / name assignment state
+  const [registeringTeam, setRegisteringTeam] = useState<string>('');
+  const [registeringName, setRegisteringName] = useState<string>('');
+  const [submittingReg, setSubmittingReg] = useState(false);
+  const [pendingNameInputs, setPendingNameInputs] = useState<Record<string, string>>({});
+  const [editingTeamCode, setEditingTeamCode] = useState<string | null>(null);
+  const [editingNameValue, setEditingNameValue] = useState<string>('');
 
   // Auto-refresh interval (5s)
   useEffect(() => {
@@ -200,6 +218,45 @@ export default function AdminClient({ initialData, initialTab = 'ops' }: AdminCl
       setActionMsg({ text: 'Error recording finale verification.', error: true });
     } finally {
       setSubmittingFinale(false);
+    }
+  }
+
+  async function handleConfirmTeam(teamCode: string, nameToAssign?: string) {
+    const finalName = (nameToAssign !== undefined ? nameToAssign : (pendingNameInputs[teamCode] || '')).trim();
+    if (!finalName) {
+      alert('Please enter a team name to assign.');
+      return;
+    }
+
+    setSubmittingReg(true);
+    setActionMsg(null);
+
+    try {
+      const res = await fetch('/api/admin/confirm-team', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ teamCode, teamName: finalName }),
+      });
+      const resData = await res.json();
+
+      if (!res.ok) {
+        setActionMsg({ text: resData.error || 'Failed to assign team name.', error: true });
+      } else {
+        setActionMsg({ text: `✓ Team ${teamCode} registered as "${finalName}" and clearance granted!` });
+        setPendingNameInputs((prev) => {
+          const next = { ...prev };
+          delete next[teamCode];
+          return next;
+        });
+        setEditingTeamCode(null);
+        setRegisteringTeam('');
+        setRegisteringName('');
+        await refreshData();
+      }
+    } catch (e) {
+      setActionMsg({ text: 'Error contacting server to assign team name.', error: true });
+    } finally {
+      setSubmittingReg(false);
     }
   }
 
@@ -487,6 +544,150 @@ PIN: ${t.pin}
             </div>
           </section>
 
+          {/* REGISTRATION DESK & TEAM NAME ASSIGNMENT MODULE */}
+          {(() => {
+            const regs = data.registrations || {};
+            const waitingTeams = data.teams.filter((t) => regs[t.code] && !regs[t.code].confirmed);
+            const confirmedCount = data.teams.filter((t) => regs[t.code]?.confirmed).length;
+
+            return (
+              <section className="border-2 border-ink p-5 bg-paper-card shadow-md space-y-4">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 pb-3 border-b border-line">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-evidence-red font-bold uppercase tracking-wider">
+                        REGISTRATION DESK DISPATCH
+                      </span>
+                      {waitingTeams.length > 0 && (
+                        <span className="bg-evidence-red text-paper text-[10px] font-mono px-2 py-0.5 font-bold animate-pulse">
+                          {waitingTeams.length} PENDING CLEARANCE
+                        </span>
+                      )}
+                    </div>
+                    <h2 className="font-display text-xl text-ink mt-0.5">
+                      Desk Check-In & Team Name Assignment
+                    </h2>
+                  </div>
+                  <div className="text-xs font-mono text-ink-soft">
+                    <span className="font-bold text-ink">{confirmedCount}</span> of {data.teams.length} Teams Cleared
+                  </div>
+                </div>
+
+                {/* WAITING QUEUE (Teams that entered their PIN and are standing at the desk) */}
+                {waitingTeams.length > 0 ? (
+                  <div className="space-y-3">
+                    <div className="text-xs font-mono text-evidence-red font-bold flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-lockout-amber animate-pulse" />
+                      <span>TEAMS CURRENTLY STANDING AT DESK AWAITING TEAM NAME:</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {waitingTeams.map((t) => {
+                        const reg = regs[t.code];
+                        return (
+                          <div
+                            key={t.code}
+                            className="border-2 border-evidence-red bg-paper p-3 shadow-sm space-y-2"
+                          >
+                            <div className="flex justify-between items-center text-xs font-mono">
+                              <span className="font-bold text-sm text-ink">
+                                Unit {t.code} (Track {t.track})
+                              </span>
+                              <span className="text-ink-soft text-[10px]" suppressHydrationWarning>
+                                Checked in: {reg ? formatTime(reg.checked_in_at) : 'Just now'}
+                              </span>
+                            </div>
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                placeholder="Enter chosen team name..."
+                                value={pendingNameInputs[t.code] || ''}
+                                onChange={(e) =>
+                                  setPendingNameInputs({
+                                    ...pendingNameInputs,
+                                    [t.code]: e.target.value,
+                                  })
+                                }
+                                className="flex-1 bg-paper-card border border-ink px-2.5 py-1.5 text-xs font-mono font-bold text-ink placeholder:text-ink/35 focus:outline-none"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleConfirmTeam(t.code)}
+                                disabled={submittingReg || !(pendingNameInputs[t.code] || '').trim()}
+                                className="bg-ink text-paper px-3 py-1.5 text-xs font-mono font-bold uppercase hover:bg-ink-mid transition-colors disabled:opacity-40"
+                              >
+                                {submittingReg ? '...' : 'Approve & Launch'}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-3 bg-paper border border-line-light text-xs font-mono text-ink-mid flex items-center justify-between">
+                    <span>✓ No teams currently waiting at desk. All logged-in units have been assigned team names.</span>
+                  </div>
+                )}
+
+                {/* MANUAL QUICK-ASSIGN FORM (Pre-assign or rename any team) */}
+                <div className="pt-2 border-t border-line-light">
+                  <span className="text-[11px] font-mono text-ink-soft font-bold block mb-1.5 uppercase">
+                    QUICK-ASSIGN / PRE-REGISTER ANY UNIT:
+                  </span>
+                  <div className="flex flex-col md:flex-row gap-2">
+                    <select
+                      value={registeringTeam}
+                      onChange={(e) => {
+                        const code = e.target.value;
+                        setRegisteringTeam(code);
+                        if (code && regs[code]?.team_name) {
+                          setRegisteringName(regs[code].team_name);
+                        } else {
+                          setRegisteringName('');
+                        }
+                      }}
+                      className="bg-paper border border-ink p-2 text-xs font-mono font-bold"
+                    >
+                      <option value="">-- Select Team Code --</option>
+                      {data.teams.map((t) => {
+                        const reg = regs[t.code];
+                        const label = reg?.confirmed
+                          ? `${t.code} (${t.track}) — "${reg.team_name}"`
+                          : reg
+                          ? `${t.code} (${t.track}) — [WAITING CLEARANCE]`
+                          : `${t.code} (${t.track}) — [Not checked in]`;
+                        return (
+                          <option key={t.code} value={t.code}>
+                            {label}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <input
+                      type="text"
+                      placeholder="Team Name (e.g. Baker Street Boys)..."
+                      value={registeringName}
+                      onChange={(e) => setRegisteringName(e.target.value)}
+                      className="flex-1 bg-paper border border-ink p-2 text-xs font-mono font-bold"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (registeringTeam) {
+                          handleConfirmTeam(registeringTeam, registeringName);
+                        }
+                      }}
+                      disabled={submittingReg || !registeringTeam || !registeringName.trim()}
+                      className="bg-ink text-paper px-4 py-2 text-xs font-mono font-bold uppercase hover:bg-ink-mid transition-colors disabled:opacity-40"
+                    >
+                      {submittingReg ? 'Saving...' : 'Assign & Activate'}
+                    </button>
+                  </div>
+                </div>
+              </section>
+            );
+          })()}
+
           {/* LIVE ROSTER TABLE */}
           <section className="border-2 border-ink p-5 bg-paper">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4 pb-3 border-b border-line">
@@ -519,7 +720,7 @@ PIN: ${t.pin}
 
                 <input
                   type="text"
-                  placeholder="Search team code..."
+                  placeholder="Search team or name..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="bg-paper-card border-2 border-ink px-3 py-1.5 text-xs font-mono font-bold placeholder:text-ink/40"
@@ -532,9 +733,11 @@ PIN: ${t.pin}
               <table className="w-full text-xs text-left border-collapse">
                 <thead>
                   <tr className="border-b-2 border-ink bg-line/20">
-                    <th className="p-2.5 font-bold">TEAM</th>
+                    <th className="p-2.5 font-bold">UNIT</th>
+                    <th className="p-2.5 font-bold">ASSIGNED TEAM NAME</th>
                     <th className="p-2.5 font-bold">TRACK</th>
                     <th className="p-2.5 font-bold">PIN</th>
+                    <th className="p-2.5 font-bold">REG STATUS</th>
                     <th className="p-2.5 font-bold">CURRENT STAGE</th>
                     <th className="p-2.5 font-bold">LAST UPDATED</th>
                     <th className="p-2.5 font-bold text-right">ACTION</th>
@@ -546,6 +749,8 @@ PIN: ${t.pin}
                     const stageKey = prog?.current_stage || 'clue2';
                     const stageLabel = STAGE_LABELS[stageKey] || stageKey;
                     const isFinished = stageKey === 'final';
+                    const reg = (data.registrations || {})[team.code];
+                    const isEditing = editingTeamCode === team.code;
 
                     return (
                       <tr
@@ -555,8 +760,67 @@ PIN: ${t.pin}
                         }`}
                       >
                         <td className="p-2.5 font-bold">{team.code}</td>
+                        <td className="p-2.5">
+                          {isEditing ? (
+                            <div className="flex items-center gap-1.5">
+                              <input
+                                type="text"
+                                value={editingNameValue}
+                                onChange={(e) => setEditingNameValue(e.target.value)}
+                                className="bg-paper border border-ink px-2 py-0.5 text-xs font-bold w-36"
+                                placeholder="Enter team name"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleConfirmTeam(team.code, editingNameValue)}
+                                className="bg-ink text-paper px-2 py-0.5 text-[10px] font-bold"
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setEditingTeamCode(null)}
+                                className="text-[10px] text-ink-soft hover:underline"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-bold text-ink">
+                                {reg?.team_name ? `"${reg.team_name}"` : '—'}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditingTeamCode(team.code);
+                                  setEditingNameValue(reg?.team_name || '');
+                                }}
+                                className="text-[10px] text-ink-soft hover:text-ink underline ml-1"
+                                title="Edit / Assign Team Name"
+                              >
+                                ✏️
+                              </button>
+                            </div>
+                          )}
+                        </td>
                         <td className="p-2.5">{team.track}</td>
-                        <td className="p-2.5 text-ink-soft">{team.pin}</td>
+                        <td className="p-2.5 text-ink-soft font-mono">{team.pin}</td>
+                        <td className="p-2.5">
+                          {reg?.confirmed ? (
+                            <span className="inline-block px-1.5 py-0.5 text-[10px] font-bold text-verified-teal bg-verified-teal/15 border border-verified-teal">
+                              ✓ CLEARED
+                            </span>
+                          ) : reg ? (
+                            <span className="inline-block px-1.5 py-0.5 text-[10px] font-bold text-lockout-amber bg-lockout-amber/15 border border-lockout-amber animate-pulse">
+                              ⚠️ AT DESK
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-ink-soft">
+                              NOT CHECKED IN
+                            </span>
+                          )}
+                        </td>
                         <td className="p-2.5">
                           <span
                             className={`inline-block px-2 py-0.5 text-[11px] font-bold ${

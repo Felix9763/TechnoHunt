@@ -90,7 +90,8 @@ export function getSanitizedStageData(
       id: fullData.crewmate.id,
       name: fullData.crewmate.name,
       photo: fullData.crewmate.photo,
-      ...(currentStage === 'crewmate' ? { script: fullData.crewmate.script } : {}),
+      // Witness statement is ONLY revealed after the crewmate code has been authenticated
+      ...(['clue3', 'clue4', 'final'].includes(currentStage) ? { script: fullData.crewmate.script } : {}),
     };
     // Note: crewmate code is NEVER provided to client (crewmate gives it in person)
   }

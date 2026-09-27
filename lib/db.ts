@@ -28,9 +28,19 @@ export function getSupabase(): SupabaseClient | null {
 // Fallback local file-based database for development/testing when Supabase creds are pending
 const LOCAL_DB_PATH = path.join(process.cwd(), 'scratch', 'local_db.json');
 
+export interface TeamRegistration {
+  round: string;
+  team_code: string;
+  team_name: string;
+  confirmed: boolean;
+  checked_in_at: string;
+  confirmed_at?: string;
+}
+
 interface LocalDbSchema {
   event_state: { id: number; active_round: string };
   team_progress: Record<string, { round: string; team_code: string; current_stage: string; last_updated: string }>;
+  team_registrations: Record<string, TeamRegistration>;
   attempts: Array<{
     id: number;
     round: string;
@@ -46,7 +56,9 @@ interface LocalDbSchema {
 function getLocalDb(): LocalDbSchema {
   try {
     if (fs.existsSync(LOCAL_DB_PATH)) {
-      return JSON.parse(fs.readFileSync(LOCAL_DB_PATH, 'utf-8'));
+      const parsed = JSON.parse(fs.readFileSync(LOCAL_DB_PATH, 'utf-8'));
+      if (!parsed.team_registrations) parsed.team_registrations = {};
+      return parsed;
     }
   } catch (err) {
     console.error('Error reading local DB, resetting:', err);
@@ -54,6 +66,7 @@ function getLocalDb(): LocalDbSchema {
   const defaultDb: LocalDbSchema = {
     event_state: { id: 1, active_round: 'round2' },
     team_progress: {},
+    team_registrations: {},
     attempts: [],
     finale_submissions: {},
   };
@@ -352,6 +365,120 @@ export async function markFinaleSubmission(round: string, teamCode: string) {
   return { success: true, position: newPosition, alreadySubmitted: false };
 }
 
+export async function fetchTeamRegistration(round: string, teamCode: string): Promise<TeamRegistration | null> {
+  const sb = getSupabase();
+  if (sb) {
+    try {
+      const { data, error } = await sb
+        .from('team_registrations')
+        .select('*')
+        .eq('round', round)
+        .eq('team_code', teamCode)
+        .single();
+      if (!error && data) {
+        return data as TeamRegistration;
+      }
+    } catch (e) {
+      console.warn('Supabase fetchTeamRegistration error:', e);
+    }
+  }
+  const db = getLocalDb();
+  if (!db.team_registrations) db.team_registrations = {};
+  const key = `${round}:${teamCode}`;
+  return db.team_registrations[key] || null;
+}
+
+export async function checkInTeam(round: string, teamCode: string): Promise<TeamRegistration> {
+  const now = new Date().toISOString();
+  const existing = await fetchTeamRegistration(round, teamCode);
+  if (existing) {
+    return existing;
+  }
+
+  const newReg: TeamRegistration = {
+    round,
+    team_code: teamCode,
+    team_name: '',
+    confirmed: false,
+    checked_in_at: now,
+  };
+
+  const sb = getSupabase();
+  if (sb) {
+    try {
+      await sb.from('team_registrations').insert(newReg);
+    } catch (e) {
+      console.warn('Supabase checkInTeam error:', e);
+    }
+  }
+
+  const db = getLocalDb();
+  if (!db.team_registrations) db.team_registrations = {};
+  const key = `${round}:${teamCode}`;
+  db.team_registrations[key] = newReg;
+  saveLocalDb(db);
+  return newReg;
+}
+
+export async function confirmTeamRegistration(round: string, teamCode: string, teamName: string): Promise<boolean> {
+  const now = new Date().toISOString();
+  const existing = await fetchTeamRegistration(round, teamCode);
+  const updated: TeamRegistration = {
+    round,
+    team_code: teamCode,
+    team_name: teamName.trim(),
+    confirmed: true,
+    checked_in_at: existing ? existing.checked_in_at : now,
+    confirmed_at: now,
+  };
+
+  const sb = getSupabase();
+  if (sb) {
+    try {
+      await sb.from('team_registrations').upsert(updated);
+    } catch (e) {
+      console.warn('Supabase confirmTeamRegistration error:', e);
+    }
+  }
+
+  const db = getLocalDb();
+  if (!db.team_registrations) db.team_registrations = {};
+  const key = `${round}:${teamCode}`;
+  db.team_registrations[key] = updated;
+  saveLocalDb(db);
+  return true;
+}
+
+export async function fetchAllTeamRegistrations(round: string): Promise<Record<string, TeamRegistration>> {
+  const sb = getSupabase();
+  if (sb) {
+    try {
+      const { data, error } = await sb
+        .from('team_registrations')
+        .select('*')
+        .eq('round', round);
+      if (!error && data) {
+        const map: Record<string, TeamRegistration> = {};
+        for (const r of data) {
+          map[r.team_code] = r;
+        }
+        return map;
+      }
+    } catch (e) {
+      console.warn('Supabase fetchAllTeamRegistrations error:', e);
+    }
+  }
+  const db = getLocalDb();
+  if (!db.team_registrations) db.team_registrations = {};
+  const map: Record<string, TeamRegistration> = {};
+  for (const [key, val] of Object.entries(db.team_registrations)) {
+    if (val.round === round) {
+      map[val.team_code] = val;
+    }
+  }
+  return map;
+}
+
 export async function resetRoundData(round: string): Promise<boolean> {
   const sb = getSupabase();
   if (sb) {
@@ -359,6 +486,7 @@ export async function resetRoundData(round: string): Promise<boolean> {
       await sb.from('team_progress').delete().eq('round', round);
       await sb.from('attempts').delete().eq('round', round);
       await sb.from('finale_submissions').delete().eq('round', round);
+      await sb.from('team_registrations').delete().eq('round', round);
     } catch (e) {
       console.warn('Supabase resetRoundData error:', e);
     }
@@ -371,6 +499,14 @@ export async function resetRoundData(round: string): Promise<boolean> {
       delete db.team_progress[key];
     }
   });
+  // Clear team_registrations for this round
+  if (db.team_registrations) {
+    Object.keys(db.team_registrations).forEach((key) => {
+      if (db.team_registrations[key].round === round) {
+        delete db.team_registrations[key];
+      }
+    });
+  }
   // Clear attempts for this round
   db.attempts = db.attempts.filter((a) => a.round !== round);
   // Clear finale_submissions for this round

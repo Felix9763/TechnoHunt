@@ -11,6 +11,8 @@ interface DashboardClientProps {
   round: string;
   initialStage: string;
   initialStageData: SanitizedStageData;
+  initialConfirmed?: boolean;
+  initialTeamName?: string;
 }
 
 const STAGES = [
@@ -40,8 +42,14 @@ export default function DashboardClient({
   round,
   initialStage,
   initialStageData,
+  initialConfirmed = false,
+  initialTeamName = '',
 }: DashboardClientProps) {
   const router = useRouter();
+  const [confirmed, setConfirmed] = useState(initialConfirmed);
+  const [teamName, setTeamName] = useState(initialTeamName);
+  const [checkingStatus, setCheckingStatus] = useState(false);
+
   const [currentStage, setCurrentStage] = useState(initialStage);
   const [stageData, setStageData] = useState<SanitizedStageData>(initialStageData);
   const [inputValue, setInputValue] = useState('');
@@ -56,7 +64,7 @@ export default function DashboardClient({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Sync with initial props if revalidated by server
+  // Sync props if refreshed
   useEffect(() => {
     setCurrentStage(initialStage);
   }, [initialStage]);
@@ -64,6 +72,42 @@ export default function DashboardClient({
   useEffect(() => {
     setStageData(initialStageData);
   }, [initialStageData]);
+
+  useEffect(() => {
+    setConfirmed(initialConfirmed);
+  }, [initialConfirmed]);
+
+  useEffect(() => {
+    if (initialTeamName) setTeamName(initialTeamName);
+  }, [initialTeamName]);
+
+  // Polling for team confirmation / name assignment when on waiting screen
+  useEffect(() => {
+    if (confirmed) return;
+
+    let mounted = true;
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch('/api/team/status');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.confirmed && mounted) {
+            triggerHaptic('success');
+            setConfirmed(true);
+            setTeamName(data.teamName || '');
+            router.refresh();
+          }
+        }
+      } catch (e) {
+        // silent fail on network jitter
+      }
+    }, 3000);
+
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, [confirmed, router]);
 
   // Lockout countdown timer
   useEffect(() => {
@@ -105,6 +149,30 @@ export default function DashboardClient({
     router.refresh();
   }
 
+  async function handleManualCheckStatus() {
+    setCheckingStatus(true);
+    setErrorMsg(null);
+    try {
+      const res = await fetch('/api/team/status');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.confirmed) {
+          triggerHaptic('success');
+          setConfirmed(true);
+          setTeamName(data.teamName || '');
+          router.refresh();
+        } else {
+          setErrorMsg('Awaiting organizer clearance at the desk. Please ask them to assign your team name.');
+          setTimeout(() => setErrorMsg(null), 4000);
+        }
+      }
+    } catch (e) {
+      setErrorMsg('Network error checking clearance status.');
+    } finally {
+      setCheckingStatus(false);
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!inputValue.trim() || submitting || lockoutRemaining !== null || cooldownRemaining !== null) {
@@ -127,6 +195,12 @@ export default function DashboardClient({
 
       if (res.status === 409 && data.roundMismatch) {
         setRoundMismatch(true);
+        setSubmitting(false);
+        return;
+      }
+
+      if (res.status === 403 && data.notConfirmed) {
+        setConfirmed(false);
         setSubmitting(false);
         return;
       }
@@ -179,22 +253,23 @@ export default function DashboardClient({
     }
   }
 
+  // Round mismatch fallback
   if (roundMismatch) {
     return (
       <main className="min-h-screen bg-paper text-ink p-6 flex flex-col items-center justify-center max-w-md mx-auto text-left">
-        <div className="border-2 border-evidence-red bg-paper-card p-6 w-full clip-case shadow-lg">
+        <div className="border-2 border-evidence-red bg-paper-card p-6 w-full shadow-md">
           <div className="font-mono text-xs text-evidence-red mb-2 font-bold tracking-wider">
-            NOTICE // INVESTIGATION PHASE UPDATED
+            NOTICE // INVESTIGATION PHASE ADVANCED
           </div>
-          <h2 className="font-display text-2xl text-ink mb-3 font-bold">
-            This round has ended — please log in again
+          <h2 className="font-serif text-2xl text-ink mb-3 font-bold">
+            Round Transition in Progress
           </h2>
-          <p className="text-sm text-ink-soft mb-6 font-body leading-relaxed font-medium">
-            The organizer has shifted the investigation to a new phase. Your previous session credentials are no longer active.
+          <p className="text-sm text-ink-soft mb-6 font-serif leading-relaxed">
+            The field organizers have updated the active investigation phase. Please re-enter your credentials.
           </p>
           <button
             onClick={handleLogout}
-            className="w-full bg-ink text-paper py-3 font-mono font-bold text-sm uppercase tracking-wider hover:bg-ink-soft active:scale-95 transition-all shadow"
+            className="w-full bg-ink text-paper py-3 font-mono font-bold text-sm uppercase tracking-wider hover:bg-ink-mid active:scale-95 transition-all shadow"
           >
             Re-enter Portal
           </button>
@@ -203,44 +278,146 @@ export default function DashboardClient({
     );
   }
 
+  // =========================================================================
+  // HOLDING BAY: WAITING FOR ORGANIZER CLEARANCE & TEAM NAME ASSIGNMENT
+  // =========================================================================
+  if (!confirmed) {
+    return (
+      <main className="min-h-screen bg-paper text-ink px-4 py-8 flex flex-col justify-between max-w-md mx-auto">
+        <div>
+          {/* Dateline Banner */}
+          <div className="flex justify-between items-center text-[10px] font-mono font-bold text-ink-mid pb-1.5 border-b border-line-light uppercase tracking-widest">
+            <span>DISPATCH STATION // TERMINAL #0426</span>
+            <span className="text-evidence-red font-bold">STANDBY CLEARANCE</span>
+          </div>
+
+          {/* Masthead */}
+          <header className="mb-6 pt-3 flex justify-between items-start">
+            <div>
+              <div className="inline-block border border-line px-2 py-0.5 mb-2 text-[10px] font-mono font-bold tracking-widest text-ink-mid bg-paper-inset uppercase">
+                ENVELOPE AUTHENTICATED // STEP 1 OF 2
+              </div>
+              <h1 className="font-serif text-3xl font-bold tracking-tight text-ink">
+                Awaiting Clearance
+              </h1>
+              <p className="text-xs md:text-sm font-serif text-ink-mid mt-1 leading-relaxed">
+                Unit credentials verified. Your terminal is standing by for Team Name assignment at the registration desk.
+              </p>
+            </div>
+            <ThemeToggle />
+          </header>
+
+          {/* Standby Clearance Card */}
+          <section className="news-card p-6 relative shadow-md space-y-4">
+            <div className="flex justify-between items-center pb-2 border-b border-line-light">
+              <span className="font-mono text-xs font-bold text-ink-mid uppercase tracking-wider">
+                ASSIGNED UNIT
+              </span>
+              <span className="font-mono text-sm font-bold bg-ink text-paper px-2.5 py-0.5">
+                Team {teamCode} (Track {track})
+              </span>
+            </div>
+
+            <div className="detective-directive p-4 shadow-sm space-y-2">
+              <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-evidence-red tracking-wider uppercase">
+                <span>⚑</span>
+                <span>DESK REGISTRATION PROTOCOL</span>
+              </div>
+              <div className="text-xs md:text-sm font-mono text-ink leading-relaxed font-semibold space-y-1.5">
+                <p>1. Report to the Organizer / Game Master Registration Desk.</p>
+                <p>2. Give them your unit code: <strong className="text-evidence-red">Team {teamCode}</strong>.</p>
+                <p>3. Declare your chosen <strong className="text-ink">Team Name</strong>.</p>
+                <p>4. Once the organizers register your team name, this terminal will automatically unlock your investigation journey!</p>
+              </div>
+            </div>
+
+            {/* Pulsing Sync Status Indicator */}
+            <div className="p-3 bg-paper-inset border border-line-light flex items-center justify-between text-xs font-mono">
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-2.5 h-2.5 rounded-full bg-lockout-amber animate-pulse" />
+                <span className="font-bold text-ink-mid">Listening for dispatch clearance...</span>
+              </div>
+              <span className="text-[10px] text-ink-soft">Live 3s</span>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleManualCheckStatus}
+              disabled={checkingStatus}
+              className="w-full bg-ink text-paper py-3 font-mono font-bold text-xs uppercase tracking-wider hover:bg-ink-mid active:scale-95 transition-all shadow-md disabled:opacity-50"
+            >
+              {checkingStatus ? 'Checking Registry...' : '↻ Check Clearance Status Now'}
+            </button>
+
+            {errorMsg && (
+              <div className="text-xs font-mono text-evidence-red border-l-4 border-evidence-red pl-2.5 py-1 font-bold bg-paper-inset">
+                {errorMsg}
+              </div>
+            )}
+          </section>
+        </div>
+
+        {/* Footer */}
+        <footer className="mt-8 pt-3 border-t border-line text-[11px] font-mono font-bold text-ink-soft flex justify-between items-center">
+          <button
+            onClick={handleLogout}
+            className="hover:underline text-ink"
+          >
+            ← Sign out / Switch envelope
+          </button>
+          <span className="text-evidence-red">AWAITING ORGANIZER</span>
+        </footer>
+      </main>
+    );
+  }
+
+  // =========================================================================
+  // ACTIVE CASE FILE VIEW (AFTER ADMIN CONFIRMATION & TEAM NAME ASSIGNMENT)
+  // =========================================================================
   return (
     <div className="min-h-screen bg-paper text-ink pb-44 max-w-md mx-auto relative select-none">
-      {/* Top Header */}
-      <header className="px-4 pt-4 pb-3 border-b-2 border-ink flex justify-between items-center sticky top-0 bg-paper/95 backdrop-blur-md z-20 shadow-sm">
-        <div className="flex items-center gap-2.5">
-          {/* Brass Paperclip Accent */}
-          <svg className="w-5 h-5 text-ink shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-          </svg>
+      {/* Newspaper Masthead Header */}
+      <header className="px-4 pt-3 pb-2.5 border-b-2 border-ink sticky top-0 bg-paper/95 backdrop-blur-md z-20 shadow-sm">
+        {/* Top Dateline / Dispatch Banner */}
+        <div className="flex justify-between items-center pb-1.5 border-b border-line-light text-[10px] font-mono font-bold">
+          <span className="tracking-widest uppercase text-ink-mid">
+            DAILY CAMPUS DISPATCH
+          </span>
+          <span className="text-evidence-red tracking-wider uppercase">
+            CASE #{round.toUpperCase()}-0426
+          </span>
+        </div>
+
+        {/* Masthead Main Title: Shows Custom Team Name + Unit Code */}
+        <div className="pt-2 flex justify-between items-center">
           <div>
-            <div className="text-xs font-mono text-evidence-red font-bold tracking-wider uppercase">
-              CASE #0426 // {round.toUpperCase()}
-            </div>
-            <div className="flex items-baseline space-x-2">
-              <span className="font-display text-xl text-ink font-bold">
-                Team {teamCode}
-              </span>
-              <span className="text-xs font-mono bg-ink text-paper px-2 py-0.5 rounded font-bold">
+            <h1 className="font-serif text-2xl font-bold tracking-tight text-ink">
+              {teamName || `Team ${teamCode}`}
+            </h1>
+            <div className="flex items-center gap-1.5 text-xs font-mono mt-0.5">
+              <span className="font-bold text-ink-mid">Unit {teamCode}</span>
+              <span className="text-line">·</span>
+              <span className="bg-ink text-paper px-1.5 py-0.2 rounded font-bold text-[10px]">
                 Track {track}
               </span>
             </div>
           </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <button
-            onClick={handleLogout}
-            className="text-xs font-mono text-ink font-bold hover:underline py-1 transition-colors ml-1"
-          >
-            Sign out
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={handleLogout}
+              className="text-xs font-mono text-ink-mid hover:text-ink font-bold hover:underline py-1 transition-colors"
+            >
+              Sign out
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Investigation Progress Stepper */}
-      <div className="px-4 pt-3.5 pb-2.5 bg-paper-card border-b-2 border-line">
+      <div className="px-4 pt-3 pb-2.5 bg-paper-card border-b border-line">
         <div className="flex items-center justify-between text-xs font-mono mb-2">
-          <span className="text-ink font-bold tracking-wider">INVESTIGATION TRACK</span>
+          <span className="text-ink-mid font-bold tracking-wider uppercase">INVESTIGATION DISPATCH TRACK</span>
           <span className="text-evidence-red font-bold text-xs">
             {currentStage === 'final' ? 'STAGE 5/5 (PODIUM)' : `STAGE ${currentIndex + 1} OF 5`}
           </span>
@@ -252,12 +429,12 @@ export default function DashboardClient({
             return (
               <div
                 key={s.key}
-                className={`py-1.5 text-center font-mono text-xs border-2 transition-all ${
+                className={`py-1.5 text-center font-mono text-xs border transition-all ${
                   isDone
-                    ? 'bg-verified-teal/20 border-verified-teal text-verified-teal font-bold'
+                    ? 'bg-paper-inset border-verified-teal text-verified-teal font-bold'
                     : isCurrent
-                    ? 'bg-ink text-paper border-ink font-bold shadow-md'
-                    : 'bg-paper/50 border-line text-ink-soft/70 font-semibold'
+                    ? 'bg-ink text-paper border-ink font-bold shadow-sm'
+                    : 'bg-transparent border-line-light text-ink-soft/70 font-semibold'
                 }`}
               >
                 <div className="font-bold">{isDone ? '✓' : s.num}</div>
@@ -270,51 +447,51 @@ export default function DashboardClient({
 
       {/* Case File Body */}
       <div className="px-4 py-4 space-y-4">
-        {/* Detective Briefing Notice */}
-        <div className="border-2 border-ink bg-paper-card p-4 clip-case shadow-sm relative">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-mono text-evidence-red font-bold tracking-wider">
+        {/* Detective Field Briefing Box */}
+        <div className="news-card p-4 relative shadow-sm border-l-4 border-l-ink">
+          <div className="flex items-center justify-between mb-1.5 border-b border-line-light pb-1">
+            <span className="text-xs font-mono text-evidence-red font-bold tracking-wider uppercase">
               FIELD BRIEFING // CLASSIFIED
             </span>
-            <span className="text-xs font-mono font-bold text-ink-soft">REF: TR-89</span>
+            <span className="text-[11px] font-mono font-bold text-ink-soft">DOC REF: 89-B</span>
           </div>
-          <p className="text-sm text-ink leading-relaxed font-body font-medium">
+          <p className="text-sm text-ink leading-relaxed font-serif font-medium pt-1">
             You are Detectives on scene. Something walked off campus last night. Follow the physical traces, find the witnesses, decrypt their intercepts, and reach the final coordinates before time runs out.
           </p>
         </div>
 
         {/* Sequential Evidence Cards */}
-        <div className="border-l-3 border-ink pl-3.5 ml-1 space-y-4">
+        <div className="space-y-4">
           
           {/* ============================================================ */}
           {/* STAGE 1: CLUE 2 (Physical Codeword) */}
           {/* ============================================================ */}
           <section
             id="stage-card-clue2"
-            className={`border-2 p-4 relative transition-all duration-200 notched-card ${
+            className={`p-4 relative transition-all duration-200 ${
               currentIndex > 0
-                ? 'border-line bg-paper-card/70'
+                ? 'news-card-cleared'
                 : currentIndex === 0
-                ? `border-ink bg-paper-card shadow-md ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
-                : 'border-line/40 opacity-40'
+                ? `news-card-active ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-shake' : ''}`
+                : 'news-card-locked'
             }`}
           >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-mono text-ink-soft font-bold tracking-wider">
-                LEAD 01 // PHYSICAL TRACE
+            <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-line-light">
+              <span className="text-xs font-mono text-ink-mid font-bold tracking-wider">
+                EXHIBIT A // PHYSICAL TRACE
               </span>
               {currentIndex > 0 ? (
-                <span className="rubber-stamp text-verified-teal text-xs rotate-[-2deg]">
+                <span className="rubber-stamp text-verified-teal">
                   ✓ SOLVED
                 </span>
               ) : (
-                <span className="text-xs font-mono bg-evidence-red text-paper px-2 py-0.5 font-bold animate-pulse">
+                <span className="text-[11px] font-mono bg-evidence-red text-paper px-2 py-0.5 font-bold uppercase tracking-wider">
                   ACTIVE LEAD
                 </span>
               )}
             </div>
 
-            <h3 className="font-display text-lg text-ink font-bold mb-1.5">
+            <h3 className="font-serif text-lg text-ink font-bold mb-2">
               Clue 2: The Physical Codeword
             </h3>
 
@@ -325,18 +502,25 @@ export default function DashboardClient({
             ) : (
               <div className="space-y-3 mt-2.5">
                 {stageData.clue2?.riddle && (
-                  <div className="bg-paper border-2 border-ink p-3.5 shadow-sm">
-                    <div className="text-xs font-mono text-evidence-red mb-1.5 font-bold tracking-wider">
-                      LOCATION RIDDLE:
+                  <div className="newspaper-quote p-3.5 shadow-sm border border-line-light">
+                    <div className="text-xs font-mono text-evidence-red mb-1 font-bold tracking-wider uppercase">
+                      CRIME SCENE RIDDLE:
                     </div>
-                    <p className="text-sm md:text-base text-ink font-serif italic font-bold leading-relaxed">
+                    <p className="text-sm md:text-base font-serif italic font-bold leading-relaxed text-ink">
                       &ldquo;{stageData.clue2.riddle}&rdquo;
                     </p>
                   </div>
                 )}
-                <div className="text-xs md:text-sm font-mono bg-amber-500/15 p-3 border-2 border-amber-600/60 text-ink leading-relaxed font-medium">
-                  <span className="font-bold text-evidence-red block mb-1 text-xs tracking-wider">FIELD DIRECTIVE:</span>
-                  Study the lead riddle above carefully to deduce the location of the scene. Search the area on site, find the hidden clue card, solve the on-site puzzle, and enter the verified codeword below.
+                
+                {/* Harmonious Detective Directive */}
+                <div className="detective-directive p-3 shadow-sm">
+                  <div className="flex items-center gap-1.5 mb-1 text-xs font-mono font-bold text-evidence-red tracking-wider">
+                    <span>⚑</span>
+                    <span>DETECTIVE PROTOCOL</span>
+                  </div>
+                  <p className="text-xs md:text-sm font-mono text-ink leading-relaxed font-semibold">
+                    Study the lead riddle above carefully to deduce the location of the scene. Search the area on site, find the hidden clue card, solve the on-site puzzle, and enter the verified codeword below.
+                  </p>
                 </div>
               </div>
             )}
@@ -347,30 +531,30 @@ export default function DashboardClient({
           {/* ============================================================ */}
           <section
             id="stage-card-crewmate"
-            className={`border-2 p-4 relative transition-all duration-200 notched-card ${
+            className={`p-4 relative transition-all duration-200 ${
               currentIndex > 1
-                ? 'border-line bg-paper-card/70'
+                ? 'news-card-cleared'
                 : currentIndex === 1
-                ? `border-ink bg-paper-card shadow-md ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
-                : 'border-dashed border-line/60 bg-paper-card/30'
+                ? `news-card-active ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-shake' : ''}`
+                : 'news-card-locked'
             }`}
           >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-mono text-ink-soft font-bold tracking-wider">
-                LEAD 02 // WITNESS CONTACT
+            <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-line-light">
+              <span className="text-xs font-mono text-ink-mid font-bold tracking-wider">
+                EXHIBIT B // WITNESS CONTACT
               </span>
               {currentIndex > 1 ? (
-                <span className="rubber-stamp text-verified-teal text-xs rotate-[-2deg]">
+                <span className="rubber-stamp text-verified-teal">
                   ✓ CONTACTED
                 </span>
               ) : currentIndex === 1 ? (
-                <span className="text-xs font-mono bg-evidence-red text-paper px-2 py-0.5 font-bold animate-pulse">
+                <span className="text-[11px] font-mono bg-evidence-red text-paper px-2 py-0.5 font-bold uppercase tracking-wider">
                   LOCATE WITNESS
                 </span>
               ) : null}
             </div>
 
-            <h3 className="font-display text-lg text-ink font-bold mb-1.5">
+            <h3 className="font-serif text-lg text-ink font-bold mb-2">
               Witness Contact
             </h3>
 
@@ -379,20 +563,35 @@ export default function DashboardClient({
                 🔒 Solve Lead 01 to unlock the witness dossier
               </p>
             ) : currentIndex > 1 ? (
-              <div className="text-sm font-mono text-verified-teal font-bold pt-1">
-                ✓ Witness contact confirmed — scrambled code acquired
+              /* Witness Statement REVEALED AFTER CODE ENTRY */
+              <div className="space-y-3 pt-1">
+                <div className="text-sm font-mono text-verified-teal font-bold flex items-center gap-1.5">
+                  <span>✓</span>
+                  <span>Witness contact authenticated — code verified</span>
+                </div>
+                {stageData.crewmate?.script && (
+                  <div className="newspaper-quote p-3.5 shadow-sm border border-line-light mt-2">
+                    <div className="font-mono text-xs text-evidence-red mb-1 font-bold tracking-wider uppercase">
+                      REVEALED WITNESS STATEMENT:
+                    </div>
+                    <p className="italic font-serif font-bold text-sm md:text-base text-ink leading-relaxed">
+                      &ldquo;{stageData.crewmate.script}&rdquo;
+                    </p>
+                  </div>
+                )}
               </div>
             ) : (
+              /* ACTIVE: Looking for witness — NO witness statement shown before code is entered! */
               <div className="space-y-3.5 mt-2.5">
                 {/* Polaroid Photo Frame */}
                 {stageData.crewmate?.photo && (
-                  <div className="polaroid-frame mt-3">
+                  <div className="polaroid-frame p-3 pt-4 mt-3">
                     {/* Simulated Masking Tape */}
                     <div className="masking-tape" />
 
                     <div
                       onClick={() => setShowImageModal(true)}
-                      className="relative w-full min-h-[17rem] max-h-84 bg-neutral-950 flex items-center justify-center p-2 mb-2 border-2 border-line cursor-pointer group overflow-hidden"
+                      className="relative w-full min-h-[17rem] max-h-84 bg-[#1F1A14] flex items-center justify-center p-2 mb-2 border border-line cursor-pointer group overflow-hidden"
                       title="Click to view full uncropped image"
                     >
                       <img
@@ -400,16 +599,16 @@ export default function DashboardClient({
                         alt={stageData.crewmate?.name || 'Person of Interest'}
                         className="max-h-76 w-auto max-w-full object-contain mx-auto transition-transform duration-200 group-hover:scale-[1.02]"
                       />
-                      <div className="absolute bottom-2 right-2 bg-black/90 text-white font-mono text-xs px-2.5 py-1 border border-white/30 backdrop-blur-sm pointer-events-none flex items-center gap-1.5 shadow font-bold">
+                      <div className="absolute bottom-2 right-2 bg-ink/90 text-paper font-mono text-xs px-2.5 py-1 border border-paper/30 backdrop-blur-sm pointer-events-none flex items-center gap-1.5 shadow font-bold">
                         <span>🔍 Tap to expand</span>
                       </div>
                     </div>
 
                     <div className="flex justify-between items-baseline px-0.5 mb-2.5">
-                      <span className="font-mono text-xs font-bold text-evidence-red tracking-wider">
+                      <span className="font-mono text-xs font-bold text-evidence-red tracking-wider uppercase">
                         PERSON OF INTEREST:
                       </span>
-                      <span className="font-mono text-sm text-ink font-bold">
+                      <span className="font-serif text-base text-ink font-bold">
                         {stageData.crewmate?.name || stageData.crewmate?.id}
                       </span>
                     </div>
@@ -417,7 +616,7 @@ export default function DashboardClient({
                     <button
                       type="button"
                       onClick={() => setShowImageModal(true)}
-                      className="w-full py-2 px-3 bg-ink text-paper text-xs font-mono font-bold hover:bg-ink-soft active:scale-95 transition-all flex items-center justify-center gap-2 shadow"
+                      className="w-full py-2 px-3 bg-ink text-paper text-xs font-mono font-bold hover:bg-ink-mid active:scale-95 transition-all flex items-center justify-center gap-2 shadow"
                     >
                       <span>🔍</span>
                       <span>Click to view full uncropped image</span>
@@ -425,21 +624,15 @@ export default function DashboardClient({
                   </div>
                 )}
 
-                {/* Witness Statement */}
-                <div className="text-sm text-ink bg-paper border-l-4 border-evidence-red p-3.5 leading-relaxed shadow-sm">
-                  <div className="font-mono text-xs text-evidence-red mb-1.5 font-bold tracking-wider">
-                    WITNESS STATEMENT:
+                {/* Harmonious Detective Directive */}
+                <div className="detective-directive p-3 shadow-sm">
+                  <div className="flex items-center gap-1.5 mb-1 text-xs font-mono font-bold text-evidence-red tracking-wider">
+                    <span>⚑</span>
+                    <span>DETECTIVE PROTOCOL</span>
                   </div>
-                  <p className="italic font-serif font-bold text-sm md:text-base text-ink">
-                    {stageData.crewmate?.script ||
-                      '“You found me, Detective. I saw someone out here far too late... Here — scrambled, just in case.”'}
+                  <p className="text-xs md:text-sm font-mono text-ink leading-relaxed font-semibold">
+                    Study this photograph carefully. This person was spotted in transit on campus. You must locate them on foot, establish contact, and obtain the physical scrambled code they are carrying.
                   </p>
-                </div>
-
-                {/* Field Directive */}
-                <div className="text-xs md:text-sm font-mono bg-amber-500/15 p-3 border-2 border-amber-600/60 text-ink leading-relaxed font-medium">
-                  <span className="font-bold text-evidence-red block mb-1 text-xs tracking-wider">FIELD DIRECTIVE:</span>
-                  Study this photograph carefully. This person was seen moving across campus. You must locate them on foot, establish contact in character, and obtain the physical scrambled code they are carrying.
                 </div>
               </div>
             )}
@@ -450,30 +643,30 @@ export default function DashboardClient({
           {/* ============================================================ */}
           <section
             id="stage-card-clue3"
-            className={`border-2 p-4 relative transition-all duration-200 notched-card ${
+            className={`p-4 relative transition-all duration-200 ${
               currentIndex > 2
-                ? 'border-line bg-paper-card/70'
+                ? 'news-card-cleared'
                 : currentIndex === 2
-                ? `border-ink bg-paper-card shadow-md ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
-                : 'border-dashed border-line/60 bg-paper-card/30'
+                ? `news-card-active ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-shake' : ''}`
+                : 'news-card-locked'
             }`}
           >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-mono text-ink-soft font-bold tracking-wider">
-                LEAD 03 // SCRAMBLED SIGHTING
+            <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-line-light">
+              <span className="text-xs font-mono text-ink-mid font-bold tracking-wider">
+                EXHIBIT C // SCRAMBLED SIGHTING
               </span>
               {currentIndex > 2 ? (
-                <span className="rubber-stamp text-verified-teal text-xs rotate-[-2deg]">
+                <span className="rubber-stamp text-verified-teal">
                   ✓ DECIPHERED
                 </span>
               ) : currentIndex === 2 ? (
-                <span className="text-xs font-mono bg-evidence-red text-paper px-2 py-0.5 font-bold animate-pulse">
+                <span className="text-[11px] font-mono bg-evidence-red text-paper px-2 py-0.5 font-bold uppercase tracking-wider">
                   DECRYPT CIPHER
                 </span>
               ) : null}
             </div>
 
-            <h3 className="font-display text-lg text-ink font-bold mb-1.5">
+            <h3 className="font-serif text-lg text-ink font-bold mb-2">
               Clue 3: The Scrambled Sighting
             </h3>
 
@@ -487,29 +680,49 @@ export default function DashboardClient({
               </div>
             ) : (
               <div className="space-y-3 mt-2.5">
-                <p className="text-sm text-ink leading-relaxed font-body font-medium">
+                <p className="text-sm text-ink leading-relaxed font-serif">
                   The witness didn’t want to write it plain. Decrypt their dispatch intercept to discover where the suspect fled next.
                 </p>
 
-                {/* High Contrast Intercept Box */}
-                <div className="bg-[#101216] text-white p-4 border-2 border-line shadow-md space-y-2.5">
-                  <div className="text-white/80 text-xs font-mono uppercase tracking-wider font-bold border-b border-white/20 pb-1.5">
-                    CLASSIFICATION: {stageData.clue3?.cipherType || 'ENCRYPTED DISPATCH'}
+                {/* Optional reminder of the witness statement after it's unlocked */}
+                {stageData.crewmate?.script && (
+                  <div className="newspaper-quote p-3 shadow-sm border border-line-light text-xs font-serif italic text-ink">
+                    <span className="font-bold uppercase not-italic text-evidence-red font-mono block mb-1">WITNESS STATEMENT (DECRYPTED):</span>
+                    &ldquo;{stageData.crewmate.script}&rdquo;
                   </div>
-                  <div className="text-base md:text-lg font-mono font-bold text-center tracking-widest text-evidence-red break-all py-2 bg-black/40 border border-white/10">
-                    {stageData.clue3?.intercept || 'ENCRYPTED DISPATCH'}
+                )}
+
+                {/* Authentic Vintage Telegram Dispatch */}
+                <div className="telegraph-dispatch p-4 shadow-md space-y-2.5">
+                  <div className="text-[#D8CCA8] text-xs font-mono uppercase tracking-wider font-bold border-b border-[#5E523F] pb-1.5 flex justify-between items-center">
+                    <span>TELEGRAPH DISPATCH // CABLE INTERCEPT</span>
+                    <span className="text-[11px] text-[#A6977A]">PRIORITY 1</span>
+                  </div>
+                  <div className="text-center py-2.5 bg-[#17130E] border border-[#4A3E2F]">
+                    <div className="text-[11px] font-mono text-[#A6977A] tracking-wider mb-1 uppercase">
+                      CIPHER TYPE: {stageData.clue3?.cipherType || 'ENCRYPTED DISPATCH'}
+                    </div>
+                    <div className="text-base md:text-lg telegraph-cipher break-all px-2">
+                      {stageData.clue3?.intercept || 'ENCRYPTED DISPATCH'}
+                    </div>
                   </div>
                   {stageData.clue3?.hint && (
-                    <div className="text-xs md:text-sm font-mono text-white pt-2 border-t border-white/20 leading-relaxed font-medium">
-                      <span className="text-amber-400 font-bold">💡 DECRYPTION HINT: </span>
+                    <div className="text-xs md:text-sm font-mono text-[#E8DCC2] pt-2 border-t border-[#5E523F] leading-relaxed">
+                      <span className="text-[#E2B26C] font-bold">DECRYPTION KEY: </span>
                       {stageData.clue3.hint}
                     </div>
                   )}
                 </div>
 
-                <div className="text-xs md:text-sm font-mono bg-amber-500/15 p-3 border-2 border-amber-600/60 text-ink leading-relaxed font-medium">
-                  <span className="font-bold text-evidence-red block mb-1 text-xs tracking-wider">FIELD DIRECTIVE:</span>
-                  Use the encryption hint to decipher the message above. Once decoded, submit the plaintext answer below to unlock the coordinates to the next scene.
+                {/* Harmonious Detective Directive */}
+                <div className="detective-directive p-3 shadow-sm">
+                  <div className="flex items-center gap-1.5 mb-1 text-xs font-mono font-bold text-evidence-red tracking-wider">
+                    <span>⚑</span>
+                    <span>DETECTIVE PROTOCOL</span>
+                  </div>
+                  <p className="text-xs md:text-sm font-mono text-ink leading-relaxed font-semibold">
+                    Use the encryption hint to decipher the message above. Once decoded, submit the plaintext answer below to unlock the coordinates to the next scene.
+                  </p>
                 </div>
               </div>
             )}
@@ -520,30 +733,30 @@ export default function DashboardClient({
           {/* ============================================================ */}
           <section
             id="stage-card-clue4"
-            className={`border-2 p-4 relative transition-all duration-200 notched-card ${
+            className={`p-4 relative transition-all duration-200 ${
               currentIndex > 3
-                ? 'border-line bg-paper-card/70'
+                ? 'news-card-cleared'
                 : currentIndex === 3
-                ? `border-ink bg-paper-card shadow-md ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-flash-error' : ''}`
-                : 'border-dashed border-line/60 bg-paper-card/30'
+                ? `news-card-active ${justVerified ? 'animate-stamp' : ''} ${justErrored ? 'animate-shake' : ''}`
+                : 'news-card-locked'
             }`}
           >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-mono text-ink-soft font-bold tracking-wider">
-                LEAD 04 // PHYSICAL EVIDENCE
+            <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-line-light">
+              <span className="text-xs font-mono text-ink-mid font-bold tracking-wider">
+                EXHIBIT D // PHYSICAL EVIDENCE
               </span>
               {currentIndex > 3 ? (
-                <span className="rubber-stamp text-verified-teal text-xs rotate-[-2deg]">
+                <span className="rubber-stamp text-verified-teal">
                   ✓ SOLVED
                 </span>
               ) : currentIndex === 3 ? (
-                <span className="text-xs font-mono bg-evidence-red text-paper px-2 py-0.5 font-bold animate-pulse">
+                <span className="text-[11px] font-mono bg-evidence-red text-paper px-2 py-0.5 font-bold uppercase tracking-wider">
                   SEARCH SECTOR
                 </span>
               ) : null}
             </div>
 
-            <h3 className="font-display text-lg text-ink font-bold mb-1.5">
+            <h3 className="font-serif text-lg text-ink font-bold mb-2">
               Clue 4: The Evidence
             </h3>
 
@@ -558,18 +771,25 @@ export default function DashboardClient({
             ) : (
               <div className="space-y-3 mt-2.5">
                 {stageData.clue3?.nextRiddle && (
-                  <div className="bg-paper border-2 border-ink p-3.5 shadow-sm">
-                    <div className="text-xs font-mono text-evidence-red mb-1.5 font-bold tracking-wider">
+                  <div className="newspaper-quote p-3.5 shadow-sm border border-line-light">
+                    <div className="text-xs font-mono text-evidence-red mb-1 font-bold tracking-wider uppercase">
                       NEXT SECTOR RIDDLE:
                     </div>
-                    <p className="text-sm md:text-base text-ink font-serif italic font-bold leading-relaxed">
+                    <p className="text-sm md:text-base font-serif italic font-bold leading-relaxed text-ink">
                       &ldquo;{stageData.clue3.nextRiddle}&rdquo;
                     </p>
                   </div>
                 )}
-                <div className="text-xs md:text-sm font-mono bg-amber-500/15 p-3 border-2 border-amber-600/60 text-ink leading-relaxed font-medium">
-                  <span className="font-bold text-evidence-red block mb-1 text-xs tracking-wider">FIELD DIRECTIVE:</span>
-                  Decode the riddle above to determine where the suspect fled. Search the sector on site, find the hidden puzzle left behind, solve the calculation, and enter the final result below.
+                
+                {/* Harmonious Detective Directive */}
+                <div className="detective-directive p-3 shadow-sm">
+                  <div className="flex items-center gap-1.5 mb-1 text-xs font-mono font-bold text-evidence-red tracking-wider">
+                    <span>⚑</span>
+                    <span>DETECTIVE PROTOCOL</span>
+                  </div>
+                  <p className="text-xs md:text-sm font-mono text-ink leading-relaxed font-semibold">
+                    Decode the riddle above to determine where the suspect fled. Search the sector on site, find the hidden puzzle left behind, solve the calculation, and enter the final result below.
+                  </p>
                 </div>
               </div>
             )}
@@ -580,24 +800,24 @@ export default function DashboardClient({
           {/* ============================================================ */}
           <section
             id="stage-card-final"
-            className={`border-2 p-4 relative transition-all duration-200 notched-card ${
+            className={`p-4 relative transition-all duration-200 ${
               currentStage === 'final'
-                ? 'border-evidence-red bg-paper-card shadow-xl'
-                : 'border-dashed border-line/60 bg-paper-card/30'
+                ? 'news-card-active border-evidence-red shadow-xl'
+                : 'news-card-locked'
             }`}
           >
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-line-light">
               <span className="text-xs font-mono text-evidence-red font-bold tracking-wider uppercase">
                 CASE RESOLUTION // EMPTY STAGE
               </span>
               {currentStage === 'final' && (
-                <span className="rubber-stamp text-evidence-red text-xs rotate-[-2deg]">
+                <span className="rubber-stamp text-evidence-red">
                   PODIUM SPRINT
                 </span>
               )}
             </div>
 
-            <h3 className="font-display text-xl text-ink font-bold mb-1.5">
+            <h3 className="font-serif text-xl text-ink font-bold mb-2">
               Final Destination: Empty Stage
             </h3>
 
@@ -607,16 +827,22 @@ export default function DashboardClient({
               </p>
             ) : (
               <div className="space-y-3.5 mt-2.5">
-                <div className="text-sm font-mono bg-verified-teal/15 border-l-4 border-verified-teal p-3.5 text-ink shadow-sm font-medium">
-                  <span className="font-bold block mb-1 text-verified-teal text-xs tracking-wider">FINAL DIRECTIVE UNLOCKED:</span>
+                <div className="text-sm font-mono bg-paper-inset border-l-4 border-verified-teal p-3.5 text-ink shadow-sm font-medium">
+                  <span className="font-bold block mb-1 text-verified-teal text-xs tracking-wider uppercase">FINAL DIRECTIVE UNLOCKED:</span>
                   Whatever went missing that night, it didn’t stay lost for long. Get there before anyone else does.
                 </div>
-                <div className="text-sm font-body italic font-bold text-ink border-l-2 border-line pl-3 py-1 bg-paper/60">
-                  &ldquo;Lights are down. No crowd tonight. Something’s hidden, out of sight. Three places hold what you came to find — the first to claim it leaves the rest behind.&rdquo;
+                <div className="newspaper-quote p-3.5 shadow-sm border border-line-light">
+                  <p className="text-sm font-serif italic font-bold text-ink leading-relaxed">
+                    &ldquo;Lights are down. No crowd tonight. Something’s hidden, out of sight. Three places hold what you came to find — the first to claim it leaves the rest behind.&rdquo;
+                  </p>
                 </div>
-                <div className="text-xs md:text-sm font-mono bg-ink text-paper p-3.5 shadow-md">
-                  <div className="font-bold text-evidence-red mb-1.5 tracking-wider">PHYSICAL SPRINT REQUIRED:</div>
-                  3 hidden keys are located backstage at Empty Stage. The first 3 teams to physically bring a key to the organizers will be confirmed on the podium!
+                <div className="detective-directive p-3.5 shadow-md">
+                  <div className="font-bold text-evidence-red mb-1.5 tracking-wider uppercase text-xs">
+                    PHYSICAL SPRINT REQUIRED:
+                  </div>
+                  <p className="text-xs md:text-sm font-mono text-ink font-semibold leading-relaxed">
+                    3 hidden keys are located backstage at Empty Stage. The first 3 teams to physically bring a key to the organizers will be confirmed on the podium!
+                  </p>
                 </div>
               </div>
             )}
@@ -632,7 +858,7 @@ export default function DashboardClient({
             <div className="flex justify-between items-center text-xs font-mono">
               <label
                 htmlFor="case-answer-input"
-                className="text-ink uppercase tracking-wider text-xs font-bold"
+                className="text-ink-mid uppercase tracking-wider text-xs font-bold"
               >
                 {currentStage === 'clue2'
                   ? 'Enter verified codeword:'
@@ -678,7 +904,7 @@ export default function DashboardClient({
                 value={inputValue}
                 disabled={lockoutRemaining !== null || cooldownRemaining !== null || submitting}
                 onChange={(e) => setInputValue(e.target.value)}
-                className={`flex-1 bg-paper border-2 px-3 py-2.5 font-mono text-base font-bold uppercase text-ink placeholder:text-ink/35 focus:border-ink focus:outline-none transition-colors disabled:opacity-50 ${
+                className={`flex-1 bg-paper border-2 px-3 py-2.5 font-mono text-base font-bold uppercase text-ink placeholder:text-ink-soft/40 focus:border-ink focus:outline-none transition-colors disabled:opacity-50 ${
                   justErrored ? 'border-evidence-red animate-shake' : 'border-line focus:border-ink'
                 }`}
               />
@@ -691,7 +917,7 @@ export default function DashboardClient({
                   lockoutRemaining !== null ||
                   cooldownRemaining !== null
                 }
-                className="bg-ink text-paper px-6 py-2.5 font-mono font-bold text-sm uppercase tracking-wider hover:bg-ink-soft active:scale-95 disabled:opacity-40 transition-all shadow-md"
+                className="bg-ink text-paper px-6 py-2.5 font-mono font-bold text-sm uppercase tracking-wider hover:bg-ink-mid active:scale-95 disabled:opacity-40 transition-all shadow-md"
               >
                 {submitting ? '...' : 'Submit'}
               </button>
@@ -700,7 +926,7 @@ export default function DashboardClient({
             {errorMsg && (
               <div
                 id="submission-error"
-                className="text-xs md:text-sm font-mono text-evidence-red border-l-4 border-evidence-red pl-2.5 py-1 font-bold animate-shake bg-evidence-red/10"
+                className="text-xs md:text-sm font-mono text-evidence-red border-l-4 border-evidence-red pl-2.5 py-1 font-bold animate-shake bg-paper-inset"
               >
                 {errorMsg}
               </div>
@@ -718,17 +944,17 @@ export default function DashboardClient({
       {/* Fullscreen Lightbox Modal for Crewmate Photo */}
       {showImageModal && stageData.crewmate?.photo && (
         <div
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between p-4"
+          className="fixed inset-0 z-50 bg-[#14110C]/95 backdrop-blur-md flex flex-col justify-between p-4"
           onClick={() => setShowImageModal(false)}
         >
-          <div className="flex justify-between items-center text-paper font-mono text-xs pb-3 border-b border-white/20">
+          <div className="flex justify-between items-center text-paper font-mono text-xs pb-3 border-b border-paper/20">
             <span className="text-evidence-red font-bold tracking-wider">
               CASE #0426 // PERSON OF INTEREST
             </span>
             <button
               type="button"
               onClick={() => setShowImageModal(false)}
-              className="px-3.5 py-1.5 bg-white/20 hover:bg-white/30 text-white rounded font-mono text-xs font-bold transition-colors"
+              className="px-3.5 py-1.5 bg-paper/20 hover:bg-paper/30 text-paper rounded font-mono text-xs font-bold transition-colors"
             >
               ✕ Close
             </button>
@@ -738,15 +964,15 @@ export default function DashboardClient({
             <img
               src={stageData.crewmate.photo}
               alt={stageData.crewmate?.name || 'Person of Interest'}
-              className="max-h-[75vh] max-w-[95vw] object-contain rounded border-2 border-white/30 shadow-2xl"
+              className="max-h-[75vh] max-w-[95vw] object-contain rounded border-2 border-paper/30 shadow-2xl"
             />
           </div>
 
           <div className="text-center pb-2">
-            <div className="font-display text-xl text-white font-bold">
+            <div className="font-serif text-2xl text-paper font-bold">
               {stageData.crewmate.name || stageData.crewmate.id}
             </div>
-            <div className="text-xs font-mono text-white/80 mt-1 font-semibold">
+            <div className="text-xs font-mono text-paper/70 mt-1 font-semibold">
               Tap anywhere to return to case file
             </div>
           </div>

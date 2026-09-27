@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Archivo_Black, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
+import { Archivo_Black, IBM_Plex_Sans, IBM_Plex_Mono, Newsreader } from 'next/font/google';
 import './globals.css';
 
 const archivoBlack = Archivo_Black({
@@ -7,6 +7,15 @@ const archivoBlack = Archivo_Black({
   subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
+});
+
+const newsreader = Newsreader({
+  weight: ['400', '600', '700'],
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  variable: '--font-serif',
+  display: 'swap',
+  adjustFontFallback: false,
 });
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -43,7 +52,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${archivoBlack.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}
+      className={`${archivoBlack.variable} ${newsreader.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}
     >
       <body className="bg-paper text-ink font-body min-h-screen selection:bg-evidence-red selection:text-paper">
         {children}

@@ -11,6 +11,7 @@ import {
   fetchAllTeamProgress,
   fetchAllAttempts,
   fetchFinaleSubmissions,
+  fetchAllTeamRegistrations,
 } from '@/lib/db';
 import AdminClient from './AdminClient';
 
@@ -28,6 +29,7 @@ export default async function AdminPage() {
   const progressList = await fetchAllTeamProgress(activeRound);
   const attempts = await fetchAllAttempts(activeRound, 100);
   const finale = await fetchFinaleSubmissions(activeRound);
+  const registrations = await fetchAllTeamRegistrations(activeRound);
   const settings = getSettings();
 
   const progressMap: Record<string, { current_stage: string; last_updated: string }> = {};
@@ -45,6 +47,7 @@ export default async function AdminPage() {
     teams,
     stages,
     progress: progressMap,
+    registrations,
     attempts,
     finale,
     settings,

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getLiveActiveRound, getTeamsForRound } from '@/lib/round';
 import { setTeamSessionCookie } from '@/lib/auth';
-import { fetchTeamProgress } from '@/lib/db';
+import { fetchTeamProgress, checkInTeam, fetchTeamRegistration } from '@/lib/db';
 import { checkLoginRateLimit, recordFailedLogin, resetLoginAttempts } from '@/lib/rateLimit';
 
 export async function POST(req: NextRequest) {
@@ -18,15 +18,25 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const rateLimitKey = `login:${teamCodeInput}:${ip}`;
-    const ipRateLimitKey = `login_ip:${ip}`;
+    // Rate limiting keys: per team-code PIN lock, per team+IP, and per IP
+    const teamPinKey = `login_team_pin:${teamCodeInput}`;
+    const comboKey = `login_combo:${teamCodeInput}:${ip}`;
+    const ipKey = `login_ip:${ip}`;
 
-    const teamLimit = checkLoginRateLimit(rateLimitKey, 5, 60);
-    const ipLimit = checkLoginRateLimit(ipRateLimitKey, 10, 60);
+    const teamPinLimit = checkLoginRateLimit(teamPinKey, 4, 60);
+    const comboLimit = checkLoginRateLimit(comboKey, 5, 60);
+    const ipLimit = checkLoginRateLimit(ipKey, 10, 60);
 
-    if (!teamLimit.allowed) {
+    if (!teamPinLimit.allowed) {
       return NextResponse.json(
-        { error: `Too many failed login attempts. Locked out for ${teamLimit.remainingSeconds}s.` },
+        { error: `Too many incorrect PIN attempts for Team ${teamCodeInput}. Locked out for ${teamPinLimit.remainingSeconds}s.` },
+        { status: 429 }
+      );
+    }
+
+    if (!comboLimit.allowed) {
+      return NextResponse.json(
+        { error: `Too many failed attempts. Terminal locked out for ${comboLimit.remainingSeconds}s.` },
         { status: 429 }
       );
     }
@@ -46,34 +56,41 @@ export async function POST(req: NextRequest) {
     );
 
     if (!team) {
-      const fail = recordFailedLogin(rateLimitKey, 5, 60);
-      recordFailedLogin(ipRateLimitKey, 10, 60);
+      const pinFail = recordFailedLogin(teamPinKey, 4, 60);
+      recordFailedLogin(comboKey, 5, 60);
+      recordFailedLogin(ipKey, 10, 60);
 
-      if (fail.isLockedOut) {
+      if (pinFail.isLockedOut) {
         return NextResponse.json(
-          { error: `Too many failed attempts. Locked out for ${fail.remainingSeconds}s.` },
+          { error: `Too many incorrect PIN attempts for Team ${teamCodeInput}. Terminal locked out for ${pinFail.remainingSeconds}s.` },
           { status: 429 }
         );
       }
 
       return NextResponse.json(
-        { error: 'Invalid badge or PIN. Check your credentials.' },
+        { error: 'Invalid team code or PIN. Check your envelope.' },
         { status: 401 }
       );
     }
 
     // Reset rate limits on successful authentication
-    resetLoginAttempts(rateLimitKey);
-    resetLoginAttempts(ipRateLimitKey);
+    resetLoginAttempts(teamPinKey);
+    resetLoginAttempts(comboKey);
+    resetLoginAttempts(ipKey);
 
     // Initialize team progress in DB if not already present
     await fetchTeamProgress(activeRound, team.code);
+
+    // Check in team in database (marks them checked in, awaits admin confirmation)
+    const reg = await checkInTeam(activeRound, team.code);
 
     const res = NextResponse.json({
       success: true,
       teamCode: team.code,
       track: team.track,
       round: activeRound,
+      confirmed: reg.confirmed,
+      teamName: reg.team_name || '',
       redirect: '/dashboard',
     });
 
