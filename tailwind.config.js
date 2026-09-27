@@ -9,13 +9,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        paper: '#EAE2CC',
-        ink: '#211F1B',
-        'ink-soft': '#5B564A',
-        'evidence-red': '#A3312B',
-        'verified-teal': '#2E5F59',
-        'lockout-amber': '#B8822E',
-        line: '#C9BFA0',
+        paper: 'var(--color-paper)',
+        'paper-card': 'var(--color-paper-card)',
+        ink: 'var(--color-ink)',
+        'ink-soft': 'var(--color-ink-soft)',
+        'evidence-red': 'var(--color-evidence-red)',
+        'verified-teal': 'var(--color-verified-teal)',
+        'lockout-amber': 'var(--color-lockout-amber)',
+        line: 'var(--color-line)',
       },
       fontFamily: {
         display: ['var(--font-display)', 'system-ui', 'sans-serif'],

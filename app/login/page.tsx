@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -41,22 +42,25 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen bg-paper text-ink px-4 py-8 flex flex-col justify-between max-w-md mx-auto">
       <div>
-        {/* Header with Case stamp aesthetic */}
-        <header className="mb-8 pt-4">
-          <div className="inline-block border border-ink-soft px-2.5 py-1 mb-3 text-xs font-mono tracking-wider text-ink-soft transform -rotate-1">
-            CONFIDENTIAL // FIELD DOSSIER
+        {/* Header with Case stamp aesthetic & Theme Toggle */}
+        <header className="mb-6 pt-2 flex justify-between items-start">
+          <div>
+            <div className="inline-block border-2 border-ink px-2.5 py-1 mb-2 text-xs font-mono font-bold tracking-wider text-ink bg-paper-card">
+              CONFIDENTIAL // FIELD DOSSIER
+            </div>
+            <h1 className="font-display text-3xl md:text-4xl tracking-tight leading-tight text-ink font-bold">
+              The Case File
+            </h1>
+            <p className="text-sm font-medium text-ink mt-1.5 font-body">
+              Official investigation portal. Enter team credentials to access your active lead.
+            </p>
           </div>
-          <h1 className="font-display text-3xl tracking-tight leading-tight text-ink transform rotate-1">
-            The Case File
-          </h1>
-          <p className="text-sm text-ink-soft mt-1.5 font-body">
-            Official investigation portal. Enter team credentials to access your active lead.
-          </p>
+          <ThemeToggle />
         </header>
 
         {/* Case File Form */}
-        <section className="border border-line bg-paper/60 p-5 clip-case relative">
-          <div className="text-xs font-mono text-ink-soft mb-4 pb-2 border-b border-line">
+        <section className="border-2 border-ink bg-paper-card p-6 clip-case relative shadow-md">
+          <div className="text-xs font-mono font-bold text-evidence-red mb-4 pb-2 border-b-2 border-line tracking-wider">
             CASE CHECK-IN // DETECTIVE VERIFICATION
           </div>
 
@@ -64,7 +68,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="team-code"
-                className="block text-sm font-medium text-ink mb-1"
+                className="block text-sm font-bold text-ink mb-1.5 uppercase font-mono"
               >
                 Team code
               </label>
@@ -76,10 +80,10 @@ export default function LoginPage() {
                 placeholder="e.g. A1 or B1"
                 value={teamCode}
                 onChange={(e) => setTeamCode(e.target.value.toUpperCase())}
-                className="w-full bg-paper border-2 border-line px-3.5 py-2.5 font-mono text-base text-ink placeholder:text-ink-soft/50 focus:border-ink focus:outline-none transition-colors"
+                className="w-full bg-paper border-2 border-ink px-3.5 py-2.5 font-mono text-base font-bold text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none transition-colors"
                 required
               />
-              <span className="text-xs text-ink-soft mt-1 block">
+              <span className="text-xs font-mono font-semibold text-ink-soft mt-1.5 block">
                 Found on your dispatch envelope
               </span>
             </div>
@@ -87,7 +91,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="team-pin"
-                className="block text-sm font-medium text-ink mb-1"
+                className="block text-sm font-bold text-ink mb-1.5 uppercase font-mono"
               >
                 Passcode PIN
               </label>
@@ -99,7 +103,7 @@ export default function LoginPage() {
                 placeholder="4-digit PIN"
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                className="w-full bg-paper border-2 border-line px-3.5 py-2.5 font-mono text-base text-ink placeholder:text-ink-soft/50 focus:border-ink focus:outline-none tracking-widest transition-colors"
+                className="w-full bg-paper border-2 border-ink px-3.5 py-2.5 font-mono text-base font-bold text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none transition-colors"
                 required
               />
             </div>
@@ -107,28 +111,28 @@ export default function LoginPage() {
             {error && (
               <div
                 id="login-error"
-                className="border-l-4 border-evidence-red bg-evidence-red/10 p-3 text-sm text-evidence-red font-medium"
+                className="text-xs md:text-sm font-mono text-evidence-red border-l-4 border-evidence-red pl-3 py-1.5 font-bold bg-evidence-red/10"
               >
                 {error}
               </div>
             )}
 
             <button
-              id="submit-login-button"
+              id="login-submit-button"
               type="submit"
               disabled={submitting}
-              className="w-full bg-ink text-paper py-3 font-medium text-sm hover:bg-ink-soft active:translate-y-0.5 disabled:opacity-50 transition-colors"
+              className="w-full bg-ink text-paper py-3 font-mono font-bold text-sm uppercase tracking-wider hover:bg-ink-soft active:scale-95 transition-all disabled:opacity-50 shadow-md"
             >
-              {submitting ? 'Checking credentials...' : 'Submit'}
+              {submitting ? 'Authenticating...' : 'Access Case File'}
             </button>
           </form>
         </section>
       </div>
 
-      {/* Footer */}
-      <footer className="mt-12 pt-6 border-t border-line text-xs font-mono text-ink-soft">
-        <div>COHO INVESTIGATION UNIT</div>
-        <div className="mt-1 text-ink-soft/75">Stationed campus personnel only</div>
+      {/* Footer Info */}
+      <footer className="mt-8 pt-4 border-t-2 border-line text-xs font-mono font-bold text-ink flex justify-between items-center">
+        <span>COLLEGE CAMPUS // LIVE EVENT</span>
+        <span className="text-evidence-red font-bold">STRICTLY TIMED</span>
       </footer>
     </main>
   );

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import ThemeToggle from '@/components/ThemeToggle';
 
 interface TeamProgressInfo {
   current_stage: string;
@@ -344,23 +345,24 @@ PIN: ${t.pin}
           <h1 className="font-display text-2xl md:text-3xl text-ink">Organizer Admin Panel</h1>
         </div>
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <button
             onClick={refreshData}
             disabled={loading}
-            className="text-xs bg-paper border border-ink px-3 py-1.5 hover:bg-ink hover:text-paper transition-colors disabled:opacity-50"
+            className="text-xs font-bold bg-paper-card border-2 border-ink px-3 py-1.5 hover:bg-ink hover:text-paper transition-colors disabled:opacity-50 shadow-sm"
           >
             {loading ? 'Refreshing...' : 'Refresh'}
           </button>
           <button
             onClick={handleResetRound}
             disabled={loading}
-            className="text-xs bg-paper border border-evidence-red text-evidence-red px-3 py-1.5 hover:bg-evidence-red hover:text-paper transition-colors disabled:opacity-50"
+            className="text-xs font-bold bg-paper-card border-2 border-evidence-red text-evidence-red px-3 py-1.5 hover:bg-evidence-red hover:text-paper transition-colors disabled:opacity-50 shadow-sm"
           >
             Reset Test Data
           </button>
           <button
             onClick={handleLogout}
-            className="text-xs bg-ink text-paper px-3 py-1.5 hover:bg-ink-soft transition-colors"
+            className="text-xs font-bold bg-ink text-paper px-3 py-1.5 hover:bg-ink-soft active:scale-95 transition-all shadow-sm"
           >
             Sign out
           </button>
@@ -416,10 +418,10 @@ PIN: ${t.pin}
       {activeTab === 'ops' && (
         <div className="space-y-8">
           {/* ROUND SWITCHER (Prominent, top of page) */}
-          <section className="border-2 border-ink p-5 bg-paper">
+          <section className="border-2 border-ink p-5 bg-paper-card shadow-md">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <span className="text-xs text-ink-soft block uppercase tracking-wider">
+                <span className="text-xs text-evidence-red font-bold block uppercase tracking-wider">
                   Runtime Round Configuration
                 </span>
                 <div className="flex items-baseline gap-3 mt-1">
@@ -520,7 +522,7 @@ PIN: ${t.pin}
                   placeholder="Search team code..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="bg-paper border border-ink px-2.5 py-1 text-xs font-mono placeholder:text-ink-soft/60"
+                  className="bg-paper-card border-2 border-ink px-3 py-1.5 text-xs font-mono font-bold placeholder:text-ink/40"
                 />
               </div>
             </div>
@@ -772,15 +774,15 @@ PIN: ${t.pin}
       {activeTab === 'paths' && (
         <div className="space-y-6">
           {/* Paths Search & Filters */}
-          <div className="border-2 border-ink p-4 bg-paper flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="border-2 border-ink p-4 bg-paper-card shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-bold uppercase text-ink-soft">Filter Track:</span>
+              <span className="text-xs font-bold uppercase text-ink">Filter Track:</span>
               <button
                 onClick={() => setDossierTrackFilter('ALL')}
-                className={`px-3 py-1 text-xs font-bold border ${
+                className={`px-3 py-1 text-xs font-bold border-2 ${
                   dossierTrackFilter === 'ALL'
                     ? 'bg-ink text-paper border-ink'
-                    : 'bg-paper text-ink border-line hover:border-ink'
+                    : 'bg-paper-card text-ink border-line hover:border-ink'
                 }`}
               >
                 ALL
@@ -789,10 +791,10 @@ PIN: ${t.pin}
                 <button
                   key={tr}
                   onClick={() => setDossierTrackFilter(tr)}
-                  className={`px-3 py-1 text-xs font-bold border ${
+                  className={`px-3 py-1 text-xs font-bold border-2 ${
                     dossierTrackFilter === tr
                       ? 'bg-ink text-paper border-ink'
-                      : 'bg-paper text-ink border-line hover:border-ink'
+                      : 'bg-paper-card text-ink border-line hover:border-ink'
                   }`}
                 >
                   Track {tr}
@@ -806,12 +808,12 @@ PIN: ${t.pin}
                 placeholder="Search team, crew, codeword, zone, hint..."
                 value={dossierSearch}
                 onChange={(e) => setDossierSearch(e.target.value)}
-                className="w-full md:w-64 bg-paper border border-ink px-3 py-1.5 text-xs font-mono placeholder:text-ink-soft/60"
+                className="w-full md:w-64 bg-paper-card border-2 border-ink px-3 py-1.5 text-xs font-mono font-bold placeholder:text-ink/40"
               />
               <button
                 type="button"
                 onClick={copyAllPathsMaster}
-                className="px-3 py-1.5 bg-paper border border-ink text-xs font-bold hover:bg-ink hover:text-paper transition-colors"
+                className="px-3 py-1.5 bg-paper-card border-2 border-ink text-xs font-bold hover:bg-ink hover:text-paper transition-colors"
                 title="Copy entire cheat sheet of all teams with all hints, answers, and scripts"
               >
                 {copiedTeam === 'ALL' ? '✓ Master Copied!' : '📋 Copy All 32 Paths'}
@@ -879,7 +881,7 @@ PIN: ${t.pin}
                   const liveStage = data.progress[currentTeam.code]?.current_stage || 'clue2';
 
                   return (
-                    <div className="border-2 border-ink bg-paper p-5 md:p-6 space-y-6">
+                    <div className="border-2 border-ink bg-paper-card p-5 md:p-6 space-y-6 shadow-md">
                       {/* Team Header */}
                       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 pb-4 border-b-2 border-ink">
                         <div>
@@ -1088,7 +1090,7 @@ PIN: ${t.pin}
 
           {/* TABLE / MATRIX VIEW */}
           {dossierViewMode === 'table' && (
-            <div className="border-2 border-ink p-4 bg-paper space-y-3">
+            <div className="border-2 border-ink p-4 bg-paper-card shadow-md space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-ink">
                   Total Matching Teams: {dossierFilteredTeams.length}

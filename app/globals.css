@@ -3,23 +3,38 @@
 @tailwind utilities;
 
 :root {
-  --color-paper: #EAE2CC;
-  --color-ink: #211F1B;
-  --color-ink-soft: #5B564A;
-  --color-evidence-red: #A3312B;
-  --color-verified-teal: #2E5F59;
-  --color-lockout-amber: #B8822E;
-  --color-line: #C9BFA0;
+  /* High-Contrast Crisp Parchment Theme (Default) */
+  --color-paper: #F3EFE6;
+  --color-paper-card: #FFFFFF;
+  --color-ink: #11100D;
+  --color-ink-soft: #2B2722;
+  --color-evidence-red: #B91C1C;
+  --color-verified-teal: #047857;
+  --color-lockout-amber: #B45309;
+  --color-line: #7E7462;
+}
+
+[data-theme="dark"] {
+  /* High-Contrast Sleek Detective Night Mode */
+  --color-paper: #0D1117;
+  --color-paper-card: #161B22;
+  --color-ink: #F0F6FC;
+  --color-ink-soft: #C9D1D9;
+  --color-evidence-red: #F85149;
+  --color-verified-teal: #3FB950;
+  --color-lockout-amber: #F0883E;
+  --color-line: #38414A;
 }
 
 body {
-  background-color: #EAE2CC;
-  color: #211F1B;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-body), sans-serif;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
 /* Rubber Stamp Slam Animation (Inked physical impact) */
@@ -76,11 +91,11 @@ body {
 /* Flash Red on Error */
 @keyframes flash-red {
   0%, 100% {
-    border-color: #C9BFA0;
+    border-color: var(--color-line);
   }
   30%, 70% {
-    border-color: #A3312B;
-    background-color: rgba(163, 49, 43, 0.08);
+    border-color: var(--color-evidence-red);
+    background-color: rgba(185, 28, 28, 0.08);
   }
 }
 
@@ -98,21 +113,19 @@ body {
   padding: 0.25rem 0.6rem;
   border: 2.5px solid currentColor;
   border-radius: 3px;
-  mask-image: radial-gradient(circle at 50% 50%, black 75%, rgba(0, 0, 0, 0.65) 100%);
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 75%, rgba(0, 0, 0, 0.65) 100%);
   line-height: 1.1;
 }
 
 /* Clipped Case File Corner */
 .clip-case {
-  clip-path: polygon(0% 0%, calc(100% - 12px) 0%, 100% 12px, 100% 100%, 0% 100%);
+  clip-path: polygon(0% 0%, calc(100% - 14px) 0%, 100% 14px, 100% 100%, 0% 100%);
 }
 
-/* Notched Ticket/Dossier Card */
+/* High Contrast Card */
 .notched-card {
   position: relative;
-  background-color: rgba(234, 226, 204, 0.95);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  background-color: var(--color-paper-card);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 /* Masking Tape Effect on Polaroid */
@@ -121,34 +134,39 @@ body {
   top: -10px;
   left: 50%;
   transform: translateX(-50%) rotate(-1deg);
-  width: 72px;
+  width: 76px;
   height: 22px;
-  background: rgba(230, 220, 195, 0.75);
-  border-left: 2px dashed rgba(180, 170, 145, 0.4);
-  border-right: 2px dashed rgba(180, 170, 145, 0.4);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(1px);
+  background: rgba(220, 210, 185, 0.85);
+  border-left: 2px dashed rgba(160, 150, 125, 0.5);
+  border-right: 2px dashed rgba(160, 150, 125, 0.5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
   z-index: 10;
+}
+
+[data-theme="dark"] .masking-tape {
+  background: rgba(60, 68, 78, 0.85);
+  border-left: 2px dashed rgba(100, 110, 125, 0.5);
+  border-right: 2px dashed rgba(100, 110, 125, 0.5);
 }
 
 /* Polaroid Paper Card */
 .polaroid-frame {
-  background: #FDFBF7;
-  padding: 10px 10px 14px 10px;
-  border: 1px solid #D5C9AB;
-  box-shadow: 0 4px 12px rgba(33, 31, 27, 0.12), 0 1px 3px rgba(33, 31, 27, 0.08);
+  background: var(--color-paper-card);
+  padding: 12px 12px 16px 12px;
+  border: 2px solid var(--color-line);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
   position: relative;
 }
 
 /* Telegram / Typewriter Ribbon Intercept Box */
 .intercept-box {
-  background-color: #1A1815;
-  color: #F0EAD6;
-  border-left: 3px solid #A3312B;
+  background-color: #0E1014;
+  color: #F0F6FC;
+  border-left: 4px solid var(--color-evidence-red);
   letter-spacing: 0.08em;
 }
 
 /* Mobile Safe-Area Bottom Padding Utility */
 .pb-safe {
-  padding-bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
+  padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 1.25rem));
 }
