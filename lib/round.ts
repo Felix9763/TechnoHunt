@@ -47,12 +47,17 @@ export interface StageData {
     answer: string;
     prompt?: string;
   };
+  final?: {
+    zone?: string;
+    directive?: string;
+  };
   [key: string]: any;
 }
 
 export interface SanitizedStageData {
   clue2?: {
     riddle?: string;
+    prompt?: string;
   };
   crewmate?: {
     id?: string;
@@ -66,7 +71,13 @@ export interface SanitizedStageData {
     hint?: string;
     nextRiddle?: string;
   };
-  clue4?: Record<string, never>;
+  clue4?: {
+    prompt?: string;
+  };
+  final?: {
+    zone?: string;
+    directive?: string;
+  };
 }
 
 export function getSanitizedStageData(
@@ -77,10 +88,15 @@ export function getSanitizedStageData(
 
   const sanitized: SanitizedStageData = {};
 
-  // 1. Clue 2 is always unlocked from the start (only riddle provided, location is never revealed)
+  // 1. Clue 2 is always unlocked from the start (only riddle/prompt provided, location is never revealed)
   if (fullData.clue2) {
     sanitized.clue2 = {
-      ...(currentStage === 'clue2' ? { riddle: fullData.clue2.riddle } : {}),
+      ...(currentStage === 'clue2'
+        ? {
+            riddle: fullData.clue2.riddle,
+            ...(fullData.clue2.prompt ? { prompt: fullData.clue2.prompt } : {}),
+          }
+        : {}),
     };
   }
 
@@ -114,8 +130,18 @@ export function getSanitizedStageData(
 
   // 4. Clue 4 unlocks once clue3 is solved (currentStage is clue4 or final)
   if (['clue4', 'final'].includes(currentStage) && fullData.clue4) {
-    sanitized.clue4 = {};
+    sanitized.clue4 = {
+      ...(fullData.clue4.prompt ? { prompt: fullData.clue4.prompt } : {}),
+    };
     // Note: clue4 answer and zone are NEVER provided to client
+  }
+
+  // 5. Final stage details unlocked once clue4 is solved
+  if (currentStage === 'final' && fullData.final) {
+    sanitized.final = {
+      zone: fullData.final.zone,
+      directive: fullData.final.directive,
+    };
   }
 
   return sanitized;

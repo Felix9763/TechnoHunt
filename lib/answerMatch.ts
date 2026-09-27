@@ -12,6 +12,12 @@ export function cleanCode(str: string): string {
 export function isAnswerCorrect(submitted: string, expected: string): boolean {
   if (!submitted || !expected) return false;
 
+  // Support multiple acceptable variations separated by '|'
+  if (expected.includes('|')) {
+    const options = expected.split('|').map((o) => o.trim()).filter(Boolean);
+    return options.some((opt) => isAnswerCorrect(submitted, opt));
+  }
+
   const sClean = cleanAnswer(submitted);
   const eClean = cleanAnswer(expected);
 

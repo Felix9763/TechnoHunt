@@ -56,7 +56,7 @@ const STAGE_LABELS: Record<string, string> = {
   crewmate: 'Witness',
   clue3: 'Clue 3',
   clue4: 'Clue 4',
-  final: 'Finale (Empty Stage)',
+  final: 'Finale (Podium)',
 };
 
 function formatTime(iso: string): string {
@@ -320,10 +320,10 @@ PIN: ${t.pin}
 
 [STAGE 4] CLUE 4 (Physical Evidence):
 - Target Sector: ${s.clue4?.zone || 'N/A'}
-- Physical Puzzle Answer: ${s.clue4?.answer || 'N/A'}
+- Physical Puzzle Answer: ${s.clue4?.answer || 'N/A'}${s.clue4?.prompt ? `\n- On-Site Question: "${s.clue4.prompt}"` : ''}
 
 [STAGE 5] FINALE (Resolution):
-- Target: Empty Stage (3 hidden keys backstage for 1st, 2nd, 3rd)`;
+- Target: ${s.final?.zone || 'Empty Stage'} (${s.final?.directive || 'Physical podium sprint'})`;
 
     navigator.clipboard.writeText(text);
     setCopiedTeam(t.code);
@@ -352,7 +352,7 @@ PIN: ${t.pin}
         `   Answer: [${s.clue3?.answer || 'N/A'}]`,
         `   Next Riddle: "${s.clue3?.nextRiddle || ''}"`,
         `4. CLUE 4: Sector: [${s.clue4?.zone || 'N/A'}] | Answer: [${s.clue4?.answer || 'N/A'}]`,
-        `5. FINALE: Empty Stage (3 keys backstage)\n`
+        `5. FINALE: [${s.final?.zone || 'Empty Stage'}] (${s.final?.directive || 'Podium arrival'})\n`
       );
     });
 
@@ -898,7 +898,7 @@ PIN: ${t.pin}
                     <option value="crewmate">Witness (Crewmate)</option>
                     <option value="clue3">Clue 3</option>
                     <option value="clue4">Clue 4</option>
-                    <option value="final">Final (Empty Stage)</option>
+                    <option value="final">Final (Podium Arrival)</option>
                   </select>
                 </div>
 
@@ -915,10 +915,10 @@ PIN: ${t.pin}
             {/* FINALE VERIFICATION BOARD */}
             <section className="border-2 border-ink p-5 bg-paper">
               <h2 className="text-sm font-bold uppercase tracking-wider text-ink mb-1">
-                Finale Key Verification Board
+                Finale Verification Board
               </h2>
               <p className="text-xs text-ink-soft mb-4">
-                Log physical key hand-off at Empty Stage. First 3 arrivals receive official placement!
+                Log physical arrival at the final sector. First 3 arrivals receive official placement!
               </p>
 
               <form onSubmit={handleFinaleSubmit} className="space-y-3 mb-5">
@@ -1335,6 +1335,14 @@ PIN: ${t.pin}
                                 {st.clue4?.answer || 'N/A'}
                               </strong>
                             </div>
+                            {st.clue4?.prompt && (
+                              <div className="p-2 bg-line/20 border-l-2 border-line text-ink mt-2">
+                                <span className="text-ink-soft font-bold block text-[10px] mb-0.5">
+                                  📝 ON-SITE EVIDENCE PUZZLE:
+                                </span>
+                                <pre className="text-[11px] font-mono whitespace-pre-wrap">{st.clue4.prompt}</pre>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1343,7 +1351,7 @@ PIN: ${t.pin}
                       <div className="border border-ink bg-paper p-3 text-xs flex justify-between items-center">
                         <div>
                           <strong className="text-evidence-red">5. CASE RESOLUTION: </strong>
-                          <span>Empty Stage // Backstage key retrieval (3 Keys available for 1st, 2nd, 3rd)</span>
+                          <span>{st.final?.zone || 'Empty Stage'} // {st.final?.directive || 'Physical podium sprint (Top 3 confirmed)'}</span>
                         </div>
                         <span className="text-ink-soft">Round: {data.activeRound.toUpperCase()}</span>
                       </div>
@@ -1450,6 +1458,9 @@ PIN: ${t.pin}
                           <td className="p-2">
                             <div><strong>{st.clue4?.zone}</strong></div>
                             <div className="text-verified-teal font-bold">{st.clue4?.answer}</div>
+                            <div className="text-[10px] text-evidence-red font-bold mt-1">
+                              🏁 {st.final?.zone || 'Empty Stage'}
+                            </div>
                           </td>
                           <td className="p-2 text-right">
                             <button

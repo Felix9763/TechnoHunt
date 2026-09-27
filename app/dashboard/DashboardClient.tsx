@@ -550,6 +550,17 @@ export default function DashboardClient({
                     </p>
                   </div>
                 )}
+
+                {stageData.clue2?.prompt && (
+                  <div className="newspaper-quote p-3.5 shadow-sm border border-line-light">
+                    <div className="text-xs font-mono text-evidence-red mb-1 font-bold tracking-wider uppercase">
+                      ON-SITE QUESTION:
+                    </div>
+                    <p className="text-sm md:text-base font-serif font-bold leading-relaxed text-ink">
+                      &ldquo;{stageData.clue2.prompt}&rdquo;
+                    </p>
+                  </div>
+                )}
                 
                 {/* Harmonious Detective Directive */}
                 <div className="detective-directive p-3 shadow-sm">
@@ -819,6 +830,17 @@ export default function DashboardClient({
                     </p>
                   </div>
                 )}
+
+                {stageData.clue4?.prompt && (
+                  <div className="newspaper-quote p-3.5 shadow-sm border border-line-light">
+                    <div className="text-xs font-mono text-evidence-red mb-1 font-bold tracking-wider uppercase">
+                      ON-SITE EVIDENCE PUZZLE:
+                    </div>
+                    <p className="text-sm md:text-base font-serif font-bold leading-relaxed text-ink whitespace-pre-wrap">
+                      {stageData.clue4.prompt}
+                    </p>
+                  </div>
+                )}
                 
                 {/* Harmonious Detective Directive */}
                 <div className="detective-directive p-3 shadow-sm">
@@ -835,7 +857,7 @@ export default function DashboardClient({
           </section>
 
           {/* ============================================================ */}
-          {/* FINAL STAGE: EMPTY STAGE (Podium Resolution) */}
+          {/* FINAL STAGE: PODIUM RESOLUTION */}
           {/* ============================================================ */}
           <section
             id="stage-card-final"
@@ -847,7 +869,7 @@ export default function DashboardClient({
           >
             <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-line-light">
               <span className="text-xs font-mono text-evidence-red font-bold tracking-wider uppercase">
-                CASE RESOLUTION // EMPTY STAGE
+                CASE RESOLUTION // {stageData.final?.zone ? stageData.final.zone.toUpperCase() : 'EMPTY STAGE'}
               </span>
               {currentStage === 'final' && (
                 <span className="rubber-stamp text-evidence-red">
@@ -857,7 +879,7 @@ export default function DashboardClient({
             </div>
 
             <h3 className="font-serif text-xl text-ink font-bold mb-2">
-              Final Destination: Empty Stage
+              Final Destination: {stageData.final?.zone || 'Empty Stage'}
             </h3>
 
             {currentStage !== 'final' ? (
@@ -868,19 +890,14 @@ export default function DashboardClient({
               <div className="space-y-3.5 mt-2.5">
                 <div className="text-sm font-mono bg-paper-inset border-l-4 border-verified-teal p-3.5 text-ink shadow-sm font-medium">
                   <span className="font-bold block mb-1 text-verified-teal text-xs tracking-wider uppercase">FINAL DIRECTIVE UNLOCKED:</span>
-                  Whatever went missing that night, it didn’t stay lost for long. Get there before anyone else does.
-                </div>
-                <div className="newspaper-quote p-3.5 shadow-sm border border-line-light">
-                  <p className="text-sm font-serif italic font-bold text-ink leading-relaxed">
-                    &ldquo;Lights are down. No crowd tonight. Something’s hidden, out of sight. Three places hold what you came to find — the first to claim it leaves the rest behind.&rdquo;
-                  </p>
+                  Whatever went missing, it didn’t stay lost for long. Get to the final coordinates before anyone else does.
                 </div>
                 <div className="detective-directive p-3.5 shadow-md">
                   <div className="font-bold text-evidence-red mb-1.5 tracking-wider uppercase text-xs">
                     PHYSICAL SPRINT REQUIRED:
                   </div>
                   <p className="text-xs md:text-sm font-mono text-ink font-semibold leading-relaxed">
-                    3 hidden keys are located backstage at Empty Stage. The first 3 teams to physically bring a key to the organizers will be confirmed on the podium!
+                    {stageData.final?.directive || `Proceed immediately to ${stageData.final?.zone || 'Empty Stage'}. The first 3 teams to reach the organizers will be confirmed on the podium!`}
                   </p>
                 </div>
               </div>
