@@ -4,6 +4,9 @@ import { getLiveActiveRound, getStagesForRound, getSanitizedStageData } from '@/
 import { fetchTeamProgress, fetchTeamRegistration } from '@/lib/db';
 import DashboardClient from './DashboardClient';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function DashboardPage() {
   const session = await getTeamSession();
   if (!session) {

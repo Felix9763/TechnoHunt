@@ -4,13 +4,13 @@
 -- 1. Single-row table holding active round state
 create table if not exists event_state (
   id int primary key default 1,
-  active_round text not null default 'round2',
+  active_round text not null default 'round1',
   check (id = 1)
 );
 
--- Seed initial event state with round2
+-- Seed initial event state with round1
 insert into event_state (id, active_round)
-values (1, 'round2')
+values (1, 'round1')
 on conflict (id) do nothing;
 
 -- 2. Team progress table, scoped by round and team_code

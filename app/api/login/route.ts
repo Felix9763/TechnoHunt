@@ -4,6 +4,8 @@ import { setTeamSessionCookie } from '@/lib/auth';
 import { fetchTeamProgress, checkInTeam, fetchTeamRegistration } from '@/lib/db';
 import { checkLoginRateLimit, recordFailedLogin, resetLoginAttempts } from '@/lib/rateLimit';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || req.headers.get('x-real-ip') || 'unknown';

@@ -15,6 +15,9 @@ import {
 } from '@/lib/db';
 import AdminClient from '../AdminClient';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function AdminPathsPage() {
   const session = await getAdminSession();
   if (!session) {

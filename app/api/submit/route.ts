@@ -7,6 +7,8 @@ import { isAnswerCorrect } from '@/lib/answerMatch';
 
 const STAGE_ORDER = ['clue2', 'crewmate', 'clue3', 'clue4', 'final'];
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     // 1. Validate session

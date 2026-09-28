@@ -21,6 +21,10 @@ export function getSupabase(): SupabaseClient | null {
   if (!supabaseInstance) {
     supabaseInstance = createClient(supabaseUrl, supabaseServiceKey, {
       auth: { persistSession: false },
+      global: {
+        fetch: (url, options = {}) =>
+          fetch(url, { ...options, cache: 'no-store' }),
+      },
     });
   }
   return supabaseInstance;
@@ -79,7 +83,7 @@ function getLocalDb(): LocalDbSchema {
     console.warn('Local DB file read skipped/failed, using in-memory store:', err);
   }
   const defaultDb: LocalDbSchema = {
-    event_state: { id: 1, active_round: 'round2' },
+    event_state: { id: 1, active_round: 'round1' },
     team_progress: {},
     team_registrations: {},
     attempts: [],
@@ -124,7 +128,7 @@ export async function fetchActiveRound(): Promise<string> {
       console.warn('Supabase error:', e);
     }
   }
-  return getLocalDb().event_state.active_round || 'round2';
+  return getLocalDb().event_state.active_round || 'round1';
 }
 
 export async function updateActiveRound(round: string): Promise<boolean> {

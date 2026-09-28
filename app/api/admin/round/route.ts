@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminSession } from '@/lib/auth';
 import { getLiveActiveRound, setLiveActiveRound, checkRoundConfig, RoundId } from '@/lib/round';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   const session = await getAdminSession(req);
   if (!session) {
