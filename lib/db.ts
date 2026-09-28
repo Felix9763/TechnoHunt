@@ -82,8 +82,20 @@ function getLocalDb(): LocalDbSchema {
   } catch (err) {
     console.warn('Local DB file read skipped/failed, using in-memory store:', err);
   }
+
+  function getDefaultRound(): string {
+    try {
+      const sPath = path.join(process.cwd(), 'config', 'settings.json');
+      if (fs.existsSync(sPath)) {
+        const cfg = JSON.parse(fs.readFileSync(sPath, 'utf-8'));
+        if (cfg.defaultRound) return cfg.defaultRound;
+      }
+    } catch {}
+    return 'round2';
+  }
+
   const defaultDb: LocalDbSchema = {
-    event_state: { id: 1, active_round: 'round1' },
+    event_state: { id: 1, active_round: getDefaultRound() },
     team_progress: {},
     team_registrations: {},
     attempts: [],
@@ -128,7 +140,7 @@ export async function fetchActiveRound(): Promise<string> {
       console.warn('Supabase error:', e);
     }
   }
-  return getLocalDb().event_state.active_round || 'round1';
+  return getLocalDb().event_state.active_round || 'round2';
 }
 
 export async function updateActiveRound(round: string): Promise<boolean> {
@@ -644,5 +656,30 @@ export async function resetRoundData(round: string): Promise<boolean> {
     }
   });
   saveLocalDb(db);
+  return true;
+}
+
+export async function clearEntireDatabase(activeRound: string = 'round2'): Promise<boolean> {
+  const sb = getSupabase();
+  if (sb) {
+    try {
+      await sb.from('team_progress').delete().neq('team_code', '___NON_EXISTENT___');
+      await sb.from('attempts').delete().neq('round', '___NON_EXISTENT___');
+      await sb.from('finale_submissions').delete().neq('team_code', '___NON_EXISTENT___');
+      await sb.from('team_registrations').delete().neq('team_code', '___NON_EXISTENT___');
+      await sb.from('event_state').upsert({ id: 1, active_round: activeRound }, { onConflict: 'id' });
+    } catch (e) {
+      console.warn('Supabase clearEntireDatabase error:', e);
+    }
+  }
+
+  const cleanDb: LocalDbSchema = {
+    event_state: { id: 1, active_round: activeRound },
+    team_progress: {},
+    team_registrations: {},
+    attempts: [],
+    finale_submissions: {},
+  };
+  saveLocalDb(cleanDb);
   return true;
 }

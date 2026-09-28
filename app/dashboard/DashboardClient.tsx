@@ -95,8 +95,16 @@ export default function DashboardClient({
     async function syncFromServer() {
       try {
         const res = await fetch('/api/team/status', { cache: 'no-store' });
+        if (res.status === 401 && !cancelled) {
+          window.location.href = '/login';
+          return;
+        }
         if (!res.ok || cancelled) return;
         const data = await res.json();
+        if ((!data.authenticated || data.roundMismatch) && !cancelled) {
+          window.location.href = '/login';
+          return;
+        }
         if (!data.currentStage || cancelled) return;
 
         const stageKeys = STAGES.map((s) => s.key);
@@ -125,6 +133,10 @@ export default function DashboardClient({
     const interval = setInterval(async () => {
       try {
         const res = await fetch(`/api/team/status?t=${Date.now()}`, { cache: 'no-store' });
+        if (res.status === 401 && mounted) {
+          window.location.href = '/login';
+          return;
+        }
         if (res.ok) {
           const data = await res.json();
           if (data.confirmed && mounted) {

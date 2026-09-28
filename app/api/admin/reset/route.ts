@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminSession } from '@/lib/auth';
 import { getLiveActiveRound } from '@/lib/round';
-import { resetRoundData } from '@/lib/db';
+import { clearEntireDatabase } from '@/lib/db';
 
 export async function POST(req: NextRequest) {
   const session = await getAdminSession(req);
@@ -11,12 +11,12 @@ export async function POST(req: NextRequest) {
 
   try {
     const activeRound = await getLiveActiveRound();
-    await resetRoundData(activeRound);
+    await clearEntireDatabase(activeRound);
 
     return NextResponse.json({
       success: true,
       round: activeRound,
-      message: `All test data for ${activeRound} has been reset.`,
+      message: `Database completely cleared and reset for ${activeRound}.`,
     });
   } catch (err: any) {
     console.error('Admin reset error:', err);

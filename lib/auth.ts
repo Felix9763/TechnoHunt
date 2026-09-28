@@ -6,14 +6,15 @@ import { getSettings } from './round';
 const TEAM_COOKIE_NAME = 'hunt_team_session';
 const ADMIN_COOKIE_NAME = 'hunt_admin_session';
 
-const DEFAULT_TEAM_SECRET = 'technohunt-team-session-secret-key-32chars!';
+const DEFAULT_TEAM_SECRET = 'technohunt-round2-session-secret-key-32chars!';
 const DEFAULT_ADMIN_SECRET = 'technohunt-admin-session-secret-key-32chars!';
 
 function getTeamSecret() {
   const secret = process.env.SESSION_SECRET;
-  return new TextEncoder().encode(
-    secret && secret.length >= 32 ? secret : DEFAULT_TEAM_SECRET
-  );
+  const baseSecret = secret && secret.length >= 32
+    ? `${secret}-round2`
+    : DEFAULT_TEAM_SECRET;
+  return new TextEncoder().encode(baseSecret);
 }
 
 function getAdminSecret() {
@@ -55,7 +56,11 @@ export async function signTeamSession(payload: TeamSessionPayload): Promise<{ to
 export async function verifyTeamToken(token: string): Promise<TeamSessionPayload | null> {
   try {
     const { payload } = await jwtVerify(token, getTeamSecret());
-    return payload as unknown as TeamSessionPayload;
+    const data = payload as unknown as TeamSessionPayload;
+    if (data.round !== 'round2') {
+      return null;
+    }
+    return data;
   } catch (err) {
     return null;
   }

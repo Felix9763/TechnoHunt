@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTeamSession } from '@/lib/auth';
+import { getTeamSession, clearTeamSessionCookie } from '@/lib/auth';
 import { fetchTeamRegistration, fetchTeamProgress } from '@/lib/db';
 import { getStagesForRound, getSanitizedStageData } from '@/lib/round';
 
@@ -9,7 +9,9 @@ export async function GET(req: NextRequest) {
   try {
     const session = await getTeamSession(req);
     if (!session) {
-      return NextResponse.json({ authenticated: false }, { status: 401 });
+      const res = NextResponse.json({ authenticated: false }, { status: 401 });
+      clearTeamSessionCookie(res);
+      return res;
     }
 
     const reg = await fetchTeamRegistration(session.round, session.teamCode);
