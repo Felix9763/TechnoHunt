@@ -87,6 +87,36 @@ export default function DashboardClient({
     if (initialTeamName) setTeamName(initialTeamName);
   }, [initialTeamName]);
 
+  // On every mount (including full page refresh), fetch authoritative stage from server.
+  // This is the single source of truth — handles cases where SSR props were stale,
+  // the page was cached by Vercel, or Supabase had a read-lag when the page rendered.
+  useEffect(() => {
+    let cancelled = false;
+    async function syncFromServer() {
+      try {
+        const res = await fetch('/api/team/status', { cache: 'no-store' });
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        if (!data.currentStage || cancelled) return;
+
+        const stageKeys = STAGES.map((s) => s.key);
+        const serverIdx = stageKeys.indexOf(data.currentStage);
+        const clientIdx = stageKeys.indexOf(currentStage);
+
+        if (serverIdx > clientIdx) {
+          setCurrentStage(data.currentStage);
+          if (data.stageData) setStageData(data.stageData);
+        }
+      } catch {
+        // silent — network jitter; client state is still valid
+      }
+    }
+    syncFromServer();
+    return () => { cancelled = true; };
+  // Run once on mount only — currentStage is intentionally omitted from deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Polling for team confirmation / name assignment when on waiting screen
   useEffect(() => {
     if (confirmed) return;
