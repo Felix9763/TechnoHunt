@@ -1,6 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 
 let supabaseInstance: SupabaseClient | null = null;
 
@@ -25,8 +26,17 @@ export function getSupabase(): SupabaseClient | null {
   return supabaseInstance;
 }
 
-// Fallback local file-based database for development/testing when Supabase creds are pending
-const LOCAL_DB_PATH = path.join(process.cwd(), 'scratch', 'local_db.json');
+// Fallback database for development/testing when Supabase creds are pending
+let inMemoryDb: LocalDbSchema | null = null;
+
+function getLocalDbPath(): string {
+  // On Vercel / serverless lambdas, process.cwd() (/var/task) is strictly read-only.
+  // The only writable directory is os.tmpdir() (/tmp).
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    return path.join(os.tmpdir(), 'technohunt_local_db.json');
+  }
+  return path.join(process.cwd(), 'scratch', 'local_db.json');
+}
 
 export interface TeamRegistration {
   round: string;
@@ -54,14 +64,19 @@ interface LocalDbSchema {
 }
 
 function getLocalDb(): LocalDbSchema {
+  if (inMemoryDb) {
+    return inMemoryDb;
+  }
   try {
-    if (fs.existsSync(LOCAL_DB_PATH)) {
-      const parsed = JSON.parse(fs.readFileSync(LOCAL_DB_PATH, 'utf-8'));
+    const filePath = getLocalDbPath();
+    if (fs.existsSync(filePath)) {
+      const parsed = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
       if (!parsed.team_registrations) parsed.team_registrations = {};
+      inMemoryDb = parsed;
       return parsed;
     }
   } catch (err) {
-    console.error('Error reading local DB, resetting:', err);
+    console.warn('Local DB file read skipped/failed, using in-memory store:', err);
   }
   const defaultDb: LocalDbSchema = {
     event_state: { id: 1, active_round: 'round2' },
@@ -70,17 +85,21 @@ function getLocalDb(): LocalDbSchema {
     attempts: [],
     finale_submissions: {},
   };
+  inMemoryDb = defaultDb;
   saveLocalDb(defaultDb);
   return defaultDb;
 }
 
 function saveLocalDb(data: LocalDbSchema) {
+  inMemoryDb = data;
   try {
-    const dir = path.dirname(LOCAL_DB_PATH);
+    const filePath = getLocalDbPath();
+    const dir = path.dirname(filePath);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify(data, null, 2), 'utf-8');
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
   } catch (err) {
-    console.error('Error saving local DB:', err);
+    // Non-fatal warning: In serverless environments without write permissions, inMemoryDb will continue serving
+    console.warn('Could not persist local DB to disk, using in-memory state.');
   }
 }
 
