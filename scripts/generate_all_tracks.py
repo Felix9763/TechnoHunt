@@ -124,10 +124,10 @@ def generate_track_pdf(round_num, track_name, teams, output_pdf):
     doc = SimpleDocTemplate(
         output_pdf,
         pagesize=A4,
-        leftMargin=36,
-        rightMargin=36,
-        topMargin=36,
-        bottomMargin=36
+        leftMargin=28,
+        rightMargin=28,
+        topMargin=28,
+        bottomMargin=28
     )
     
     styles = getSampleStyleSheet()
@@ -135,80 +135,79 @@ def generate_track_pdf(round_num, track_name, teams, output_pdf):
         'TrackHeader',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=12,
-        leading=16,
-        spaceAfter=8,
-        spaceBefore=14
+        fontSize=9.5,
+        leading=12,
+        spaceAfter=3,
+        spaceBefore=6
     )
     body_style = ParagraphStyle(
         'TrackBody',
         parent=styles['Normal'],
         fontName='Helvetica',
-        fontSize=10,
-        leading=14,
-        spaceAfter=6
+        fontSize=8,
+        leading=10.5,
+        spaceAfter=2
     )
     riddle_style = ParagraphStyle(
         'TrackRiddle',
         parent=styles['Normal'],
         fontName='Helvetica-Oblique',
-        fontSize=10,
-        leading=14,
-        spaceAfter=6,
-        leftIndent=12
+        fontSize=8,
+        leading=10.5,
+        spaceAfter=2,
+        leftIndent=8
     )
     code_style = ParagraphStyle(
         'TrackCode',
         parent=styles['Normal'],
         fontName='Courier-Bold',
-        fontSize=10,
-        leading=13,
-        spaceAfter=6,
-        leftIndent=12
+        fontSize=8,
+        leading=10.5,
+        spaceAfter=2,
+        leftIndent=8
     )
     ans_style = ParagraphStyle(
         'TrackAns',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=10,
-        leading=14,
-        spaceAfter=14
+        fontSize=8,
+        leading=10.5,
+        spaceAfter=6
     )
     
     story = []
     
     for i, t in enumerate(teams):
         chits = get_team_chits(round_num, track_name, t)
+        team_elements = []
         
         # CLUE 1 Block
-        story.append(Paragraph(f"<b>{t} - CLUE 1</b>", header_style))
-        story.append(Paragraph(clean_html(chits['c1_intro']), body_style))
-        story.append(Paragraph(f'"{clean_html(chits["c1_riddle"])}"', riddle_style))
-        story.append(Paragraph("Where must you go?", body_style))
-        story.append(Paragraph(f"<b>Answer: {clean_html(chits['c1_zone'])}</b>", ans_style))
+        team_elements.append(Paragraph(f"<b>{t} - CLUE 1</b>", header_style))
+        team_elements.append(Paragraph(clean_html(chits['c1_intro']), body_style))
+        team_elements.append(Paragraph(f'"{clean_html(chits["c1_riddle"])}"', riddle_style))
+        team_elements.append(Paragraph("Where must you go?", body_style))
+        team_elements.append(Paragraph(f"<b>Answer: {clean_html(chits['c1_zone'])}</b>", ans_style))
         
         # CLUE 2 Block
-        story.append(Paragraph(f"<b>{t} - CLUE 2</b>", header_style))
-        story.append(Paragraph(clean_html(chits['c2_intro']), body_style))
-        story.append(Paragraph(f'"{clean_html(chits["c2_prompt"]).replace(chr(10), "<br/>")}"', riddle_style))
-        story.append(Paragraph("Enter your answer online to see your next destination.", body_style))
-        story.append(Paragraph(f"<b>Answer: {clean_html(chits['c2_code'])}</b>", ans_style))
+        team_elements.append(Paragraph(f"<b>{t} - CLUE 2</b>", header_style))
+        team_elements.append(Paragraph(clean_html(chits['c2_intro']), body_style))
+        team_elements.append(Paragraph(f'"{clean_html(chits["c2_prompt"]).replace(chr(10), "<br/>")}"', riddle_style))
+        team_elements.append(Paragraph("Enter your answer online to see your next destination.", body_style))
+        team_elements.append(Paragraph(f"<b>Answer: {clean_html(chits['c2_code'])}</b>", ans_style))
         
         # CREWMATE CODE Block
-        story.append(Paragraph(f"<b>Crewmate Code:</b>", header_style))
-        story.append(Paragraph(f"<b>{clean_html(chits['cm_code'])}</b>", ans_style))
+        team_elements.append(Paragraph(f"<b>Crewmate Code:</b>", header_style))
+        team_elements.append(Paragraph(f"<b>{clean_html(chits['cm_code'])}</b>", ans_style))
         
         # CLUE 4 Block
-        story.append(Paragraph(f"<b>{t} - CLUE 4</b>", header_style))
-        story.append(Paragraph(clean_html(chits['c4_intro']), body_style))
-        story.append(Paragraph(clean_html(chits['c4_prompt']).replace('\n', '<br/>'), code_style))
-        story.append(Paragraph("Enter the printed value online to unlock the treasure!", body_style))
-        story.append(Paragraph(f"<b>Answer: {clean_html(chits['c4_ans'])}</b>", ans_style))
+        team_elements.append(Paragraph(f"<b>{t} - CLUE 4</b>", header_style))
+        team_elements.append(Paragraph(clean_html(chits['c4_intro']), body_style))
+        team_elements.append(Paragraph(clean_html(chits['c4_prompt']).replace('\n', '<br/>'), code_style))
+        team_elements.append(Paragraph("Enter the printed value online to unlock the treasure!", body_style))
+        team_elements.append(Paragraph(f"<b>Answer: {clean_html(chits['c4_ans'])}</b>", ans_style))
         
-        if (i + 1) % 2 == 0 and i < len(teams) - 1:
-            story.append(PageBreak())
-        else:
-            story.append(Spacer(1, 10))
+        team_elements.append(Spacer(1, 10))
+        story.append(KeepTogether(team_elements))
             
     doc.build(story)
     print(f"Generated PDF: {output_pdf}")
@@ -218,37 +217,39 @@ def generate_track_html(round_num, track_name, teams, output_html):
     for t in teams:
         c = get_team_chits(round_num, track_name, t)
         cards_html += f"""
-    <!-- {t} CLUE 1 -->
-    <div class="chit-block">
-      <div class="chit-header">{clean_html(t)} &mdash; CLUE 1</div>
-      <div class="chit-text">{clean_html(c['c1_intro'])}</div>
-      <div class="chit-riddle">&ldquo;{clean_html(c['c1_riddle'])}&rdquo;</div>
-      <div class="chit-text">Where must you go?</div>
-      <div class="chit-ans">Answer: {clean_html(c['c1_zone'])}</div>
-    </div>
+    <div class="team-container">
+      <!-- {t} CLUE 1 -->
+      <div class="chit-block">
+        <div class="chit-header">{clean_html(t)} &mdash; CLUE 1</div>
+        <div class="chit-text">{clean_html(c['c1_intro'])}</div>
+        <div class="chit-riddle">&ldquo;{clean_html(c['c1_riddle'])}&rdquo;</div>
+        <div class="chit-text">Where must you go?</div>
+        <div class="chit-ans">Answer: {clean_html(c['c1_zone'])}</div>
+      </div>
 
-    <!-- {t} CLUE 2 -->
-    <div class="chit-block">
-      <div class="chit-header">{clean_html(t)} &mdash; CLUE 2</div>
-      <div class="chit-text">{clean_html(c['c2_intro'])}</div>
-      <div class="chit-riddle">{clean_html(c['c2_prompt']).replace(chr(10), '<br>')}</div>
-      <div class="chit-text">Enter your answer online to see your next destination.</div>
-      <div class="chit-ans">Answer: {clean_html(c['c2_code'])}</div>
-    </div>
+      <!-- {t} CLUE 2 -->
+      <div class="chit-block">
+        <div class="chit-header">{clean_html(t)} &mdash; CLUE 2</div>
+        <div class="chit-text">{clean_html(c['c2_intro'])}</div>
+        <div class="chit-riddle">{clean_html(c['c2_prompt']).replace(chr(10), '<br>')}</div>
+        <div class="chit-text">Enter your answer online to see your next destination.</div>
+        <div class="chit-ans">Answer: {clean_html(c['c2_code'])}</div>
+      </div>
 
-    <!-- {t} CREWMATE CODE -->
-    <div class="chit-block">
-      <div class="chit-header">Crewmate Code:</div>
-      <div class="chit-code">{clean_html(c['cm_code'])}</div>
-    </div>
+      <!-- {t} CREWMATE CODE -->
+      <div class="chit-block">
+        <div class="chit-header">Crewmate Code:</div>
+        <div class="chit-code">{clean_html(c['cm_code'])}</div>
+      </div>
 
-    <!-- {t} CLUE 4 -->
-    <div class="chit-block">
-      <div class="chit-header">{clean_html(t)} &mdash; CLUE 4</div>
-      <div class="chit-text">{clean_html(c['c4_intro'])}</div>
-      <div class="chit-code">{clean_html(c['c4_prompt']).replace(chr(10), '<br>')}</div>
-      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
-      <div class="chit-ans">Answer: {clean_html(c['c4_ans'])}</div>
+      <!-- {t} CLUE 4 -->
+      <div class="chit-block">
+        <div class="chit-header">{clean_html(t)} &mdash; CLUE 4</div>
+        <div class="chit-text">{clean_html(c['c4_intro'])}</div>
+        <div class="chit-code">{clean_html(c['c4_prompt']).replace(chr(10), '<br>')}</div>
+        <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+        <div class="chit-ans">Answer: {clean_html(c['c4_ans'])}</div>
+      </div>
     </div>
 """
 
@@ -260,34 +261,34 @@ def generate_track_html(round_num, track_name, teams, output_html):
 <style>
   @page {{
     size: A4;
-    margin: 12mm 12mm 12mm 12mm;
+    margin: 10mm 10mm 10mm 10mm;
   }}
   body {{
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    line-height: 1.4;
+    font-size: 8.5pt;
+    line-height: 1.3;
     color: #000;
     background: #fff;
     margin: 0;
-    padding: 16px;
+    padding: 12px;
   }}
   .print-bar {{
     background: #f4f4f4;
     border: 1px solid #000;
-    padding: 10px 14px;
-    margin-bottom: 20px;
+    padding: 8px 12px;
+    margin-bottom: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }}
   .print-btn {{
-    padding: 6px 14px;
+    padding: 5px 12px;
     background: #000;
     color: #fff;
     font-weight: bold;
     border: none;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 11px;
   }}
   @media print {{
     .print-bar {{
@@ -297,34 +298,39 @@ def generate_track_html(round_num, track_name, teams, output_html):
       padding: 0;
     }}
   }}
-  .chit-block {{
-    margin-bottom: 16px;
+  .team-container {{
     page-break-inside: avoid;
     break-inside: avoid;
+    border-bottom: 1px dashed #666;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+  }}
+  .chit-block {{
+    margin-bottom: 10px;
   }}
   .chit-header {{
     font-weight: bold;
-    font-size: 13px;
-    margin-bottom: 6px;
+    font-size: 10pt;
+    margin-bottom: 3px;
   }}
   .chit-text {{
-    margin-bottom: 6px;
+    margin-bottom: 3px;
   }}
   .chit-riddle {{
     font-style: italic;
-    margin: 6px 0;
-    padding-left: 8px;
+    margin: 3px 0;
+    padding-left: 6px;
   }}
   .chit-code {{
     font-family: "Courier New", Courier, monospace;
     font-weight: bold;
-    margin: 6px 0;
-    padding-left: 8px;
+    margin: 3px 0;
+    padding-left: 6px;
     white-space: pre-wrap;
   }}
   .chit-ans {{
     font-weight: bold;
-    margin-top: 6px;
+    margin-top: 3px;
   }}
 </style>
 </head>
@@ -332,7 +338,7 @@ def generate_track_html(round_num, track_name, teams, output_html):
   <div class="print-bar">
     <div>
       <strong>TechnoHunt &mdash; Round {round_num} {track_name} Physical Chits</strong>
-      <span style="color: #555; margin-left: 8px;">({len(teams)} Teams)</span>
+      <span style="color: #555; margin-left: 6px;">({len(teams)} Teams)</span>
     </div>
     <button class="print-btn" onclick="window.print()">Print Track (Ctrl+P / PDF)</button>
   </div>
@@ -374,12 +380,8 @@ def generate_track_md(round_num, track_name, teams, output_md):
         f.write(md)
     print(f"Generated MD: {output_md}")
 
-# Define all 6 tracks
+# ONLY ROUND 2 TRACKS
 tracks = [
-    (1, 'TrackA', [f'A{i}' for i in range(1, 9)]),
-    (1, 'TrackB', [f'B{i}' for i in range(1, 9)]),
-    (1, 'TrackC', [f'C{i}' for i in range(1, 9)]),
-    (1, 'TrackD', [f'D{i}' for i in range(1, 9)]),
     (2, 'TrackA', [f'A{i}' for i in range(1, 17)]),
     (2, 'TrackB', [f'B{i}' for i in range(1, 17)]),
 ]
@@ -394,4 +396,4 @@ for round_num, track_name, teams in tracks:
     generate_track_html(round_num, track_name, teams, html_path)
     generate_track_md(round_num, track_name, teams, md_path)
 
-print("\nALL 6 TRACK DOCUMENTS GENERATED SUCCESSFULLY!")
+print("\nROUND 2 TRACK DOCUMENTS GENERATED SUCCESSFULLY!")
