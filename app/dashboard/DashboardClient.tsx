@@ -65,14 +65,19 @@ export default function DashboardClient({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Sync props if refreshed
+  // Sync stage from server ONLY if server is ahead of current client position.
+  // Never regress the stage backwards — this prevents the photo flash/disappear bug
+  // caused by router.refresh() triggering a Supabase read before the write has propagated.
   useEffect(() => {
-    setCurrentStage(initialStage);
+    const stageKeys = STAGES.map((s) => s.key);
+    const serverIdx = stageKeys.indexOf(initialStage);
+    const clientIdx = stageKeys.indexOf(currentStage);
+    if (serverIdx > clientIdx) {
+      setCurrentStage(initialStage);
+      setStageData(initialStageData);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialStage]);
-
-  useEffect(() => {
-    setStageData(initialStageData);
-  }, [initialStageData]);
 
   useEffect(() => {
     setConfirmed(initialConfirmed);
@@ -238,6 +243,10 @@ export default function DashboardClient({
       }
 
       // Submission was correct!
+      // NOTE: Do NOT call router.refresh() here.
+      // The API already returned the correct next-stage data. Calling refresh()
+      // triggers a server re-render that reads from Supabase, which may still
+      // return the old stage due to replication lag — causing the photo flash bug.
       triggerHaptic('success');
       setJustVerified(true);
       setInputValue('');
@@ -245,7 +254,6 @@ export default function DashboardClient({
       if (data.stageData) {
         setStageData(data.stageData);
       }
-      router.refresh();
 
       // Settle the animation
       setTimeout(() => {
@@ -693,14 +701,26 @@ export default function DashboardClient({
                       </span>
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => setShowImageModal(true)}
-                      className="w-full py-2 px-3 bg-ink text-paper text-xs font-mono font-bold hover:bg-ink-mid active:scale-95 transition-all flex items-center justify-center gap-2 shadow"
-                    >
-                      <span>🔍</span>
-                      <span>Click to view full uncropped image</span>
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowImageModal(true)}
+                        className="flex-1 py-2 px-3 bg-ink text-paper text-xs font-mono font-bold hover:bg-ink-mid active:scale-95 transition-all flex items-center justify-center gap-2 shadow"
+                      >
+                        <span>🔍</span>
+                        <span>View full photo</span>
+                      </button>
+                      <a
+                        href={stageData.crewmate.photo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="py-2 px-3 border-2 border-ink text-ink text-xs font-mono font-bold hover:bg-ink hover:text-paper active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow"
+                        title="Open photo in new tab — use if photo disappears"
+                      >
+                        <span>↗</span>
+                        <span>Open</span>
+                      </a>
+                    </div>
                   </div>
                 )}
 
