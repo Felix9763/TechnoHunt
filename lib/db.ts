@@ -163,17 +163,28 @@ export async function fetchTeamProgress(round: string, teamCode: string): Promis
         .select('current_stage')
         .eq('round', round)
         .eq('team_code', teamCode)
-        .single();
+        .maybeSingle();
+
       if (!error && data?.current_stage) {
         return data.current_stage;
       }
-      // If no row exists yet, initialize it
-      await sb
-        .from('team_progress')
-        .insert({ round, team_code: teamCode, current_stage: 'clue2' });
-      return 'clue2';
+
+      if (!error && !data) {
+        // If no row exists yet, initialize it
+        await sb
+          .from('team_progress')
+          .upsert(
+            { round, team_code: teamCode, current_stage: 'clue2' },
+            { onConflict: 'round,team_code', ignoreDuplicates: true }
+          );
+        return 'clue2';
+      }
+
+      if (error) {
+        console.warn('Supabase fetchTeamProgress error:', error.message);
+      }
     } catch (e) {
-      console.warn('Supabase fetchTeamProgress error:', e);
+      console.warn('Supabase fetchTeamProgress exception:', e);
     }
   }
   const db = getLocalDb();
@@ -197,12 +208,15 @@ export async function updateTeamProgress(round: string, teamCode: string, newSta
     try {
       const { error } = await sb
         .from('team_progress')
-        .upsert({
-          round,
-          team_code: teamCode,
-          current_stage: newStage,
-          last_updated: now,
-        });
+        .upsert(
+          {
+            round,
+            team_code: teamCode,
+            current_stage: newStage,
+            last_updated: now,
+          },
+          { onConflict: 'round,team_code' }
+        );
       if (error) {
         console.error('Supabase updateTeamProgress error:', error.message);
         return false;
@@ -397,12 +411,15 @@ export async function fetchTeamRegistration(round: string, teamCode: string): Pr
         .select('*')
         .eq('round', round)
         .eq('team_code', teamCode)
-        .single();
+        .maybeSingle();
       if (!error && data) {
         return data as TeamRegistration;
       }
+      if (error) {
+        console.warn('Supabase fetchTeamRegistration error:', error.message);
+      }
     } catch (e) {
-      console.warn('Supabase fetchTeamRegistration error:', e);
+      console.warn('Supabase fetchTeamRegistration exception:', e);
     }
   }
   const db = getLocalDb();
@@ -429,7 +446,9 @@ export async function checkInTeam(round: string, teamCode: string): Promise<Team
   const sb = getSupabase();
   if (sb) {
     try {
-      await sb.from('team_registrations').insert(newReg);
+      await sb
+        .from('team_registrations')
+        .upsert(newReg, { onConflict: 'round,team_code', ignoreDuplicates: true });
     } catch (e) {
       console.warn('Supabase checkInTeam error:', e);
     }
@@ -458,7 +477,12 @@ export async function confirmTeamRegistration(round: string, teamCode: string, t
   const sb = getSupabase();
   if (sb) {
     try {
-      await sb.from('team_registrations').upsert(updated);
+      const { error } = await sb
+        .from('team_registrations')
+        .upsert(updated, { onConflict: 'round,team_code' });
+      if (error) {
+        console.error('Supabase confirmTeamRegistration error:', error.message);
+      }
     } catch (e) {
       console.warn('Supabase confirmTeamRegistration error:', e);
     }
