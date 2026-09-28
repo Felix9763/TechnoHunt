@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TechnoHunt &mdash; Round 1 TrackD</title>
+<style>
+  @page {
+    size: A4;
+    margin: 12mm 12mm 12mm 12mm;
+  }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #000;
+    background: #fff;
+    margin: 0;
+    padding: 16px;
+  }
+  .print-bar {
+    background: #f4f4f4;
+    border: 1px solid #000;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .print-btn {
+    padding: 6px 14px;
+    background: #000;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  @media print {
+    .print-bar {
+      display: none !important;
+    }
+    body {
+      padding: 0;
+    }
+  }
+  .chit-block {
+    margin-bottom: 16px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .chit-header {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .chit-text {
+    margin-bottom: 6px;
+  }
+  .chit-riddle {
+    font-style: italic;
+    margin: 6px 0;
+    padding-left: 8px;
+  }
+  .chit-code {
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+    margin: 6px 0;
+    padding-left: 8px;
+    white-space: pre-wrap;
+  }
+  .chit-ans {
+    font-weight: bold;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+  <div class="print-bar">
+    <div>
+      <strong>TechnoHunt &mdash; Round 1 TrackD Physical Chits</strong>
+      <span style="color: #555; margin-left: 8px;">(8 Teams)</span>
+    </div>
+    <button class="print-btn" onclick="window.print()">Print Track (Ctrl+P / PDF)</button>
+  </div>
+  
+    <!-- D1 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">D1 &mdash; CLUE 1</div>
+      <div class="chit-text">AHOY, PIRATES! The Captain has disappeared, leaving behind this first order:</div>
+      <div class="chit-riddle">&ldquo;Where the crew docks to feast and drink, and tankards clink upon the brink.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: CANTEEN</div>
+    </div>
+
+    <!-- D1 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">D1 &mdash; CLUE 2</div>
+      <div class="chit-text">You reached CANTEEN! The Captain's first map piece is taped here with a riddle:</div>
+      <div class="chit-riddle">A true pirate never loses his way. What helps a pirate find the right direction?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: COMPASS</div>
+    </div>
+
+    <!-- D1 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">BLACKPEARL</div>
+    </div>
+
+    <!-- D1 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">D1 &mdash; CLUE 4</div>
+      <div class="chit-text">The Captain's treasure safe at Empty Stage is locked behind a countdown! What is printed?</div>
+      <div class="chit-code">Collect the physical puzzle piece at Empty Stage (Piece codeword: SHIP).<br><br>Final Question:<br>What will be printed?<br>for(int i = 5; i &gt;= 1; i--)<br>    printf("%d ", i);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: SHIP</div>
+    </div>
+
+    <!-- D2 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">D2 &mdash; CLUE 1</div>
+      <div class="chit-text">AHOY, PIRATES! The Captain has disappeared, leaving behind this first order:</div>
+      <div class="chit-riddle">&ldquo;Steps like the rigging rising high, reaching up towards the open sky.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: NEW STAIRS</div>
+    </div>
+
+    <!-- D2 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">D2 &mdash; CLUE 2</div>
+      <div class="chit-text">You reached NEW STAIRS! The Captain's first map piece is taped here with a riddle:</div>
+      <div class="chit-riddle">Every pirate needs one to find the treasure. What guides the crew on their journey?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: MAP</div>
+    </div>
+
+    <!-- D2 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">BLACKFLAG</div>
+    </div>
+
+    <!-- D2 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">D2 &mdash; CLUE 4</div>
+      <div class="chit-text">The Captain's treasure safe at Garden Fountain is locked behind a countdown! What is printed?</div>
+      <div class="chit-code">Collect the physical puzzle piece at Garden Fountain (Piece codeword: SHIP B).<br><br>Final Question:<br>What is printed?<br>for(int i = 1; i &lt;= 5; i += 2)<br>    printf("%d ", i);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: SHIP B</div>
+    </div>
+
+    <!-- D3 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">D3 &mdash; CLUE 1</div>
+      <div class="chit-text">AHOY, PIRATES! The Captain has disappeared, leaving behind this first order:</div>
+      <div class="chit-riddle">&ldquo;An island oasis green and still, where flowers bloom upon the hill.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: GARDEN</div>
+    </div>
+
+    <!-- D3 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">D3 &mdash; CLUE 2</div>
+      <div class="chit-text">You reached GARDEN! The Captain's first map piece is taped here with a riddle:</div>
+      <div class="chit-riddle">Before a pirate can claim the treasure, what do pirates call the wooden box where their precious loot is kept?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: CHEST</div>
+    </div>
+
+    <!-- D3 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">SKULL</div>
+    </div>
+
+    <!-- D3 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">D3 &mdash; CLUE 4</div>
+      <div class="chit-text">The Captain's treasure safe at Badminton Court is locked behind a countdown! What is printed?</div>
+      <div class="chit-code">Collect the physical puzzle piece at Badminton Court (Piece codeword: SHIP D).<br><br>Final Question:<br>What will be printed?<br>int i = 2;<br>while(i &lt;= 8) {<br>    printf("%d ", i);<br>    i += 2;<br>}</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: SHIP D</div>
+    </div>
+
+    <!-- D4 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">D4 &mdash; CLUE 1</div>
+      <div class="chit-text">AHOY, PIRATES! The Captain has disappeared, leaving behind this first order:</div>
+      <div class="chit-riddle">&ldquo;The harbor entrance sealed with chains, guarding entry from ocean rains.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: MAIN GATE</div>
+    </div>
+
+    <!-- D4 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">D4 &mdash; CLUE 2</div>
+      <div class="chit-text">You reached MAIN GATE! The Captain's first map piece is taped here with a riddle:</div>
+      <div class="chit-riddle">A pirate's journey cannot continue without a name. What do we call the person who commands the ship?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: CAPTAIN</div>
+    </div>
+
+    <!-- D4 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">JOLLYROGER</div>
+    </div>
+
+    <!-- D4 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">D4 &mdash; CLUE 4</div>
+      <div class="chit-text">The Captain's treasure safe at Canteen is locked behind a countdown! What is printed?</div>
+      <div class="chit-code">Collect the physical puzzle piece at Canteen (Piece codeword: SHIB).<br><br>Final Question:<br>What will be printed?<br>for(int i = 1; i &lt;= 4; i++)<br>    printf("%d ", i * 2);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: SHIB</div>
+    </div>
+
+    <!-- D5 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">D5 &mdash; CLUE 1</div>
+      <div class="chit-text">AHOY, PIRATES! The Captain has disappeared, leaving behind this first order:</div>
+      <div class="chit-riddle">&ldquo;The ship's quarterdeck proud and wide, where captains call across the tide.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: EMPTY STAGE</div>
+    </div>
+
+    <!-- D5 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">D5 &mdash; CLUE 2</div>
+      <div class="chit-text">You reached EMPTY STAGE! The Captain's first map piece is taped here with a riddle:</div>
+      <div class="chit-riddle">I have keys but open no locks. I have space but no room. You can enter, but you cannot walk inside. What am I?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: KEYBOARD</div>
+    </div>
+
+    <!-- D5 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">SEABLUE</div>
+    </div>
+
+    <!-- D5 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">D5 &mdash; CLUE 4</div>
+      <div class="chit-text">The Captain's treasure safe at Football Net is locked behind a countdown! What is printed?</div>
+      <div class="chit-code">Collect the physical puzzle piece at Football Net (Piece codeword: SHIP L).<br><br>Final Question:<br>What will this C program print?<br>int x = 4;<br>if(x &gt; 5)<br>    printf("SEA");<br>else<br>    printf("LAND");</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: SHIP L</div>
+    </div>
+
+    <!-- D6 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">D6 &mdash; CLUE 1</div>
+      <div class="chit-text">AHOY, PIRATES! The Captain has disappeared, leaving behind this first order:</div>
+      <div class="chit-riddle">&ldquo;The netted deck where sea winds blow, swift as flying fish below.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: BADMINTON COURT</div>
+    </div>
+
+    <!-- D6 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">D6 &mdash; CLUE 2</div>
+      <div class="chit-text">You reached BADMINTON COURT! The Captain's first map piece is taped here with a riddle:</div>
+      <div class="chit-riddle">I have hands but cannot clap, I have a face but cannot smile. What am I?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: CLOCK</div>
+    </div>
+
+    <!-- D6 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">REDSAIL</div>
+    </div>
+
+    <!-- D6 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">D6 &mdash; CLUE 4</div>
+      <div class="chit-text">The Captain's treasure safe at Nursing Room is locked behind a countdown! What is printed?</div>
+      <div class="chit-code">Collect the physical puzzle piece at Nursing Room (Piece codeword: SHIP X).<br><br>Final Question:<br>What is the output of this C program?<br>int n = 6;<br>while(n &gt; 2) {<br>    n--;<br>}<br>printf("%d", n);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: SHIP X</div>
+    </div>
+
+    <!-- D7 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">D7 &mdash; CLUE 1</div>
+      <div class="chit-text">AHOY, PIRATES! The Captain has disappeared, leaving behind this first order:</div>
+      <div class="chit-riddle">&ldquo;The ship's sickbay where sailors mend, away from storm and howling wind.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: NURSING ROOM</div>
+    </div>
+
+    <!-- D7 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">D7 &mdash; CLUE 2</div>
+      <div class="chit-text">You reached NURSING ROOM! The Captain's first map piece is taped here with a riddle:</div>
+      <div class="chit-riddle">I'm always in front of you, But can never be seen. You can chase me forever, But never catch me. What am I?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: FUTURE</div>
+    </div>
+
+    <!-- D7 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">SKULLFLAG</div>
+    </div>
+
+    <!-- D7 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">D7 &mdash; CLUE 4</div>
+      <div class="chit-text">The Captain's treasure safe at Main Gate is locked behind a countdown! What is printed?</div>
+      <div class="chit-code">Collect the physical puzzle piece at Main Gate (Piece codeword: SHIP C).<br><br>Final Question:<br>The Captain left a strange sequence: 2, 6, 12, 20, 30, ? Find the missing number.</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: SHIP C</div>
+    </div>
+
+    <!-- D8 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">D8 &mdash; CLUE 1</div>
+      <div class="chit-text">AHOY, PIRATES! The Captain has disappeared, leaving behind this first order:</div>
+      <div class="chit-riddle">&ldquo;A sprawling trawler's net outspread, where balls like flying cannonballs sped.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: FOOTBALL NET</div>
+    </div>
+
+    <!-- D8 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">D8 &mdash; CLUE 2</div>
+      <div class="chit-text">You reached FOOTBALL NET! The Captain's first map piece is taped here with a riddle:</div>
+      <div class="chit-riddle">The Captain wants to guess the word from the number.</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: MS DHONI</div>
+    </div>
+
+    <!-- D8 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">TREASURE</div>
+    </div>
+
+    <!-- D8 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">D8 &mdash; CLUE 4</div>
+      <div class="chit-text">The Captain's treasure safe at Football Net (Goal Post) is locked behind a countdown! What is printed?</div>
+      <div class="chit-code">Collect the physical puzzle piece at Goal Post (Piece codeword: SHIP V).<br><br>Final Question:<br>Captain's Cipher: The Captain never writes the location plainly. He shifts every letter 3 places forward to keep it safe.<br>Decode: WKH WUHDVXUH LV QHDU WKH JRDO</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: SHIP V</div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TechnoHunt &mdash; Round 1 TrackC</title>
+<style>
+  @page {
+    size: A4;
+    margin: 12mm 12mm 12mm 12mm;
+  }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #000;
+    background: #fff;
+    margin: 0;
+    padding: 16px;
+  }
+  .print-bar {
+    background: #f4f4f4;
+    border: 1px solid #000;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .print-btn {
+    padding: 6px 14px;
+    background: #000;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  @media print {
+    .print-bar {
+      display: none !important;
+    }
+    body {
+      padding: 0;
+    }
+  }
+  .chit-block {
+    margin-bottom: 16px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .chit-header {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .chit-text {
+    margin-bottom: 6px;
+  }
+  .chit-riddle {
+    font-style: italic;
+    margin: 6px 0;
+    padding-left: 8px;
+  }
+  .chit-code {
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+    margin: 6px 0;
+    padding-left: 8px;
+    white-space: pre-wrap;
+  }
+  .chit-ans {
+    font-weight: bold;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+  <div class="print-bar">
+    <div>
+      <strong>TechnoHunt &mdash; Round 1 TrackC Physical Chits</strong>
+      <span style="color: #555; margin-left: 8px;">(8 Teams)</span>
+    </div>
+    <button class="print-btn" onclick="window.print()">Print Track (Ctrl+P / PDF)</button>
+  </div>
+  
+    <!-- C1 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">C1 &mdash; CLUE 1</div>
+      <div class="chit-text">A priceless diamond has vanished from the museum display. The thief left nothing behind but a note:</div>
+      <div class="chit-riddle">&ldquo;Two patches green where shadows blend, seek where the winding path will bend.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: GARDEN</div>
+    </div>
+
+    <!-- C1 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">C1 &mdash; CLUE 2</div>
+      <div class="chit-text">You've found the spot where the clue was hidden at GARDEN. A folded note reads:</div>
+      <div class="chit-riddle">I have a lens that makes small things grand... what tool for inspection could I possibly be?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: MAGNIFYING GLASS</div>
+    </div>
+
+    <!-- C1 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">REDDIAMOND</div>
+    </div>
+
+    <!-- C1 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">C1 &mdash; CLUE 4</div>
+      <div class="chit-text">The safe holding the recovered evidence at Badminton Court is locked behind this code. What is printed?</div>
+      <div class="chit-code">What will this program print?<br>int a = 10, b = 20;<br>if(a &lt; b &amp;&amp; b &lt; 30)<br>    printf("%d", a + b);<br>else<br>    printf("%d", a - b);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 30</div>
+    </div>
+
+    <!-- C2 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">C2 &mdash; CLUE 1</div>
+      <div class="chit-text">A priceless diamond has vanished from the museum display. The thief left nothing behind but a note:</div>
+      <div class="chit-riddle">&ldquo;Where hunger goes to disappear, and footsteps echo sharp and clear.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: CANTEEN</div>
+    </div>
+
+    <!-- C2 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">C2 &mdash; CLUE 2</div>
+      <div class="chit-text">You've found the spot where the clue was hidden at CANTEEN. A folded note reads:</div>
+      <div class="chit-riddle">I have no key yet I open the vault... what am I, the tool safe-crackers found?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: STETHOSCOPE</div>
+    </div>
+
+    <!-- C2 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">VAULTBREAKER</div>
+    </div>
+
+    <!-- C2 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">C2 &mdash; CLUE 4</div>
+      <div class="chit-text">The safe holding the recovered evidence at Main Gate is locked behind this code. What is printed?</div>
+      <div class="chit-code">What will this program print?<br>int x = 4, y = 2;<br>printf("%d", x * y + x / y);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 10</div>
+    </div>
+
+    <!-- C3 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">C3 &mdash; CLUE 1</div>
+      <div class="chit-text">A priceless diamond has vanished from the museum display. The thief left nothing behind but a note:</div>
+      <div class="chit-riddle">&ldquo;Steps of stone rising to the floor, leading upward to the open door.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: NEW STAIRS</div>
+    </div>
+
+    <!-- C3 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">C3 &mdash; CLUE 2</div>
+      <div class="chit-text">You've found the spot where the clue was hidden at NEW STAIRS. A folded note reads:</div>
+      <div class="chit-riddle">I hold the colours that painters trust... what tool paints a lie that looks true?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: PAINTBRUSH</div>
+    </div>
+
+    <!-- C3 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">FORGEDCANVAS</div>
+    </div>
+
+    <!-- C3 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">C3 &mdash; CLUE 4</div>
+      <div class="chit-text">The safe holding the recovered evidence at Empty Stage is locked behind this code. What is printed?</div>
+      <div class="chit-code">What will this program print?<br>int sum = 0;<br>for(int i = 1; i &lt;= 5; i++)<br>    sum += i;<br>printf("%d", sum);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 15</div>
+    </div>
+
+    <!-- C4 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">C4 &mdash; CLUE 1</div>
+      <div class="chit-text">A priceless diamond has vanished from the museum display. The thief left nothing behind but a note:</div>
+      <div class="chit-riddle">&ldquo;Where strings and nets divide the floor, swift footsteps hear the rally's roar.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: BADMINTON COURT</div>
+    </div>
+
+    <!-- C4 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">C4 &mdash; CLUE 2</div>
+      <div class="chit-text">You've found the spot where the clue was hidden at BADMINTON COURT. A folded note reads:</div>
+      <div class="chit-riddle">I'm a program that walks in unseen... name the tiny thief that makes systems fail.</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: KEYLOGGER</div>
+    </div>
+
+    <!-- C4 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">GHOSTHACKER</div>
+    </div>
+
+    <!-- C4 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">C4 &mdash; CLUE 4</div>
+      <div class="chit-text">The safe holding the recovered evidence at Football Net is locked behind this code. What is printed?</div>
+      <div class="chit-code">What will this program print?<br>int arr[3] = {5, 10, 15};<br>printf("%d", arr[0] + arr[2]);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 20</div>
+    </div>
+
+    <!-- C5 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">C5 &mdash; CLUE 1</div>
+      <div class="chit-text">A priceless diamond has vanished from the museum display. The thief left nothing behind but a note:</div>
+      <div class="chit-riddle">&ldquo;The iron gate where vehicles wait, the border of the campus state.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: MAIN GATE</div>
+    </div>
+
+    <!-- C5 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">C5 &mdash; CLUE 2</div>
+      <div class="chit-text">You've found the spot where the clue was hidden at MAIN GATE. A folded note reads:</div>
+      <div class="chit-riddle">I'm hidden in a container, sealed and taped tight... what am I called in the smuggler's routine?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: CONTRABAND</div>
+    </div>
+
+    <!-- C5 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">MIDNIGHTCARGO</div>
+    </div>
+
+    <!-- C5 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">C5 &mdash; CLUE 4</div>
+      <div class="chit-text">The safe holding the recovered evidence at Canteen is locked behind this code. What is printed?</div>
+      <div class="chit-code">What will this program print?<br>int x = 7;<br>printf("%d", (x % 2 == 0) ? x * 2 : x * 3);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 21</div>
+    </div>
+
+    <!-- C6 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">C6 &mdash; CLUE 1</div>
+      <div class="chit-text">A priceless diamond has vanished from the museum display. The thief left nothing behind but a note:</div>
+      <div class="chit-riddle">&ldquo;A raised wooden floor where curtains fall, silence resting against the wall.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: EMPTY STAGE</div>
+    </div>
+
+    <!-- C6 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">C6 &mdash; CLUE 2</div>
+      <div class="chit-text">You've found the spot where the clue was hidden at EMPTY STAGE. A folded note reads:</div>
+      <div class="chit-riddle">I look real, I feel real, but I'm not what I seem... what word describes the money I make?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: COUNTERFEIT</div>
+    </div>
+
+    <!-- C6 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">FAKENOTE</div>
+    </div>
+
+    <!-- C6 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">C6 &mdash; CLUE 4</div>
+      <div class="chit-text">The safe holding the recovered evidence at Placement Court is locked behind this code. What is printed?</div>
+      <div class="chit-code">What will this program print?<br>int n = 3, fact = 1;<br>while(n &gt; 0) {<br>    fact *= n;<br>    n--;<br>}<br>printf("%d", fact);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 6</div>
+    </div>
+
+    <!-- C7 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">C7 &mdash; CLUE 1</div>
+      <div class="chit-text">A priceless diamond has vanished from the museum display. The thief left nothing behind but a note:</div>
+      <div class="chit-riddle">&ldquo;White cords woven tight and deep, where goals are scored and secrets sleep.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: FOOTBALL NET</div>
+    </div>
+
+    <!-- C7 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">C7 &mdash; CLUE 2</div>
+      <div class="chit-text">You've found the spot where the clue was hidden at FOOTBALL NET. A folded note reads:</div>
+      <div class="chit-riddle">I hold a secret that someone wants buried... what crime forces payment through fear and duress?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: EXTORTION</div>
+    </div>
+
+    <!-- C7 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">SILENTTHREAT</div>
+    </div>
+
+    <!-- C7 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">C7 &mdash; CLUE 4</div>
+      <div class="chit-text">The safe holding the recovered evidence at New Stairs is locked behind this code. What is printed?</div>
+      <div class="chit-code">What will this program print?<br>int a = 2, b = 3;<br>int c = a + b * b - a;<br>printf("%d", c);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 9</div>
+    </div>
+
+    <!-- C8 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">C8 &mdash; CLUE 1</div>
+      <div class="chit-text">A priceless diamond has vanished from the museum display. The thief left nothing behind but a note:</div>
+      <div class="chit-riddle">&ldquo;Where flyers hang and banners gleam, the corridor of future dream.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: PLACEMENT COURT</div>
+    </div>
+
+    <!-- C8 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">C8 &mdash; CLUE 2</div>
+      <div class="chit-text">You've found the spot where the clue was hidden at PLACEMENT COURT. A folded note reads:</div>
+      <div class="chit-riddle">I slip into offices dressed like a friend... what crime steals secrets before the work's begun?</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: ESPIONAGE</div>
+    </div>
+
+    <!-- C8 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">STOLENBLUEPRINT</div>
+    </div>
+
+    <!-- C8 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">C8 &mdash; CLUE 4</div>
+      <div class="chit-text">The safe holding the recovered evidence at Garden is locked behind this code. What is printed?</div>
+      <div class="chit-code">What will this program print?<br>int x = 5, y = 0;<br>if(x &gt; 0)<br>    y = x * x;<br>else<br>    y = -x;<br>printf("%d", y);</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 25</div>
+    </div>
+
+</body>
+</html>

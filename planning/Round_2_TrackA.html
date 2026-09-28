@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TechnoHunt &mdash; Round 2 TrackA</title>
+<style>
+  @page {
+    size: A4;
+    margin: 12mm 12mm 12mm 12mm;
+  }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #000;
+    background: #fff;
+    margin: 0;
+    padding: 16px;
+  }
+  .print-bar {
+    background: #f4f4f4;
+    border: 1px solid #000;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .print-btn {
+    padding: 6px 14px;
+    background: #000;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  @media print {
+    .print-bar {
+      display: none !important;
+    }
+    body {
+      padding: 0;
+    }
+  }
+  .chit-block {
+    margin-bottom: 16px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .chit-header {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .chit-text {
+    margin-bottom: 6px;
+  }
+  .chit-riddle {
+    font-style: italic;
+    margin: 6px 0;
+    padding-left: 8px;
+  }
+  .chit-code {
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+    margin: 6px 0;
+    padding-left: 8px;
+    white-space: pre-wrap;
+  }
+  .chit-ans {
+    font-weight: bold;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+  <div class="print-bar">
+    <div>
+      <strong>TechnoHunt &mdash; Round 2 TrackA Physical Chits</strong>
+      <span style="color: #555; margin-left: 8px;">(16 Teams)</span>
+    </div>
+    <button class="print-btn" onclick="window.print()">Print Track (Ctrl+P / PDF)</button>
+  </div>
+  
+    <!-- A1 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A1 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Where a ball forgets to fall asleep, netted still, its silence deep  -  someone crossed here, soft and fast, gone before the moment passed.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: FOOTBALL NET</div>
+    </div>
+
+    <!-- A1 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A1 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at FOOTBALL NET! A recovered slip reads:</div>
+      <div class="chit-riddle">Decode the Caesar shift (+3): YHFWRU</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: VECTOR</div>
+    </div>
+
+    <!-- A1 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">01000011 01001111 01000100 01000101</div>
+    </div>
+
+    <!-- A1 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A1 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Garden. Analyze the question below:</div>
+      <div class="chit-code">for(int i=5;i&gt;=1;i--) printf("%d ", i);  -  what prints?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 5 4 3 2 1</div>
+    </div>
+
+    <!-- A2 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A2 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Two patches green, on either side, where someone waited, stepped, and tried  -  the fast food light, she knew too well, to time her steps and never tell.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: GARDEN</div>
+    </div>
+
+    <!-- A2 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A2 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at GARDEN! A recovered slip reads:</div>
+      <div class="chit-riddle">Decode the Atbash cipher: HRTMZO</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: SIGNAL</div>
+    </div>
+
+    <!-- A2 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">01001000 01000101 01001100 01001100 01001111</div>
+    </div>
+
+    <!-- A2 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A2 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Placement Banner. Analyze the question below:</div>
+      <div class="chit-code">int a[]={2,4,6,8,10}; for(i=0;i&lt;5;i++) printf("%d ", a[i]+1);  -  what prints, and the sum?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 3 5 7 9 11, SUM 35</div>
+    </div>
+
+    <!-- A3 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A3 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Where futures hang, printed and proud, she waited here, alone, unbowed  -  scrolling one thing, again, again, until the courage came to enter in.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: PLACEMENT BANNER</div>
+    </div>
+
+    <!-- A3 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A3 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at PLACEMENT BANNER! A recovered slip reads:</div>
+      <div class="chit-riddle">Decode the Caesar shift (+4): WLEHSA</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: SHADOW</div>
+    </div>
+
+    <!-- A3 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">2-4-7-4-3-7</div>
+    </div>
+
+    <!-- A3 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A3 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Student Parking. Analyze the question below:</div>
+      <div class="chit-code">Find the next number: 2, 5, 11, 23, 47, ?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 95</div>
+    </div>
+
+    <!-- A4 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A4 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Wheels rest here, riders long gone, she never lingered, kept moving on  -  just passed the edge, and kept her pace, nowhere close to a resting place.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: STUDENT PARKING</div>
+    </div>
+
+    <!-- A4 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A4 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at STUDENT PARKING! A recovered slip reads:</div>
+      <div class="chit-riddle">Convert the ASCII values: 67 73 80 72 69 82</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: CIPHER</div>
+    </div>
+
+    <!-- A4 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">7-2-2-5-3-8</div>
+    </div>
+
+    <!-- A4 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A4 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Badminton Court. Analyze the question below:</div>
+      <div class="chit-code">int a[]={5,10,15,20}; printf("%d", a[2]);  -  what prints?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 15</div>
+    </div>
+
+    <!-- A5 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A5 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Where hunger goes to disappear, she entered soft, drawing near  -  a door, a crash, a startled sound, and something rolling on the ground.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: CANTEEN</div>
+    </div>
+
+    <!-- A5 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A5 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at CANTEEN! A recovered slip reads:</div>
+      <div class="chit-riddle">Decode the Caesar shift (+3): PDWULA</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: MATRIX</div>
+    </div>
+
+    <!-- A5 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">01010011 01001000 01000001 01000100 01001111 01010111</div>
+    </div>
+
+    <!-- A5 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A5 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at New Stairs. Analyze the question below:</div>
+      <div class="chit-code">A=1, B=0. Evaluate (A AND B) OR NOT(B).</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 1</div>
+    </div>
+
+    <!-- A6 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A6 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Fresh paint, barely worn by feet, she passed close by, unsure, discreet  -  steps that lead toward open air, not the way she chose, but almost there.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: NEW STAIRS</div>
+    </div>
+
+    <!-- A6 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A6 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at NEW STAIRS! A recovered slip reads:</div>
+      <div class="chit-riddle">Decode the Atbash cipher: HLXPVG</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: SOCKET</div>
+    </div>
+
+    <!-- A6 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">54 52 41 43 45</div>
+    </div>
+
+    <!-- A6 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A6 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Main Gate. Analyze the question below:</div>
+      <div class="chit-code">How many times does for(int i=0;i&lt;5;i++) execute?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 5</div>
+    </div>
+
+    <!-- A7 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A7 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Where shuttles fly and rackets sing, something landed, an unplanned thing  -  not sport tonight, just panic's flight, caught in netting, out of sight.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: BADMINTON COURT</div>
+    </div>
+
+    <!-- A7 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A7 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at BADMINTON COURT! A recovered slip reads:</div>
+      <div class="chit-riddle">Decode the Caesar shift (+2): RCEMGV</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: PACKET</div>
+    </div>
+
+    <!-- A7 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">4C 4F 47 49 43</div>
+    </div>
+
+    <!-- A7 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A7 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Football Net. Analyze the question below:</div>
+      <div class="chit-code">for(int i=1;i&lt;=3;i++) printf("%d",i);  -  what prints?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 123</div>
+    </div>
+
+    <!-- A8 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A8 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Where the campus breathes its last goodbye, she never came or went thereby  -  but someone did, in a hurry, unseen, gone before the gate's routine.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: MAIN GATE</div>
+    </div>
+
+    <!-- A8 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A8 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at MAIN GATE! A recovered slip reads:</div>
+      <div class="chit-riddle">Convert the ASCII values: 66 73 78 65 82 89</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: BINARY</div>
+    </div>
+
+    <!-- A8 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">53 48 49 46 54</div>
+    </div>
+
+    <!-- A8 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A8 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Ground. Analyze the question below:</div>
+      <div class="chit-code">Find the next number: 4, 8, 16, 32, ?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 64</div>
+    </div>
+
+    <!-- A9 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A9 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Where a hundred feet run every morning, empty now, silent, no warning  -  she crossed it once, then turned away, chose a different path to stray.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: GROUND</div>
+    </div>
+
+    <!-- A9 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A9 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at GROUND! A recovered slip reads:</div>
+      <div class="chit-riddle">Decode the Caesar shift (+3): WUDFH</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: TRACE</div>
+    </div>
+
+    <!-- A9 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">56 45 43 54 4F 52</div>
+    </div>
+
+    <!-- A9 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A9 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Canteen. Analyze the question below:</div>
+      <div class="chit-code">Find the next number: 1, 4, 9, 16, ?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 25</div>
+    </div>
+
+    <!-- A10 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A10 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Where a ball forgets to fall asleep, netted still, its silence deep  -  someone crossed here, soft and fast, gone before the moment passed.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: FOOTBALL NET</div>
+    </div>
+
+    <!-- A10 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A10 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at FOOTBALL NET! A recovered slip reads:</div>
+      <div class="chit-riddle">Decode the Atbash cipher: XLWV</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: CODE</div>
+    </div>
+
+    <!-- A10 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">4D 41 54 52 49 58</div>
+    </div>
+
+    <!-- A10 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A10 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at New Stairs. Analyze the question below:</div>
+      <div class="chit-code">Find the next number: 3, 6, 10, 15, ?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 21</div>
+    </div>
+
+    <!-- A11 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A11 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Two patches green, on either side, where someone waited, stepped, and tried  -  the fast food light, she knew too well, to time her steps and never tell.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: GARDEN</div>
+    </div>
+
+    <!-- A11 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A11 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at GARDEN! A recovered slip reads:</div>
+      <div class="chit-riddle">Convert the ASCII values: 72 69 76 76 79</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: HELLO</div>
+    </div>
+
+    <!-- A11 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">01001011 01000101 01011001</div>
+    </div>
+
+    <!-- A11 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A11 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Badminton Court. Analyze the question below:</div>
+      <div class="chit-code">int a[]={10,20,30,40};  -  what is a[0]?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 10</div>
+    </div>
+
+    <!-- A12 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A12 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Where futures hang, printed and proud, she waited here, alone, unbowed  -  scrolling one thing, again, again, until the courage came to enter in.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: PLACEMENT BANNER</div>
+    </div>
+
+    <!-- A12 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A12 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at PLACEMENT BANNER! A recovered slip reads:</div>
+      <div class="chit-riddle">Decode the Caesar shift (+1): TZTUBY</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: SYNTAX</div>
+    </div>
+
+    <!-- A12 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">8-3-2-2-4</div>
+    </div>
+
+    <!-- A12 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A12 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Main Gate. Analyze the question below:</div>
+      <div class="chit-code">int a[]={5,10,15};  -  what is a[1]+a[2]?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 25</div>
+    </div>
+
+    <!-- A13 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A13 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Wheels rest here, riders long gone, she never lingered, kept moving on  -  just passed the edge, and kept her pace, nowhere close to a resting place.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: STUDENT PARKING</div>
+    </div>
+
+    <!-- A13 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A13 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at STUDENT PARKING! A recovered slip reads:</div>
+      <div class="chit-riddle">Convert the ASCII values: 75 69 82 78 69 76</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: KERNEL</div>
+    </div>
+
+    <!-- A13 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">72 73</div>
+    </div>
+
+    <!-- A13 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A13 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Garden. Analyze the question below:</div>
+      <div class="chit-code">int x=8; int y=x&lt;&lt;2; printf("%d", y);  -  what prints?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 32</div>
+    </div>
+
+    <!-- A14 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A14 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Where shuttles fly and rackets sing, something landed, an unplanned thing  -  not sport tonight, just panic's flight, caught in netting, out of sight.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: BADMINTON COURT</div>
+    </div>
+
+    <!-- A14 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A14 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at BADMINTON COURT! A recovered slip reads:</div>
+      <div class="chit-riddle">Decode the Caesar shift (+4): WSNIR</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: TOKEN</div>
+    </div>
+
+    <!-- A14 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">01010011 01001001 01000111 01001110 01000001 01001100</div>
+    </div>
+
+    <!-- A14 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A14 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Football Net. Analyze the question below:</div>
+      <div class="chit-code">Find the next number in sequence: 1, 1, 2, 3, 5, 8, ?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 13</div>
+    </div>
+
+    <!-- A15 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A15 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Fresh paint, barely worn by feet, she passed close by, unsure, discreet  -  steps that lead toward open air, not the way she chose, but almost there.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: NEW STAIRS</div>
+    </div>
+
+    <!-- A15 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A15 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at NEW STAIRS! A recovered slip reads:</div>
+      <div class="chit-riddle">Decode the Atbash cipher: YFUUVI</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: BUFFER</div>
+    </div>
+
+    <!-- A15 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">01010011 01001111 01000011 01001011 01000101 01010100</div>
+    </div>
+
+    <!-- A15 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A15 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Placement Banner. Analyze the question below:</div>
+      <div class="chit-code">char c="A"; printf("%d", c+3);  -  what prints?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 68</div>
+    </div>
+
+    <!-- A16 CLUE 1 -->
+    <div class="chit-block">
+      <div class="chit-header">A16 &mdash; CLUE 1</div>
+      <div class="chit-text">Case #0426  -  The Case of the Missing Pendrive. Track the coordinator's trail:</div>
+      <div class="chit-riddle">&ldquo;Where the campus breathes its last goodbye, she never came or went thereby  -  but someone did, in a hurry, unseen, gone before the gate's routine.&rdquo;</div>
+      <div class="chit-text">Where must you go?</div>
+      <div class="chit-ans">Answer: MAIN GATE</div>
+    </div>
+
+    <!-- A16 CLUE 2 -->
+    <div class="chit-block">
+      <div class="chit-header">A16 &mdash; CLUE 2</div>
+      <div class="chit-text">You found the dropped exhibit at MAIN GATE! A recovered slip reads:</div>
+      <div class="chit-riddle">Convert the ASCII values: 83 67 82 73 80 84</div>
+      <div class="chit-text">Enter your answer online to see your next destination.</div>
+      <div class="chit-ans">Answer: SCRIPT</div>
+    </div>
+
+    <!-- A16 CREWMATE CODE -->
+    <div class="chit-block">
+      <div class="chit-header">Crewmate Code:</div>
+      <div class="chit-code">53 59 4E 54 41 58</div>
+    </div>
+
+    <!-- A16 CLUE 4 -->
+    <div class="chit-block">
+      <div class="chit-header">A16 &mdash; CLUE 4</div>
+      <div class="chit-text">Physical evidence is secured at Student Parking. Analyze the question below:</div>
+      <div class="chit-code">int x=10, y=20; x = x ^ y; y = x ^ y; x = x ^ y; what is x?</div>
+      <div class="chit-text">Enter the printed value online to unlock the treasure!</div>
+      <div class="chit-ans">Answer: 20</div>
+    </div>
+
+</body>
+</html>
