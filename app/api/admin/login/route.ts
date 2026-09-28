@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || req.headers.get('x-real-ip') || 'unknown';
     const body = await req.json();
     const passcode = (body.passcode || '').trim();
-    const expectedPasscode = process.env.ADMIN_PASSCODE || 'huntadmin2026';
+    const expectedPasscode = process.env.ADMIN_PASSCODE || process.env.ADMIN_PASSWORD || 'huntadmin2026';
 
     const rateKey = `admin_login:${ip}`;
     const limit = checkLoginRateLimit(rateKey, 5, 120);

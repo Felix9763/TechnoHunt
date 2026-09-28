@@ -5,16 +5,16 @@ import os from 'os';
 
 let supabaseInstance: SupabaseClient | null = null;
 
-const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-
-const isRealSupabaseConfigured =
-  supabaseUrl.startsWith('http') &&
-  !supabaseUrl.includes('your-project') &&
-  supabaseServiceKey.length > 20 &&
-  !supabaseServiceKey.includes('your-supabase');
-
 export function getSupabase(): SupabaseClient | null {
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+  const isRealSupabaseConfigured =
+    supabaseUrl.startsWith('http') &&
+    !supabaseUrl.includes('your-project') &&
+    supabaseServiceKey.length > 20 &&
+    !supabaseServiceKey.includes('your-supabase');
+
   if (!isRealSupabaseConfigured) {
     return null;
   }

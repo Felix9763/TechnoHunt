@@ -9,17 +9,19 @@ const ADMIN_COOKIE_NAME = 'hunt_admin_session';
 const DEFAULT_TEAM_SECRET = 'technohunt-team-session-secret-key-32chars!';
 const DEFAULT_ADMIN_SECRET = 'technohunt-admin-session-secret-key-32chars!';
 
-const teamSecret = new TextEncoder().encode(
-  (process.env.SESSION_SECRET && process.env.SESSION_SECRET.length >= 32)
-    ? process.env.SESSION_SECRET
-    : DEFAULT_TEAM_SECRET
-);
+function getTeamSecret() {
+  const secret = process.env.SESSION_SECRET;
+  return new TextEncoder().encode(
+    secret && secret.length >= 32 ? secret : DEFAULT_TEAM_SECRET
+  );
+}
 
-const adminSecret = new TextEncoder().encode(
-  (process.env.ADMIN_SESSION_SECRET && process.env.ADMIN_SESSION_SECRET.length >= 32)
-    ? process.env.ADMIN_SESSION_SECRET
-    : DEFAULT_ADMIN_SECRET
-);
+function getAdminSecret() {
+  const secret = process.env.ADMIN_SESSION_SECRET;
+  return new TextEncoder().encode(
+    secret && secret.length >= 32 ? secret : DEFAULT_ADMIN_SECRET
+  );
+}
 
 export interface TeamSessionPayload {
   teamCode: string;
@@ -45,14 +47,14 @@ export async function signTeamSession(payload: TeamSessionPayload): Promise<{ to
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(Math.floor(expiresAt.getTime() / 1000))
-    .sign(teamSecret);
+    .sign(getTeamSecret());
 
   return { token, expiresAt };
 }
 
 export async function verifyTeamToken(token: string): Promise<TeamSessionPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, teamSecret);
+    const { payload } = await jwtVerify(token, getTeamSecret());
     return payload as unknown as TeamSessionPayload;
   } catch (err) {
     return null;
@@ -104,14 +106,14 @@ export async function signAdminSession(): Promise<{ token: string; expiresAt: Da
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(Math.floor(expiresAt.getTime() / 1000))
-    .sign(adminSecret);
+    .sign(getAdminSecret());
 
   return { token, expiresAt };
 }
 
 export async function verifyAdminToken(token: string): Promise<AdminSessionPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, adminSecret);
+    const { payload } = await jwtVerify(token, getAdminSecret());
     if ((payload as any).isAdmin === true) {
       return payload as unknown as AdminSessionPayload;
     }
