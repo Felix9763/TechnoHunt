@@ -91,7 +91,7 @@ export default function LoginPage() {
                 placeholder="e.g. A1, B2..."
                 value={teamCode}
                 onChange={(e) => setTeamCode(e.target.value.toUpperCase())}
-                className="w-full bg-paper border-2 border-line px-3.5 py-2.5 font-mono text-base font-bold text-ink placeholder:text-ink-soft/40 focus:border-ink focus:outline-none transition-colors"
+                className="w-full bg-paper-inset border-2 border-line px-3.5 py-2.5 font-mono text-base font-bold text-ink placeholder:text-ink-soft/60 focus:border-ink focus:outline-none transition-colors"
                 required
               />
               <span className="text-[11px] font-mono text-ink-soft mt-1 block">
@@ -114,7 +114,7 @@ export default function LoginPage() {
                 placeholder="4-digit PIN"
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                className="w-full bg-paper border-2 border-line px-3.5 py-2.5 font-mono text-base font-bold text-ink placeholder:text-ink-soft/40 focus:border-ink focus:outline-none transition-colors"
+                className="w-full bg-paper-inset border-2 border-line px-3.5 py-2.5 font-mono text-base font-bold text-ink placeholder:text-ink-soft/60 focus:border-ink focus:outline-none transition-colors"
                 required
               />
             </div>
@@ -132,9 +132,9 @@ export default function LoginPage() {
               id="login-submit-button"
               type="submit"
               disabled={submitting}
-              className="w-full bg-ink text-paper py-3 font-mono font-bold text-sm uppercase tracking-wider hover:bg-ink-mid active:scale-95 transition-all disabled:opacity-50 shadow-md mt-2"
+              className="w-full bg-evidence-red text-[#FFFDF8] py-3.5 font-mono font-bold text-sm uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 shadow-md border-2 border-[#541212] mt-2 flex items-center justify-center gap-2"
             >
-              {submitting ? 'Authenticating...' : 'Access Case File'}
+              <span>{submitting ? 'Authenticating...' : 'Access Case File →'}</span>
             </button>
           </form>
         </section>

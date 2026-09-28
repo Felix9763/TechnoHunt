@@ -9,10 +9,12 @@
    ============================================================ */
 
 :root {
+  color-scheme: light;
+
   /* Aged broadsheet newsprint & manila dossier stock */
   --color-paper:        #EAE1CA;  /* Background: authentic warm aged newsprint */
   --color-paper-card:   #F4ECDA;  /* Card surface: subtle warm stationery */
-  --color-paper-inset:  #E0D5BC;  /* Inset well: quotes, lead riddles, directives */
+  --color-paper-inset:  #E0D5BC;  /* Inset well: quotes, lead riddles, directives, inputs */
 
   /* Printer's Ink — deep sepia-charcoal, ultra-readable */
   --color-ink:          #1A150F;  /* Primary ink: sharp letterpress contrast */
@@ -31,6 +33,8 @@
 
 /* Vintage Detective Darkroom Theme (for dark mode toggle) */
 [data-theme="dark"] {
+  color-scheme: dark;
+
   --color-paper:        #14110C;
   --color-paper-card:   #1E1912;
   --color-paper-inset:  #17130E;
@@ -56,6 +60,23 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Ensure inputs, selects, and textareas strictly adhere to paper/ink palette */
+input, select, textarea {
+  color: var(--color-ink);
+  background-color: var(--color-paper-inset);
+}
+
+/* Browser autofill override: prevent browser from injecting plain white boxes or text */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 50px var(--color-paper-inset) inset !important;
+  -webkit-text-fill-color: var(--color-ink) !important;
+  caret-color: var(--color-ink) !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* ============================================================
