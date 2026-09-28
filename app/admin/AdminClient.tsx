@@ -306,6 +306,7 @@ PIN: ${t.pin}
 
 [STAGE 2] WITNESS CONTACT (Crewmate):
 - Witness Name: ${s.crewmate?.name || 'N/A'} (${s.crewmate?.id || 'CREW'})
+- Stationed Location: ${s.crewmate?.assignedLocation || 'N/A'}
 - Photo Path: ${s.crewmate?.photo || 'N/A'}
 - Witness Dialogue Script: "${s.crewmate?.script || ''}"
 - Physical Scrambled Code: ${s.crewmate?.code || 'N/A'}
@@ -345,7 +346,7 @@ PIN: ${t.pin}
         `TEAM ${t.code} (TRACK ${t.track}) | PIN: ${t.pin}`,
         `1. CLUE 2: Zone: [${s.clue2?.zone || 'N/A'}] | Codeword: [${s.clue2?.codeword || 'N/A'}]`,
         `   Riddle: "${s.clue2?.riddle || ''}"`,
-        `2. WITNESS: ${s.crewmate?.name || 'N/A'} (${s.crewmate?.id || ''}) | Code: [${s.crewmate?.code || 'N/A'}]`,
+        `2. WITNESS: ${s.crewmate?.name || 'N/A'} (${s.crewmate?.id || ''}) | Post: [${s.crewmate?.assignedLocation || 'N/A'}] | Code: [${s.crewmate?.code || 'N/A'}]`,
         `   Script: "${s.crewmate?.script || ''}"`,
         `3. CLUE 3: Cipher: [${s.clue3?.cipherType || 'Cipher'}] | Intercept: [${s.clue3?.intercept || 'N/A'}]`,
         `   HINT: "${s.clue3?.hint || 'N/A'}"`,
@@ -381,6 +382,7 @@ PIN: ${t.pin}
       (s.clue2?.codeword && s.clue2.codeword.toLowerCase().includes(q)) ||
       (s.clue2?.riddle && s.clue2.riddle.toLowerCase().includes(q)) ||
       (s.crewmate?.name && s.crewmate.name.toLowerCase().includes(q)) ||
+      (s.crewmate?.assignedLocation && s.crewmate.assignedLocation.toLowerCase().includes(q)) ||
       (s.crewmate?.id && s.crewmate.id.toLowerCase().includes(q)) ||
       (s.crewmate?.script && s.crewmate.script.toLowerCase().includes(q)) ||
       (s.crewmate?.code && s.crewmate.code.toLowerCase().includes(q)) ||
@@ -1239,6 +1241,14 @@ PIN: ${t.pin}
                                   <span className="text-ink-soft">Person: </span>
                                   <strong className="text-sm">{st.crewmate?.name || 'N/A'}</strong>
                                 </div>
+                                {st.crewmate?.assignedLocation && (
+                                  <div>
+                                    <span className="text-ink-soft">Stationed At: </span>
+                                    <strong className="text-xs text-ink bg-amber-500/20 px-1.5 py-0.5 rounded border border-amber-500/40">
+                                      📍 {st.crewmate.assignedLocation}
+                                    </strong>
+                                  </div>
+                                )}
                                 <div>
                                   <span className="text-ink-soft">Physical Code: </span>
                                   <strong className="text-verified-teal bg-verified-teal/10 px-1 py-0.5 break-all text-xs">
@@ -1429,7 +1439,9 @@ PIN: ${t.pin}
                               )}
                               <div>
                                 <strong>{st.crewmate?.name}</strong>
-                                <div className="text-[10px] text-ink-soft">({st.crewmate?.id})</div>
+                                <div className="text-[10px] text-ink-soft">
+                                  ({st.crewmate?.id}{st.crewmate?.assignedLocation ? ` · 📍 ${st.crewmate.assignedLocation}` : ''})
+                                </div>
                               </div>
                             </div>
                             <div className="text-verified-teal font-bold text-[10px] break-all mt-0.5">{st.crewmate?.code}</div>

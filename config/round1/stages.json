@@ -7,11 +7,12 @@
       "codeword": "STOPWATCH"
     },
     "crewmate": {
-      "id": "CM-1",
-      "name": "Bannur Jishnesh Reddy",
-      "photo": "/assets/round1/Bannur_Jishnesh_Reddy.jpg",
+      "id": "C1",
+      "name": "Praanjali",
+      "photo": "/assets/round1/Praanjali.jpeg",
       "script": "\u201cYou caught up with me! Time is fracturing across the campus. Take this frequency anchor before the glitch resets us both.\u201d",
-      "code": "CHRONOSHIFT"
+      "code": "CHRONOSHIFT",
+      "assignedLocation": "Football Net"
     },
     "clue3": {
       "cipherType": "Operator Intercept // Bitwise AND",
@@ -39,11 +40,12 @@
       "codeword": "REWIND"
     },
     "crewmate": {
-      "id": "CM-2",
-      "name": "Enoch Michael",
-      "photo": "/assets/round1/Enoch_Michael.jpg",
+      "id": "C2",
+      "name": "K. Pujitha Sri",
+      "photo": "/assets/round1/K_Pujitha_Sri.jpg",
       "script": "\u201cDetective! I\u2019ve been reliving this exact moment on loop. Take this recovery sequence \u2014 use it to break the cycle.\u201d",
-      "code": "TIMELOOP99"
+      "code": "TIMELOOP99",
+      "assignedLocation": "Garden"
     },
     "clue3": {
       "cipherType": "Operator Intercept // Bitwise AND",
@@ -71,11 +73,12 @@
       "codeword": "INFINITE LOOP | INFINITELOOP"
     },
     "crewmate": {
-      "id": "CM-3",
-      "name": "Gyanendra Sethi",
-      "photo": "/assets/round1/Gyanendra_Sethi.jpg",
+      "id": "C3",
+      "name": "Khyathi Anand",
+      "photo": "/assets/round1/Khyathi_Anand.png",
       "script": "\u201cYou made it across the barrier. The system entered an infinite sequence. Here is the quantum bypass code.\u201d",
-      "code": "QUANTUMLEAP"
+      "code": "QUANTUMLEAP",
+      "assignedLocation": "Placement Court"
     },
     "clue3": {
       "cipherType": "Operator Intercept // Left Shift",
@@ -103,11 +106,12 @@
       "codeword": "GLITCH"
     },
     "crewmate": {
-      "id": "CM-4",
-      "name": "Gnaneshwar",
-      "photo": "/assets/round1/Gnaneshwar.jpeg",
+      "id": "C4",
+      "name": "Afrah Khan",
+      "photo": "/assets/round1/Afrah_Khan.jpeg",
       "script": "\u201cThe monitors went wild just minutes ago! A sudden surge tore through the display. Here is the stabilization token.\u201d",
-      "code": "FLUXCAPACITOR"
+      "code": "FLUXCAPACITOR",
+      "assignedLocation": "Canteen"
     },
     "clue3": {
       "cipherType": "Operator Intercept // Right Shift",
@@ -135,11 +139,12 @@
       "codeword": "DEJA VU | DEJAVU"
     },
     "crewmate": {
-      "id": "CM-5",
-      "name": "Venkata Sai Kiran",
-      "photo": "/assets/round1/Venkata_Sai_Kiran.jpg",
+      "id": "C5",
+      "name": "Asmi",
+      "photo": "/assets/round1/Asmi_Deshpande.png",
       "script": "\u201cI knew you were coming... in fact, I feel like we did this yesterday. Take this rift key before the timeline splits.\u201d",
-      "code": "TEMPORALRIFT"
+      "code": "TEMPORALRIFT",
+      "assignedLocation": "New Stairs"
     },
     "clue3": {
       "cipherType": "Operator Intercept // Bitwise XOR",
@@ -167,11 +172,12 @@
       "codeword": "PARADOX"
     },
     "crewmate": {
-      "id": "CM-6",
-      "name": "Ailneni Naineeth",
-      "photo": "/assets/round1/Ailneni_Naineeth.jpg",
+      "id": "C6",
+      "name": "Sreyash Pattnaik",
+      "photo": "/assets/round1/Sreyash_Pattnaik.jpeg",
       "script": "\u201cCareful! Changing anything in the past might erase the future. Here is the paradox cipher.\u201d",
-      "code": "PARADOXCODE"
+      "code": "PARADOXCODE",
+      "assignedLocation": "Badminton Court"
     },
     "clue3": {
       "cipherType": "Operator Intercept // Bitwise NOT",
@@ -199,11 +205,12 @@
       "codeword": "TIME LOOP | TIMELOOP"
     },
     "crewmate": {
-      "id": "CM-7",
-      "name": "K. Sahitya",
-      "photo": "/assets/round1/K_Sahitya.jpeg",
+      "id": "C7",
+      "name": "Yash Raj",
+      "photo": "/assets/round1/Yash_Raj.jpg",
       "script": "\u201cEvery time the clock hits zero, everything replays! Enter this rewind coordinate into your terminal.\u201d",
-      "code": "REWINDPOINT"
+      "code": "REWINDPOINT",
+      "assignedLocation": "Main Gate"
     },
     "clue3": {
       "cipherType": "Operator Intercept // Modulo & Division",
@@ -231,11 +238,12 @@
       "codeword": "RESET"
     },
     "crewmate": {
-      "id": "CM-8",
-      "name": "Saanvi Reddy",
-      "photo": "/assets/round1/Saanvi_Reddy.jpg",
+      "id": "C8",
+      "name": "Bhavadesh",
+      "photo": "/assets/round1/Bhavadesh.jpg",
       "script": "\u201cThe master clock has been tampered with. Take this reset token and restore the temporal line.\u201d",
-      "code": "RESETCLOCK"
+      "code": "RESETCLOCK",
+      "assignedLocation": "Ground"
     },
     "clue3": {
       "cipherType": "Operator Intercept // Bitwise OR",
@@ -263,11 +271,12 @@
       "codeword": "COMPASS | CHEST"
     },
     "crewmate": {
-      "id": "CM-1",
-      "name": "Bannur Jishnesh Reddy",
-      "photo": "/assets/round1/Bannur_Jishnesh_Reddy.jpg",
+      "id": "C1",
+      "name": "Praanjali",
+      "photo": "/assets/round1/Praanjali.jpeg",
       "script": "\u201cHalt, explorer! You have proven your skill in deciphering the kingdom\u2019s markers. Guard this royal cipher with your life.\u201d",
-      "code": "EMBERCROWN"
+      "code": "EMBERCROWN",
+      "assignedLocation": "Football Net"
     },
     "clue3": {
       "cipherType": "Royal Manuscript // Program Trace",
@@ -295,11 +304,12 @@
       "codeword": "CHEST | COMPASS"
     },
     "crewmate": {
-      "id": "CM-2",
-      "name": "Enoch Michael",
-      "photo": "/assets/round1/Enoch_Michael.jpg",
+      "id": "C2",
+      "name": "K. Pujitha Sri",
+      "photo": "/assets/round1/K_Pujitha_Sri.jpg",
       "script": "\u201cYou tread where ancient kings once walked. The lunar relic has revealed this hidden seal. Go forward!\u201d",
-      "code": "MOONRELIC"
+      "code": "MOONRELIC",
+      "assignedLocation": "Garden"
     },
     "clue3": {
       "cipherType": "Royal Manuscript // Subtraction",
@@ -327,11 +337,12 @@
       "codeword": "PASSWORD"
     },
     "crewmate": {
-      "id": "CM-3",
-      "name": "Gyanendra Sethi",
-      "photo": "/assets/round1/Gyanendra_Sethi.jpg",
+      "id": "C3",
+      "name": "Khyathi Anand",
+      "photo": "/assets/round1/Khyathi_Anand.png",
       "script": "\u201cBy royal decree, only the worthy may pass into the inner sanctum. Here is the sovereign password.\u201d",
-      "code": "ROYALSTONE"
+      "code": "ROYALSTONE",
+      "assignedLocation": "Placement Court"
     },
     "clue3": {
       "cipherType": "Royal Manuscript // Conditional",
@@ -359,11 +370,12 @@
       "codeword": "MAP"
     },
     "crewmate": {
-      "id": "CM-4",
-      "name": "Gnaneshwar",
-      "photo": "/assets/round1/Gnaneshwar.jpeg",
+      "id": "C4",
+      "name": "Afrah Khan",
+      "photo": "/assets/round1/Afrah_Khan.jpeg",
       "script": "\u201cThe silver archives have not been opened in centuries. Take this royal crest to unlock the next chamber.\u201d",
-      "code": "SILVERCROWN"
+      "code": "SILVERCROWN",
+      "assignedLocation": "Canteen"
     },
     "clue3": {
       "cipherType": "Royal Manuscript // While Loop",
@@ -391,11 +403,12 @@
       "codeword": "CROWN"
     },
     "crewmate": {
-      "id": "CM-5",
-      "name": "Venkata Sai Kiran",
-      "photo": "/assets/round1/Venkata_Sai_Kiran.jpg",
+      "id": "C5",
+      "name": "Asmi",
+      "photo": "/assets/round1/Asmi_Deshpande.png",
       "script": "\u201cThe royal vault keeper left behind this golden token. Carry it to the court and claim the heritage.\u201d",
-      "code": "GOLDENVAULT"
+      "code": "GOLDENVAULT",
+      "assignedLocation": "New Stairs"
     },
     "clue3": {
       "cipherType": "Royal Manuscript // Multiplication",
@@ -423,11 +436,12 @@
       "codeword": "COMPASS"
     },
     "crewmate": {
-      "id": "CM-6",
-      "name": "Ailneni Naineeth",
-      "photo": "/assets/round1/Ailneni_Naineeth.jpg",
+      "id": "C6",
+      "name": "Sreyash Pattnaik",
+      "photo": "/assets/round1/Sreyash_Pattnaik.jpeg",
       "script": "\u201cThe celestial crystal charts the way through forbidden paths. Take this fragment to unveil the lost map.\u201d",
-      "code": "CRYSTALMAP"
+      "code": "CRYSTALMAP",
+      "assignedLocation": "Badminton Court"
     },
     "clue3": {
       "cipherType": "Royal Manuscript // Modulo",
@@ -455,11 +469,12 @@
       "codeword": "CHEST"
     },
     "crewmate": {
-      "id": "CM-7",
-      "name": "K. Sahitya",
-      "photo": "/assets/round1/K_Sahitya.jpeg",
+      "id": "C7",
+      "name": "Yash Raj",
+      "photo": "/assets/round1/Yash_Raj.jpg",
       "script": "\u201cAncient rubies illuminated the forgotten corridor. Take this gem key and advance your search.\u201d",
-      "code": "ANCIENTRUBY"
+      "code": "ANCIENTRUBY",
+      "assignedLocation": "Main Gate"
     },
     "clue3": {
       "cipherType": "Royal Manuscript // Addition",
@@ -487,11 +502,12 @@
       "codeword": "CROWN"
     },
     "crewmate": {
-      "id": "CM-8",
-      "name": "Saanvi Reddy",
-      "photo": "/assets/round1/Saanvi_Reddy.jpg",
+      "id": "C8",
+      "name": "Bhavadesh",
+      "photo": "/assets/round1/Bhavadesh.jpg",
       "script": "\u201cThe lost sceptre has been located! Decrypt the inscription to reach the final sanctuary.\u201d",
-      "code": "LOSTSCEPTRE"
+      "code": "LOSTSCEPTRE",
+      "assignedLocation": "Ground"
     },
     "clue3": {
       "cipherType": "Royal Manuscript // For Loop",
@@ -519,11 +535,12 @@
       "codeword": "MAGNIFYING GLASS | MAGNIFYINGGLASS"
     },
     "crewmate": {
-      "id": "CM-1",
-      "name": "Bannur Jishnesh Reddy",
-      "photo": "/assets/round1/Bannur_Jishnesh_Reddy.jpg",
+      "id": "C1",
+      "name": "Praanjali",
+      "photo": "/assets/round1/Praanjali.jpeg",
       "script": "\u201cPsst! Detective, keep your voice down. The syndicate stash was moved, but they dropped this diamond intercept.\u201d",
-      "code": "REDDIAMOND"
+      "code": "REDDIAMOND",
+      "assignedLocation": "Football Net"
     },
     "clue3": {
       "cipherType": "Caesar Cipher // Shift -4",
@@ -551,11 +568,12 @@
       "codeword": "STETHOSCOPE"
     },
     "crewmate": {
-      "id": "CM-2",
-      "name": "Enoch Michael",
-      "photo": "/assets/round1/Enoch_Michael.jpg",
+      "id": "C2",
+      "name": "K. Pujitha Sri",
+      "photo": "/assets/round1/K_Pujitha_Sri.jpg",
       "script": "\u201cYou found me just in time. The vault combination was transmitted in fragments. Here is the intercept slip.\u201d",
-      "code": "VAULTBREAKER"
+      "code": "VAULTBREAKER",
+      "assignedLocation": "Garden"
     },
     "clue3": {
       "cipherType": "ASCII Decimal Intercept",
@@ -583,11 +601,12 @@
       "codeword": "PAINTBRUSH"
     },
     "crewmate": {
-      "id": "CM-3",
-      "name": "Gyanendra Sethi",
-      "photo": "/assets/round1/Gyanendra_Sethi.jpg",
+      "id": "C3",
+      "name": "Khyathi Anand",
+      "photo": "/assets/round1/Khyathi_Anand.png",
       "script": "\u201cThe evidence was nearly concealed under fresh coats. Here is the forged canvas intercept \u2014 decode it immediately.\u201d",
-      "code": "FORGEDCANVAS"
+      "code": "FORGEDCANVAS",
+      "assignedLocation": "Placement Court"
     },
     "clue3": {
       "cipherType": "Binary Byte Intercept",
@@ -615,11 +634,12 @@
       "codeword": "KEYLOGGER"
     },
     "crewmate": {
-      "id": "CM-4",
-      "name": "Gnaneshwar",
-      "photo": "/assets/round1/Gnaneshwar.jpeg",
+      "id": "C4",
+      "name": "Afrah Khan",
+      "photo": "/assets/round1/Afrah_Khan.jpeg",
       "script": "\u201cThey breached the mainframe and attempted to wipe the audit logs. Take this hacker trace and find their drop point.\u201d",
-      "code": "GHOSTHACKER"
+      "code": "GHOSTHACKER",
+      "assignedLocation": "Canteen"
     },
     "clue3": {
       "cipherType": "Reverse Cipher",
@@ -647,11 +667,12 @@
       "codeword": "CONTRABAND"
     },
     "crewmate": {
-      "id": "CM-5",
-      "name": "Venkata Sai Kiran",
-      "photo": "/assets/round1/Venkata_Sai_Kiran.jpg",
+      "id": "C5",
+      "name": "Asmi",
+      "photo": "/assets/round1/Asmi_Deshpande.png",
       "script": "\u201cThe midnight shipment arrived under false manifests. Decrypt the manifest token before they clear out.\u201d",
-      "code": "MIDNIGHTCARGO"
+      "code": "MIDNIGHTCARGO",
+      "assignedLocation": "New Stairs"
     },
     "clue3": {
       "cipherType": "Caesar Cipher // Shift +5",
@@ -679,11 +700,12 @@
       "codeword": "COUNTERFEIT"
     },
     "crewmate": {
-      "id": "CM-6",
-      "name": "Ailneni Naineeth",
-      "photo": "/assets/round1/Ailneni_Naineeth.jpg",
+      "id": "C6",
+      "name": "Sreyash Pattnaik",
+      "photo": "/assets/round1/Sreyash_Pattnaik.jpeg",
       "script": "\u201cCounterfeit notes were flooded through the perimeter. Take this sample code and trace the source.\u201d",
-      "code": "FAKENOTE"
+      "code": "FAKENOTE",
+      "assignedLocation": "Badminton Court"
     },
     "clue3": {
       "cipherType": "Hexadecimal Intercept",
@@ -711,11 +733,12 @@
       "codeword": "EXTORTION"
     },
     "crewmate": {
-      "id": "CM-7",
-      "name": "K. Sahitya",
-      "photo": "/assets/round1/K_Sahitya.jpeg",
+      "id": "C7",
+      "name": "Yash Raj",
+      "photo": "/assets/round1/Yash_Raj.jpg",
       "script": "\u201cThe extortionist left behind this transmission. Translate the threat telemetry to corner them.\u201d",
-      "code": "SILENTTHREAT"
+      "code": "SILENTTHREAT",
+      "assignedLocation": "Main Gate"
     },
     "clue3": {
       "cipherType": "Morse Code Intercept",
@@ -743,11 +766,12 @@
       "codeword": "ESPIONAGE"
     },
     "crewmate": {
-      "id": "CM-8",
-      "name": "Saanvi Reddy",
-      "photo": "/assets/round1/Saanvi_Reddy.jpg",
+      "id": "C8",
+      "name": "Bhavadesh",
+      "photo": "/assets/round1/Bhavadesh.jpg",
       "script": "\u201cOur surveillance caught the operative red-handed. Here is the blueprint index \u2014 decrypt the contact zone.\u201d",
-      "code": "STOLENBLUEPRINT"
+      "code": "STOLENBLUEPRINT",
+      "assignedLocation": "Ground"
     },
     "clue3": {
       "cipherType": "Atbash Cipher",
@@ -775,11 +799,12 @@
       "codeword": "COMPASS"
     },
     "crewmate": {
-      "id": "CM-1",
-      "name": "Bannur Jishnesh Reddy",
-      "photo": "/assets/round1/Bannur_Jishnesh_Reddy.jpg",
+      "id": "C1",
+      "name": "Praanjali",
+      "photo": "/assets/round1/Praanjali.jpeg",
       "script": "\u201cAhoy, matey! Ye weathered the storm and tracked the Black Pearl\u2019s wake. Take this pirate token to plot yer course.\u201d",
-      "code": "BLACKPEARL"
+      "code": "BLACKPEARL",
+      "assignedLocation": "Football Net"
     },
     "clue3": {
       "cipherType": "ASCII Decimal Intercept",
@@ -807,11 +832,12 @@
       "codeword": "MAP"
     },
     "crewmate": {
-      "id": "CM-2",
-      "name": "Enoch Michael",
-      "photo": "/assets/round1/Enoch_Michael.jpg",
+      "id": "C2",
+      "name": "K. Pujitha Sri",
+      "photo": "/assets/round1/K_Pujitha_Sri.jpg",
       "script": "\u201cThe black flag flies high upon these waters! Decrypt the Captain\u2019s coordinates and sail on!\u201d",
-      "code": "BLACKFLAG"
+      "code": "BLACKFLAG",
+      "assignedLocation": "Garden"
     },
     "clue3": {
       "cipherType": "Binary to Decimal",
@@ -839,11 +865,12 @@
       "codeword": "CHEST"
     },
     "crewmate": {
-      "id": "CM-3",
-      "name": "Gyanendra Sethi",
-      "photo": "/assets/round1/Gyanendra_Sethi.jpg",
+      "id": "C3",
+      "name": "Khyathi Anand",
+      "photo": "/assets/round1/Khyathi_Anand.png",
       "script": "\u201cDead men tell no tales, but the skull token marks the sunken chest. Enter the code to unlock the navigation charts.\u201d",
-      "code": "SKULL"
+      "code": "SKULL",
+      "assignedLocation": "Placement Court"
     },
     "clue3": {
       "cipherType": "Captain's Log // Variable Value",
@@ -871,11 +898,12 @@
       "codeword": "CAPTAIN"
     },
     "crewmate": {
-      "id": "CM-4",
-      "name": "Gnaneshwar",
-      "photo": "/assets/round1/Gnaneshwar.jpeg",
+      "id": "C4",
+      "name": "Afrah Khan",
+      "photo": "/assets/round1/Afrah_Khan.jpeg",
       "script": "\u201cBy the Jolly Roger, ye\u2019ve proven yer mettle! Take this sea dispatch and steer for the next port.\u201d",
-      "code": "JOLLYROGER"
+      "code": "JOLLYROGER",
+      "assignedLocation": "Canteen"
     },
     "clue3": {
       "cipherType": "ASCII Decimal Intercept",
@@ -903,11 +931,12 @@
       "codeword": "KEYBOARD"
     },
     "crewmate": {
-      "id": "CM-5",
-      "name": "Venkata Sai Kiran",
-      "photo": "/assets/round1/Venkata_Sai_Kiran.jpg",
+      "id": "C5",
+      "name": "Asmi",
+      "photo": "/assets/round1/Asmi_Deshpande.png",
       "script": "\u201cThe deep blue seas hold many mysteries. Here is the Captain\u2019s navigation mark \u2014 steer true!\u201d",
-      "code": "SEABLUE"
+      "code": "SEABLUE",
+      "assignedLocation": "New Stairs"
     },
     "clue3": {
       "cipherType": "Captain's Log // Modulo",
@@ -935,11 +964,12 @@
       "codeword": "CLOCK"
     },
     "crewmate": {
-      "id": "CM-6",
-      "name": "Ailneni Naineeth",
-      "photo": "/assets/round1/Ailneni_Naineeth.jpg",
+      "id": "C6",
+      "name": "Sreyash Pattnaik",
+      "photo": "/assets/round1/Sreyash_Pattnaik.jpeg",
       "script": "\u201cHoist the red sails! The winds are favorable. Take this cipher and search the next harbor.\u201d",
-      "code": "REDSAIL"
+      "code": "REDSAIL",
+      "assignedLocation": "Badminton Court"
     },
     "clue3": {
       "cipherType": "Captain's Log // Variable Swap",
@@ -967,11 +997,12 @@
       "codeword": "FUTURE"
     },
     "crewmate": {
-      "id": "CM-7",
-      "name": "K. Sahitya",
-      "photo": "/assets/round1/K_Sahitya.jpeg",
+      "id": "C7",
+      "name": "Yash Raj",
+      "photo": "/assets/round1/Yash_Raj.jpg",
       "script": "\u201cThe skull banner marks the path forward. Decrypt the Captain\u2019s riddle before the tide turns.\u201d",
-      "code": "SKULLFLAG"
+      "code": "SKULLFLAG",
+      "assignedLocation": "Main Gate"
     },
     "clue3": {
       "cipherType": "Captain's Log // Arithmetic Trace",
@@ -999,11 +1030,12 @@
       "codeword": "MS DHONI | MSD | DHONI"
     },
     "crewmate": {
-      "id": "CM-8",
-      "name": "Saanvi Reddy",
-      "photo": "/assets/round1/Saanvi_Reddy.jpg",
+      "id": "C8",
+      "name": "Bhavadesh",
+      "photo": "/assets/round1/Bhavadesh.jpg",
       "script": "\u201cYe\u2019ve reached the final leg of the Captain\u2019s voyage! Take this treasure token and make for the final prize.\u201d",
-      "code": "TREASURE"
+      "code": "TREASURE",
+      "assignedLocation": "Ground"
     },
     "clue3": {
       "cipherType": "Captain's Log // Branching",

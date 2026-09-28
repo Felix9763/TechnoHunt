@@ -111,7 +111,7 @@ export default function LoginPage() {
                 type="password"
                 inputMode="numeric"
                 maxLength={6}
-                placeholder="4-digit PIN"
+                placeholder="6-digit PIN"
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
                 className="w-full bg-paper-inset border-2 border-line px-3.5 py-2.5 font-mono text-base font-bold text-ink placeholder:text-ink-soft/60 focus:border-ink focus:outline-none transition-colors"

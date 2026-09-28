@@ -2,6 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import { fetchActiveRound, updateActiveRound } from './db';
 
+// Static fallbacks to guarantee 100% serverless / Vercel compatibility
+import round1TeamsStatic from '@/config/round1/teams.json';
+import round1StagesStatic from '@/config/round1/stages.json';
+import round2TeamsStatic from '@/config/round2/teams.json';
+import round2StagesStatic from '@/config/round2/stages.json';
+import settingsStatic from '@/config/settings.json';
+
 export type RoundId = 'round1' | 'round2';
 
 export interface Team {
@@ -154,9 +161,9 @@ export function getSettings(): Settings {
       return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
     }
   } catch (err) {
-    console.error('Failed to read settings.json:', err);
+    console.warn('Using bundled settings.json fallback:', err);
   }
-  return {
+  return (settingsStatic as any) || {
     submitCooldownSeconds: 4,
     maxWrongAttempts: 3,
     lockoutSeconds: 90,
@@ -172,47 +179,25 @@ export function checkRoundConfig(round: RoundId): {
   stageCount: number;
   reason?: string;
 } {
-  try {
-    const teamsPath = path.join(process.cwd(), 'config', round, 'teams.json');
-    const stagesPath = path.join(process.cwd(), 'config', round, 'stages.json');
+  const teams = getTeamsForRound(round);
+  const stages = getStagesForRound(round);
+  const teamCount = Array.isArray(teams) ? teams.length : 0;
+  const stageCount = typeof stages === 'object' && stages !== null ? Object.keys(stages).length : 0;
 
-    if (!fs.existsSync(teamsPath) || !fs.existsSync(stagesPath)) {
-      return {
-        isReady: false,
-        teamCount: 0,
-        stageCount: 0,
-        reason: `${round} config files missing`,
-      };
-    }
-
-    const teams = JSON.parse(fs.readFileSync(teamsPath, 'utf-8'));
-    const stages = JSON.parse(fs.readFileSync(stagesPath, 'utf-8'));
-
-    const teamCount = Array.isArray(teams) ? teams.length : 0;
-    const stageCount = typeof stages === 'object' && stages !== null ? Object.keys(stages).length : 0;
-
-    if (teamCount === 0 || stageCount === 0) {
-      return {
-        isReady: false,
-        teamCount,
-        stageCount,
-        reason: `${round === 'round1' ? 'Round 1' : 'Round 2'} config not loaded yet`,
-      };
-    }
-
-    return {
-      isReady: true,
-      teamCount,
-      stageCount,
-    };
-  } catch (err: any) {
+  if (teamCount === 0 || stageCount === 0) {
     return {
       isReady: false,
-      teamCount: 0,
-      stageCount: 0,
-      reason: err?.message || 'Error parsing config',
+      teamCount,
+      stageCount,
+      reason: `${round === 'round1' ? 'Round 1' : 'Round 2'} config not loaded yet`,
     };
   }
+
+  return {
+    isReady: true,
+    teamCount,
+    stageCount,
+  };
 }
 
 export async function getLiveActiveRound(): Promise<RoundId> {
@@ -242,9 +227,9 @@ export function getTeamsForRound(round: RoundId): Team[] {
       return JSON.parse(fs.readFileSync(teamsPath, 'utf-8'));
     }
   } catch (err) {
-    console.error(`Failed to load teams for ${round}:`, err);
+    console.warn(`Using bundled teams.json fallback for ${round}:`, err);
   }
-  return [];
+  return round === 'round1' ? (round1TeamsStatic as Team[]) : (round2TeamsStatic as Team[]);
 }
 
 export function getStagesForRound(round: RoundId): Record<string, StageData> {
@@ -254,9 +239,11 @@ export function getStagesForRound(round: RoundId): Record<string, StageData> {
       return JSON.parse(fs.readFileSync(stagesPath, 'utf-8'));
     }
   } catch (err) {
-    console.error(`Failed to load stages for ${round}:`, err);
+    console.warn(`Using bundled stages.json fallback for ${round}:`, err);
   }
-  return {};
+  return round === 'round1'
+    ? (round1StagesStatic as Record<string, StageData>)
+    : (round2StagesStatic as Record<string, StageData>);
 }
 
 export async function getActiveRoundData(): Promise<{

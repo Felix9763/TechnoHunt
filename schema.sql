@@ -42,18 +42,31 @@ create table if not exists finale_submissions (
   primary key (round, team_code)
 );
 
+-- 5. Team registrations (envelope check-in and clearance confirmation)
+create table if not exists team_registrations (
+  round text not null,
+  team_code text not null,
+  team_name text not null default '',
+  confirmed boolean not null default false,
+  checked_in_at timestamptz not null default now(),
+  confirmed_at timestamptz,
+  primary key (round, team_code)
+);
+
 -- STRICT DATABASE LOCKDOWN (Zero Direct Access via Supabase REST / Anon Key)
 -- 1. Enable Row Level Security (RLS) on all tables (denies all operations by default)
 alter table event_state enable row level security;
 alter table team_progress enable row level security;
 alter table attempts enable row level security;
 alter table finale_submissions enable row level security;
+alter table team_registrations enable row level security;
 
 -- 2. Explicitly REVOKE ALL permissions from anon, authenticated, and public roles
 revoke all on table event_state from anon, authenticated, public;
 revoke all on table team_progress from anon, authenticated, public;
 revoke all on table attempts from anon, authenticated, public;
 revoke all on table finale_submissions from anon, authenticated, public;
+revoke all on table team_registrations from anon, authenticated, public;
 
 revoke all on all sequences in schema public from anon, authenticated, public;
 revoke all on all routines in schema public from anon, authenticated, public;

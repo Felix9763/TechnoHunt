@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { SanitizedStageData } from '@/lib/round';
+import type { SanitizedStageData } from '@/lib/round';
 import ThemeToggle from '@/components/ThemeToggle';
 
 interface DashboardClientProps {
