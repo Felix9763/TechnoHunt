@@ -911,7 +911,17 @@ export default function DashboardClient({
                   </div>
                 )}
 
-                {stageData.clue4?.prompt && (
+                {stageData.clue4?.isPhysicalPuzzle ? (
+                  <div className="detective-directive p-3.5 shadow-sm border border-dashed border-evidence-red/60 bg-evidence-red/5">
+                    <div className="flex items-center gap-1.5 mb-1.5 text-xs font-mono font-bold text-evidence-red tracking-wider">
+                      <span>📋</span>
+                      <span>ON-SITE EVIDENCE PUZZLE</span>
+                    </div>
+                    <p className="text-xs md:text-sm font-mono text-ink leading-relaxed font-semibold">
+                      The puzzle is physical. Head to the sector from Clue 3&rsquo;s riddle, locate the hidden evidence on site, solve it, and enter the answer directly below.
+                    </p>
+                  </div>
+                ) : stageData.clue4?.prompt ? (
                   <div className="newspaper-quote p-3.5 shadow-sm border border-line-light">
                     <div className="text-xs font-mono text-evidence-red mb-1 font-bold tracking-wider uppercase">
                       ON-SITE EVIDENCE PUZZLE:
@@ -920,8 +930,8 @@ export default function DashboardClient({
                       {stageData.clue4.prompt}
                     </p>
                   </div>
-                )}
-                
+                ) : null}
+
                 {/* Harmonious Detective Directive */}
                 <div className="detective-directive p-3 shadow-sm">
                   <div className="flex items-center gap-1.5 mb-1 text-xs font-mono font-bold text-evidence-red tracking-wider">
@@ -929,7 +939,9 @@ export default function DashboardClient({
                     <span>DETECTIVE PROTOCOL</span>
                   </div>
                   <p className="text-xs md:text-sm font-mono text-ink leading-relaxed font-semibold">
-                    Decode the riddle above to determine where the suspect fled. Search the sector on site, find the hidden puzzle left behind, solve the calculation, and enter the final result below.
+                    {stageData.clue4?.isPhysicalPuzzle
+                      ? 'Find the physical evidence puzzle at the on-site location. Solve it, then submit the answer below to close the case.'
+                      : 'Decode the riddle above to determine where the suspect fled. Search the sector on site, find the hidden puzzle left behind, solve the calculation, and enter the final result below.'}
                   </p>
                 </div>
               </div>

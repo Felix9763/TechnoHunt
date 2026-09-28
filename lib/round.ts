@@ -81,6 +81,7 @@ export interface SanitizedStageData {
   };
   clue4?: {
     prompt?: string;
+    isPhysicalPuzzle?: boolean;
   };
   final?: {
     zone?: string;
@@ -147,9 +148,13 @@ export function getSanitizedStageData(
   }
 
   // 4. Clue 4 unlocks once clue3 is solved (currentStage is clue4 or final)
+  // In Round 1, the puzzle is physical (on-site evidence) — no prompt is shown on screen.
+  // In Round 2, the prompt is displayed digitally.
   if (['clue4', 'final'].includes(currentStage) && fullData.clue4) {
+    const isRound1 = round === 'round1';
     sanitized.clue4 = {
-      ...(fullData.clue4.prompt ? { prompt: fullData.clue4.prompt } : {}),
+      isPhysicalPuzzle: isRound1,
+      ...(!isRound1 && fullData.clue4.prompt ? { prompt: fullData.clue4.prompt } : {}),
     };
     // Note: clue4 answer and zone are NEVER provided to client
   }
