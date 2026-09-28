@@ -56,6 +56,7 @@ export interface StageData {
   };
   final?: {
     zone?: string;
+    riddle?: string;
     directive?: string;
   };
   [key: string]: any;
@@ -85,6 +86,7 @@ export interface SanitizedStageData {
   };
   final?: {
     zone?: string;
+    riddle?: string;
     directive?: string;
   };
 }
@@ -163,6 +165,7 @@ export function getSanitizedStageData(
   if (currentStage === 'final' && fullData.final) {
     sanitized.final = {
       zone: fullData.final.zone,
+      ...(fullData.final.riddle ? { riddle: fullData.final.riddle } : {}),
       directive: fullData.final.directive,
     };
   }

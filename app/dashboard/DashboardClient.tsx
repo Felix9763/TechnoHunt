@@ -896,7 +896,7 @@ export default function DashboardClient({
               </p>
             ) : currentIndex > 3 ? (
               <div className="text-sm font-mono text-verified-teal font-bold pt-1">
-                ✓ Physical evidence authenticated — Empty stage unlocked!
+                ✓ Physical evidence authenticated — Final destination unlocked!
               </div>
             ) : (
               <div className="space-y-3 mt-2.5">
@@ -961,7 +961,7 @@ export default function DashboardClient({
           >
             <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-line-light">
               <span className="text-xs font-mono text-evidence-red font-bold tracking-wider uppercase">
-                CASE RESOLUTION // {stageData.final?.zone ? stageData.final.zone.toUpperCase() : 'EMPTY STAGE'}
+                CASE RESOLUTION // {currentStage === 'final' && stageData.final?.zone ? stageData.final.zone.toUpperCase() : '██████'}
               </span>
               {currentStage === 'final' && (
                 <span className="rubber-stamp text-evidence-red">
@@ -971,7 +971,9 @@ export default function DashboardClient({
             </div>
 
             <h3 className="font-serif text-xl text-ink font-bold mb-2">
-              Final Destination: {stageData.final?.zone || 'Empty Stage'}
+              {currentStage === 'final'
+                ? `Final Destination: ${stageData.final?.zone || 'Empty Stage'}`
+                : 'Final Destination: ██████████'}
             </h3>
 
             {currentStage !== 'final' ? (
@@ -980,16 +982,26 @@ export default function DashboardClient({
               </p>
             ) : (
               <div className="space-y-3.5 mt-2.5">
+                {stageData.final?.riddle && (
+                  <div className="newspaper-quote p-3.5 shadow-sm border border-line-light">
+                    <div className="text-xs font-mono text-evidence-red mb-1 font-bold tracking-wider uppercase">
+                      FIND THE LOCATION:
+                    </div>
+                    <p className="text-sm md:text-base font-serif italic font-bold leading-relaxed text-ink">
+                      &ldquo;{stageData.final.riddle}&rdquo;
+                    </p>
+                  </div>
+                )}
                 <div className="text-sm font-mono bg-paper-inset border-l-4 border-verified-teal p-3.5 text-ink shadow-sm font-medium">
                   <span className="font-bold block mb-1 text-verified-teal text-xs tracking-wider uppercase">FINAL DIRECTIVE UNLOCKED:</span>
-                  Whatever went missing, it didn’t stay lost for long. Get to the final coordinates before anyone else does.
+                  Whatever went missing, it didn&apos;t stay lost for long. Get to the final coordinates before anyone else does.
                 </div>
                 <div className="detective-directive p-3.5 shadow-md">
                   <div className="font-bold text-evidence-red mb-1.5 tracking-wider uppercase text-xs">
                     PHYSICAL SPRINT REQUIRED:
                   </div>
                   <p className="text-xs md:text-sm font-mono text-ink font-semibold leading-relaxed">
-                    {stageData.final?.directive || `Proceed immediately to ${stageData.final?.zone || 'Empty Stage'}. The first 3 teams to reach the organizers will be confirmed on the podium!`}
+                    {stageData.final?.directive || `Proceed immediately to ${stageData.final?.zone || 'the final destination'}. The first 3 teams to reach the organizers will be confirmed on the podium!`}
                   </p>
                 </div>
               </div>
