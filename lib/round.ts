@@ -202,7 +202,7 @@ export function checkRoundConfig(round: RoundId): {
 
 export async function getLiveActiveRound(): Promise<RoundId> {
   const round = await fetchActiveRound();
-  return round === 'round1' ? 'round1' : 'round2';
+  return round === 'round2' ? 'round2' : 'round1';
 }
 
 export async function setLiveActiveRound(round: RoundId): Promise<{ success: boolean; error?: string }> {

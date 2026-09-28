@@ -1,4 +1,5 @@
 {
+  "defaultRound": "round1",
   "submitCooldownSeconds": 4,
   "maxWrongAttempts": 3,
   "lockoutSeconds": 90,

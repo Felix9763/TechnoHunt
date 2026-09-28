@@ -117,7 +117,7 @@ export async function fetchActiveRound(): Promise<string> {
         .from('event_state')
         .select('active_round')
         .eq('id', 1)
-        .single();
+        .maybeSingle();
       if (!error && data?.active_round) {
         return data.active_round;
       }
@@ -135,11 +135,23 @@ export async function updateActiveRound(round: string): Promise<boolean> {
   const sb = getSupabase();
   if (sb) {
     try {
-      const { error } = await sb
+      // 1. Direct update on existing row id = 1
+      const { error: updateErr } = await sb
         .from('event_state')
-        .upsert({ id: 1, active_round: round });
-      if (error) {
-        console.error('Supabase updateActiveRound error:', error.message);
+        .update({ active_round: round })
+        .eq('id', 1);
+
+      if (!updateErr) {
+        return true;
+      }
+
+      // 2. Upsert with explicit onConflict if row 1 did not exist
+      const { error: upsertErr } = await sb
+        .from('event_state')
+        .upsert({ id: 1, active_round: round }, { onConflict: 'id' });
+
+      if (upsertErr) {
+        console.error('Supabase updateActiveRound error:', upsertErr.message);
         return false;
       }
       return true;
