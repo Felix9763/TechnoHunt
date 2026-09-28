@@ -540,13 +540,26 @@ export default function DashboardClient({
               </div>
             ) : (
               <div className="space-y-3 mt-2.5">
-                {stageData.clue2?.riddle && (
+                {stageData.clue2?.riddle ? (
                   <div className="newspaper-quote p-3.5 shadow-sm border border-line-light">
                     <div className="text-xs font-mono text-evidence-red mb-1 font-bold tracking-wider uppercase">
                       CRIME SCENE RIDDLE:
                     </div>
                     <p className="text-sm md:text-base font-serif italic font-bold leading-relaxed text-ink">
                       &ldquo;{stageData.clue2.riddle}&rdquo;
+                    </p>
+                  </div>
+                ) : (
+                  <div className="newspaper-quote p-3.5 shadow-sm border border-amber-900/30 bg-amber-500/10">
+                    <div className="text-xs font-mono text-evidence-red mb-1 font-bold tracking-wider uppercase flex items-center gap-1.5">
+                      <span>✉</span>
+                      <span>PHYSICAL DISPATCH ENVELOPE // CLUE 01</span>
+                    </div>
+                    <p className="text-sm md:text-base font-serif italic font-bold leading-relaxed text-ink mb-1.5">
+                      &ldquo;Consult the physical mission dispatch envelope handed to your team at the briefing desk.&rdquo;
+                    </p>
+                    <p className="text-xs font-mono text-ink-soft leading-relaxed">
+                      Decipher the physical riddle inside the envelope to discover your team&apos;s starting location on campus. Once at the location, find the hidden physical codeword and submit it below to authenticate.
                     </p>
                   </div>
                 )}
@@ -569,7 +582,9 @@ export default function DashboardClient({
                     <span>DETECTIVE PROTOCOL</span>
                   </div>
                   <p className="text-xs md:text-sm font-mono text-ink leading-relaxed font-semibold">
-                    Study the lead riddle above carefully to deduce the location of the scene. Search the area on site, find the hidden clue card, solve the on-site puzzle, and enter the verified codeword below.
+                    {stageData.clue2?.riddle
+                      ? 'Study the lead riddle above carefully to deduce the location of the scene. Search the area on site, find the hidden clue card, solve the on-site puzzle, and enter the verified codeword below.'
+                      : 'Do not search for online riddles. Your starting clue is physical. Solve the riddle inside your physical dispatch envelope, head to the campus location, and submit the verified codeword below.'}
                   </p>
                 </div>
               </div>
@@ -609,9 +624,15 @@ export default function DashboardClient({
             </h3>
 
             {currentIndex < 1 ? (
-              <p className="text-xs md:text-sm font-mono text-ink-soft font-semibold">
-                🔒 Solve Lead 01 to unlock the witness dossier
-              </p>
+              <div className="p-3 bg-line/20 border border-line-light rounded space-y-1">
+                <p className="text-xs md:text-sm font-mono text-ink-mid font-semibold flex items-center gap-1.5">
+                  <span>🔒</span>
+                  <span>WITNESS DOSSIER ENCRYPTED</span>
+                </p>
+                <p className="text-[11px] font-mono text-ink-soft">
+                  Surveillance photograph, subject identity, and contact instructions will unlock once your team clears Lead 01 by submitting the verified physical codeword.
+                </p>
+              </div>
             ) : currentIndex > 1 ? (
               /* Witness Statement REVEALED AFTER CODE ENTRY */
               <div className="space-y-3 pt-1">
@@ -648,6 +669,15 @@ export default function DashboardClient({
                         src={stageData.crewmate.photo}
                         alt={stageData.crewmate?.name || 'Person of Interest'}
                         className="max-h-76 w-auto max-w-full object-contain mx-auto transition-transform duration-200 group-hover:scale-[1.02]"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (!target.dataset.retried && stageData.crewmate?.photo) {
+                            target.dataset.retried = '1';
+                            if (stageData.crewmate.photo.startsWith('/assets/')) {
+                              target.src = stageData.crewmate.photo.replace('/assets/', '/');
+                            }
+                          }
+                        }}
                       />
                       <div className="absolute bottom-2 right-2 bg-ink/90 text-paper font-mono text-xs px-2.5 py-1 border border-paper/30 backdrop-blur-sm pointer-events-none flex items-center gap-1.5 shadow font-bold">
                         <span>🔍 Tap to expand</span>
@@ -1037,6 +1067,15 @@ export default function DashboardClient({
               src={stageData.crewmate.photo}
               alt={stageData.crewmate?.name || 'Person of Interest'}
               className="max-h-[75vh] max-w-[95vw] object-contain rounded border-2 border-paper/30 shadow-2xl"
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (!target.dataset.retried && stageData.crewmate?.photo) {
+                  target.dataset.retried = '1';
+                  if (stageData.crewmate.photo.startsWith('/assets/')) {
+                    target.src = stageData.crewmate.photo.replace('/assets/', '/');
+                  }
+                }
+              }}
             />
           </div>
 

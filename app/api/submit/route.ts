@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
     await updateTeamProgress(activeRound, teamCode, nextStage);
 
     // Securely return sanitized next stage data so client never gets answers or future stages
-    const nextSanitizedData = getSanitizedStageData(teamStages, nextStage);
+    const nextSanitizedData = getSanitizedStageData(teamStages, nextStage, activeRound);
 
     return NextResponse.json({
       correct: true,

@@ -1232,6 +1232,15 @@ PIN: ${t.pin}
                                   src={st.crewmate.photo}
                                   alt={st.crewmate.name || 'Crewmate'}
                                   onClick={() => setAdminPhotoModal({ url: st.crewmate.photo, name: st.crewmate.name || st.crewmate.id })}
+                                  onError={(e) => {
+                                    const target = e.currentTarget;
+                                    if (!target.dataset.retried && st.crewmate?.photo) {
+                                      target.dataset.retried = '1';
+                                      if (st.crewmate.photo.startsWith('/assets/')) {
+                                        target.src = st.crewmate.photo.replace('/assets/', '/');
+                                      }
+                                    }
+                                  }}
                                   className="w-16 h-16 object-contain rounded border border-line bg-neutral-900 shrink-0 cursor-pointer hover:opacity-85 shadow"
                                   title="Click to view full photo"
                                 />
@@ -1434,6 +1443,15 @@ PIN: ${t.pin}
                                   src={st.crewmate.photo}
                                   alt={st.crewmate.name}
                                   onClick={() => setAdminPhotoModal({ url: st.crewmate.photo, name: st.crewmate.name })}
+                                  onError={(e) => {
+                                    const target = e.currentTarget;
+                                    if (!target.dataset.retried && st.crewmate?.photo) {
+                                      target.dataset.retried = '1';
+                                      if (st.crewmate.photo.startsWith('/assets/')) {
+                                        target.src = st.crewmate.photo.replace('/assets/', '/');
+                                      }
+                                    }
+                                  }}
                                   className="w-7 h-7 object-contain rounded border border-line bg-neutral-900 cursor-pointer shrink-0"
                                 />
                               )}
@@ -1513,6 +1531,15 @@ PIN: ${t.pin}
             <img
               src={adminPhotoModal.url}
               alt={adminPhotoModal.name}
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (!target.dataset.retried && adminPhotoModal?.url) {
+                  target.dataset.retried = '1';
+                  if (adminPhotoModal.url.startsWith('/assets/')) {
+                    target.src = adminPhotoModal.url.replace('/assets/', '/');
+                  }
+                }
+              }}
               className="max-h-[80vh] max-w-[95vw] object-contain rounded border border-white/20 shadow-2xl"
             />
           </div>

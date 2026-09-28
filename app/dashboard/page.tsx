@@ -44,7 +44,7 @@ export default async function DashboardPage() {
   const currentStage = await fetchTeamProgress(activeRound, session.teamCode);
   const stages = getStagesForRound(activeRound);
   const teamStages = stages[session.teamCode] || {};
-  const sanitizedStages = getSanitizedStageData(teamStages, currentStage);
+  const sanitizedStages = getSanitizedStageData(teamStages, currentStage, activeRound);
 
   return (
     <DashboardClient

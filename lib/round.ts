@@ -65,6 +65,7 @@ export interface SanitizedStageData {
   clue2?: {
     riddle?: string;
     prompt?: string;
+    isPhysicalEnvelope?: boolean;
   };
   crewmate?: {
     id?: string;
@@ -89,19 +90,29 @@ export interface SanitizedStageData {
 
 export function getSanitizedStageData(
   fullData: StageData | null | undefined,
-  currentStage: string
+  currentStage: string,
+  round: RoundId = 'round1'
 ): SanitizedStageData {
   if (!fullData) return {};
 
   const sanitized: SanitizedStageData = {};
 
-  // 1. Clue 2 is always unlocked from the start (only riddle/prompt provided, location is never revealed)
+  // 1. Clue 2 is always unlocked from the start.
+  // In Round 1, the riddle is physical (inside the envelope handed to teams at the start),
+  // so we NEVER leak or give away the riddle or prompt on screen.
+  // In Round 2, riddles are digital and displayed on screen.
   if (fullData.clue2) {
+    const isRound1 = round === 'round1';
     sanitized.clue2 = {
       ...(currentStage === 'clue2'
         ? {
-            riddle: fullData.clue2.riddle,
-            ...(fullData.clue2.prompt ? { prompt: fullData.clue2.prompt } : {}),
+            isPhysicalEnvelope: isRound1,
+            ...(!isRound1
+              ? {
+                  riddle: fullData.clue2.riddle,
+                  ...(fullData.clue2.prompt ? { prompt: fullData.clue2.prompt } : {}),
+                }
+              : {}),
           }
         : {}),
     };
