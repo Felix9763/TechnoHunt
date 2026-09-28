@@ -1,322 +1,290 @@
 [
   {
     "code": "A1",
-    "pin": "864916",
-    "track": "A"
-  },
-  {
-    "code": "A2",
-    "pin": "180727",
-    "track": "A"
-  },
-  {
-    "code": "A3",
-    "pin": "209468",
-    "track": "A"
-  },
-  {
-    "code": "A4",
-    "pin": "934726",
-    "track": "A"
-  },
-  {
-    "code": "A5",
-    "pin": "293288",
-    "track": "A"
-  },
-  {
-    "code": "A6",
-    "pin": "582687",
-    "track": "A"
-  },
-  {
-    "code": "A7",
-    "pin": "772630",
-    "track": "A"
-  },
-  {
-    "code": "A8",
-    "pin": "632540",
-    "track": "A"
-  },
-  {
-    "code": "B1",
-    "pin": "817976",
-    "track": "B"
-  },
-  {
-    "code": "B2",
-    "pin": "713479",
-    "track": "B"
-  },
-  {
-    "code": "B3",
-    "pin": "413613",
-    "track": "B"
-  },
-  {
-    "code": "B4",
-    "pin": "415502",
-    "track": "B"
-  },
-  {
-    "code": "B5",
-    "pin": "149071",
-    "track": "B"
-  },
-  {
-    "code": "B6",
-    "pin": "362009",
-    "track": "B"
-  },
-  {
-    "code": "B7",
-    "pin": "307167",
-    "track": "B"
-  },
-  {
-    "code": "B8",
-    "pin": "353174",
-    "track": "B"
-  },
-  {
-    "code": "C1",
-    "pin": "642763",
-    "track": "C"
-  },
-  {
-    "code": "C2",
-    "pin": "483143",
-    "track": "C"
-  },
-  {
-    "code": "C3",
-    "pin": "708947",
-    "track": "C"
-  },
-  {
-    "code": "C4",
-    "pin": "667148",
-    "track": "C"
-  },
-  {
-    "code": "C5",
-    "pin": "973915",
-    "track": "C"
-  },
-  {
-    "code": "C6",
-    "pin": "610525",
-    "track": "C"
-  },
-  {
-    "code": "C7",
-    "pin": "509409",
-    "track": "C"
-  },
-  {
-    "code": "C8",
-    "pin": "576838",
-    "track": "C"
-  },
-  {
-    "code": "D1",
-    "pin": "842826",
-    "track": "D"
-  },
-  {
-    "code": "D2",
-    "pin": "341124",
-    "track": "D"
-  },
-  {
-    "code": "D3",
-    "pin": "814829",
-    "track": "D"
-  },
-  {
-    "code": "D4",
-    "pin": "286025",
-    "track": "D"
-  },
-  {
-    "code": "D5",
-    "pin": "622043",
-    "track": "D"
-  },
-  {
-    "code": "D6",
-    "pin": "339582",
-    "track": "D"
-  },
-  {
-    "code": "D7",
-    "pin": "462268",
-    "track": "D"
-  },
-  {
-    "code": "D8",
-    "pin": "624013",
-    "track": "D"
-  },
-  {
-    "code": "A1",
     "pin": "4821",
-    "track": "A"
+    "track": "A",
+    "name": "404- VICTORY FOUND",
+    "leader": "Nirupam veerendra",
+    "email": "sesapubalaji1@gmail.com",
+    "roll": "26K81A0547"
   },
   {
     "code": "A2",
     "pin": "5192",
-    "track": "A"
+    "track": "A",
+    "name": "Vignesh Baba",
+    "leader": "A.Ramcharan teja",
+    "email": "aggathiramcharanteja@gmail.com",
+    "roll": "26K81A0561"
   },
   {
     "code": "A3",
     "pin": "3847",
-    "track": "A"
+    "track": "A",
+    "name": "Avengers",
+    "leader": "M vishwa teja",
+    "email": "vishwatej5252@gmail.com",
+    "roll": "26K81A0588"
   },
   {
     "code": "A4",
     "pin": "9201",
-    "track": "A"
+    "track": "A",
+    "name": "AVENGERS",
+    "leader": "EDLAKADI SRIDHAR",
+    "email": "sridharedlakadi@gmail.com",
+    "roll": "26K81A04E5"
   },
   {
     "code": "A5",
     "pin": "1472",
-    "track": "A"
+    "track": "A",
+    "name": "Team aishwarya",
+    "leader": "K.Harshitha",
+    "email": "mrbunmaska@gmail.com",
+    "roll": "26k81A0523"
   },
   {
     "code": "A6",
     "pin": "6384",
-    "track": "A"
+    "track": "A",
+    "name": "Greeshma and team",
+    "leader": "Greeshma",
+    "email": "greeshmaeraganaboina@gmail.com",
+    "roll": "26K81A66J6"
   },
   {
     "code": "A7",
     "pin": "2953",
-    "track": "A"
+    "track": "A",
+    "name": "Sai teja",
+    "leader": "Sai teja",
+    "email": "dakurirajesh05@gmail.com",
+    "roll": "26K81A66D2"
   },
   {
     "code": "A8",
     "pin": "8416",
-    "track": "A"
+    "track": "A",
+    "name": "Deadline Dodgers",
+    "leader": "Divya tej",
+    "email": "divyatejgudia@gmail.com",
+    "roll": "26K81A04K9"
   },
   {
     "code": "A9",
     "pin": "7239",
-    "track": "A"
+    "track": "A",
+    "name": "Digital detectives",
+    "leader": "Sai pavan",
+    "email": "dundipandu222@gmail.com",
+    "roll": "26K81A66J0"
   },
   {
     "code": "A10",
     "pin": "4581",
-    "track": "A"
+    "track": "A",
+    "name": "REBELLIONS",
+    "leader": "GUNDLAPALLI JAGADEESH GOUD",
+    "email": "gedelavignadhamartya.01@gmail.com",
+    "roll": "26K81A0484"
   },
   {
     "code": "A11",
     "pin": "1938",
-    "track": "A"
+    "track": "A",
+    "name": "Bhargav and team",
+    "leader": "Bhargav",
+    "email": "mundrathisweety4@gmail.com",
+    "roll": "26K81A0446"
   },
   {
     "code": "A12",
     "pin": "6274",
-    "track": "A"
+    "track": "A",
+    "name": "TEAM ANUBIS",
+    "leader": "Sahityaram",
+    "email": "sahityaram1@gmail.com",
+    "roll": "26K81A0485"
   },
   {
     "code": "A13",
     "pin": "8502",
-    "track": "A"
+    "track": "A",
+    "name": "Ctrl Alt Defeat",
+    "leader": "BINDU MADHAVI",
+    "email": "bindumadhavipalavalasa@gmail.com",
+    "roll": "26K81A66G0"
   },
   {
     "code": "A14",
     "pin": "3619",
-    "track": "A"
+    "track": "A",
+    "name": "The Core Four",
+    "leader": "M.Ashritha",
+    "email": "shivanipatel1122m@gmail.com",
+    "roll": "26K81A04G8"
   },
   {
     "code": "A15",
     "pin": "9473",
-    "track": "A"
+    "track": "A",
+    "name": "Smarthunters",
+    "leader": "Y Hasini",
+    "email": "yvanaja123@gmail.com",
+    "roll": "26K81A04C0"
   },
   {
     "code": "A16",
     "pin": "5820",
-    "track": "A"
+    "track": "A",
+    "name": "Tanusri and Team",
+    "leader": "B.Tanusri",
+    "email": "tanusribonakurthi@gmail.com",
+    "roll": "26K81A0568"
   },
   {
     "code": "B1",
     "pin": "7734",
-    "track": "B"
+    "track": "B",
+    "name": "Echo Hunters",
+    "leader": "Greeshma",
+    "email": "greeshma0323@gmail.com",
+    "roll": "26K81A05K5"
   },
   {
     "code": "B2",
     "pin": "6821",
-    "track": "B"
+    "track": "B",
+    "name": "Tech tribe",
+    "leader": "Haasini Kanuganti",
+    "email": "haasinikanuganti@gmail.com",
+    "roll": "26K81A66E2"
   },
   {
     "code": "B3",
     "pin": "4912",
-    "track": "B"
+    "track": "B",
+    "name": "ZOROO",
+    "leader": "Arun",
+    "email": "pamuarun1@gmail.com",
+    "roll": "26k81A05k9"
   },
   {
     "code": "B4",
     "pin": "8305",
-    "track": "B"
+    "track": "B",
+    "name": "Moggers",
+    "leader": "Sruthi",
+    "email": "thanusreeyandrathi@gmail.com",
+    "roll": "26K81A05D3"
   },
   {
     "code": "B5",
     "pin": "2194",
-    "track": "B"
+    "track": "B",
+    "name": "Shadow",
+    "leader": "B.Sai Charan",
+    "email": "ysriram1981@gmail.com",
+    "roll": "26K81A05C7"
   },
   {
     "code": "B6",
     "pin": "5478",
-    "track": "B"
+    "track": "B",
+    "name": "The Hunters",
+    "leader": "Aniketh Trigun",
+    "email": "alladalalithsai@gmail.com",
+    "roll": "26K81A0564"
   },
   {
     "code": "B7",
     "pin": "9631",
-    "track": "B"
+    "track": "B",
+    "name": "Guntanakka",
+    "leader": "Shreyes",
+    "email": "thomasab1807@gmail.com",
+    "roll": "25K81A05B8"
   },
   {
     "code": "B8",
     "pin": "3257",
-    "track": "B"
+    "track": "B",
+    "name": "The Paradise",
+    "leader": "G.Varshith goud",
+    "email": "gaddamlucky738@gmail.com",
+    "roll": "26K81A0478"
   },
   {
     "code": "B9",
     "pin": "1849",
-    "track": "B"
+    "track": "B",
+    "name": "Rishik",
+    "leader": "B Likhit",
+    "email": "bonkurilikhit@gmail.com",
+    "roll": "26k81A05C8"
   },
   {
     "code": "B10",
     "pin": "7503",
-    "track": "B"
+    "track": "B",
+    "name": "Team rithvik",
+    "leader": "Sai rithvik",
+    "email": "sairithvik845@gmail.com",
+    "roll": "26K81A05D2"
   },
   {
     "code": "B11",
     "pin": "4286",
-    "track": "B"
+    "track": "B",
+    "name": "Power stars",
+    "leader": "Dhanu sree",
+    "email": "vidhathrireddyk@gmail.com",
+    "roll": "26K81A66D8"
   },
   {
     "code": "B12",
     "pin": "9137",
-    "track": "B"
+    "track": "B",
+    "name": "SYC",
+    "leader": "Buchamgari yashwanth yadav",
+    "email": "yashwanth93923@gmail.com",
+    "roll": "26K81A05L7"
   },
   {
     "code": "B13",
     "pin": "6024",
-    "track": "B"
+    "track": "B",
+    "name": "vorteX",
+    "leader": "naveena",
+    "email": "naveenam902@gmail.com",
+    "roll": "25K81A05G6"
   },
   {
     "code": "B14",
     "pin": "3718",
-    "track": "B"
+    "track": "B",
+    "name": "QuadraX",
+    "leader": "Priya harshini",
+    "email": "maripadigamadhavi@gmail.com",
+    "roll": "25K81A05J1"
   },
   {
     "code": "B15",
     "pin": "8592",
-    "track": "B"
+    "track": "B",
+    "name": "4 Freaks",
+    "leader": "Kaushal",
+    "email": "kaushalbhatnagar1111@gmail.com",
+    "roll": "26K81A66J3"
   },
   {
     "code": "B16",
     "pin": "2461",
-    "track": "B"
+    "track": "B",
+    "name": "Star of Ruin",
+    "leader": "Lokineni Prajwal",
+    "email": "prajwallokin@gmail.com",
+    "roll": "26K81A0527"
   }
 ]

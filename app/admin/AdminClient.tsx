@@ -600,7 +600,7 @@ PIN: ${t.pin}
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-evidence-red font-bold uppercase tracking-wider">
-                        REGISTRATION DESK DISPATCH
+                        ROSTER DIRECTORY // ROUND 2
                       </span>
                       {waitingTeams.length > 0 && (
                         <span className="bg-evidence-red text-paper text-[10px] font-mono px-2 py-0.5 font-bold animate-pulse">
@@ -609,7 +609,7 @@ PIN: ${t.pin}
                       )}
                     </div>
                     <h2 className="font-display text-xl text-ink mt-0.5">
-                      Desk Check-In & Team Name Assignment
+                      Assigned Team Roster (32 Units)
                     </h2>
                   </div>
                   <div className="flex items-center gap-3">
@@ -695,7 +695,7 @@ PIN: ${t.pin}
                   </div>
                 ) : (
                   <div className="p-3 bg-paper border border-line-light text-xs font-mono text-ink-mid flex items-center justify-between">
-                    <span>✓ No teams currently waiting at desk. All logged-in units have been assigned team names.</span>
+                    <span>✓ Pre-Check-In Active: All 32 Round 2 teams are pre-assigned with their official names and direct case file access enabled. No desk activation needed.</span>
                   </div>
                 )}
 

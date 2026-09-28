@@ -15,6 +15,10 @@ export interface Team {
   code: string;
   pin: string;
   track: string;
+  name?: string;
+  leader?: string;
+  email?: string;
+  roll?: string;
 }
 
 export interface Settings {

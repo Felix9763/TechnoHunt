@@ -454,7 +454,7 @@ export async function fetchTeamRegistration(round: string, teamCode: string): Pr
         .maybeSingle();
       if (!error && data) {
         const reg = data as TeamRegistration;
-        if (!requireClearance && !reg.confirmed) {
+        if (!requireClearance || round === 'round2') {
           reg.confirmed = true;
         }
         return reg;
@@ -472,10 +472,31 @@ export async function fetchTeamRegistration(round: string, teamCode: string): Pr
   const key = `${round}:${teamCode}`;
   const localReg = db.team_registrations[key] || null;
   if (localReg) {
-    if (!requireClearance && !localReg.confirmed) {
+    if (!requireClearance || round === 'round2') {
       localReg.confirmed = true;
     }
     return localReg;
+  }
+
+  // Pre-assigned fallback from teams.json for round2
+  if (round === 'round2') {
+    try {
+      const teamsPath = path.join(process.cwd(), 'config', 'round2', 'teams.json');
+      if (fs.existsSync(teamsPath)) {
+        const teams = JSON.parse(fs.readFileSync(teamsPath, 'utf-8'));
+        const t = teams.find((x: any) => x.code === teamCode);
+        if (t) {
+          return {
+            round: 'round2',
+            team_code: teamCode,
+            team_name: t.name || `Team ${teamCode}`,
+            confirmed: true,
+            checked_in_at: new Date().toISOString(),
+            confirmed_at: new Date().toISOString(),
+          };
+        }
+      }
+    } catch {}
   }
 
   return null;
@@ -483,26 +504,36 @@ export async function fetchTeamRegistration(round: string, teamCode: string): Pr
 
 export async function checkInTeam(round: string, teamCode: string): Promise<TeamRegistration> {
   const now = new Date().toISOString();
-  const requireClearance = getRequireDeskClearance();
-  const shouldConfirm = !requireClearance;
+  let defaultName = '';
+  if (round === 'round2') {
+    try {
+      const teamsPath = path.join(process.cwd(), 'config', 'round2', 'teams.json');
+      if (fs.existsSync(teamsPath)) {
+        const teams = JSON.parse(fs.readFileSync(teamsPath, 'utf-8'));
+        const t = teams.find((x: any) => x.code === teamCode);
+        if (t?.name) defaultName = t.name;
+      }
+    } catch {}
+  }
 
   const existing = await fetchTeamRegistration(round, teamCode);
   if (existing) {
-    if (shouldConfirm && !existing.confirmed) {
-      existing.confirmed = true;
-      existing.confirmed_at = now;
-      await confirmTeamRegistration(round, teamCode, existing.team_name || '');
+    existing.confirmed = true;
+    if (!existing.team_name && defaultName) {
+      existing.team_name = defaultName;
     }
+    existing.confirmed_at = now;
+    await confirmTeamRegistration(round, teamCode, existing.team_name || '');
     return existing;
   }
 
   const newReg: TeamRegistration = {
     round,
     team_code: teamCode,
-    team_name: '',
-    confirmed: shouldConfirm,
+    team_name: defaultName,
+    confirmed: true,
     checked_in_at: now,
-    ...(shouldConfirm ? { confirmed_at: now } : {}),
+    confirmed_at: now,
   };
 
   const sb = getSupabase();
@@ -610,10 +641,35 @@ export async function fetchAllTeamRegistrations(round: string): Promise<Record<s
         round,
         team_code: p.team_code,
         team_name: '',
-        confirmed: !requireClearance,
+        confirmed: !requireClearance || round === 'round2',
         checked_in_at: p.last_updated || new Date().toISOString(),
       };
     }
+  }
+
+  // Pre-seed all Round 2 teams with their official assigned names
+  if (round === 'round2') {
+    try {
+      const teamsPath = path.join(process.cwd(), 'config', 'round2', 'teams.json');
+      if (fs.existsSync(teamsPath)) {
+        const teams = JSON.parse(fs.readFileSync(teamsPath, 'utf-8'));
+        for (const t of teams) {
+          if (!map[t.code]) {
+            map[t.code] = {
+              round: 'round2',
+              team_code: t.code,
+              team_name: t.name || `Team ${t.code}`,
+              confirmed: true,
+              checked_in_at: new Date().toISOString(),
+              confirmed_at: new Date().toISOString(),
+            };
+          } else if (!map[t.code].team_name && t.name) {
+            map[t.code].team_name = t.name;
+            map[t.code].confirmed = true;
+          }
+        }
+      }
+    } catch {}
   }
 
   return map;

@@ -42,11 +42,11 @@ export default function DashboardClient({
   round,
   initialStage,
   initialStageData,
-  initialConfirmed = false,
+  initialConfirmed = true,
   initialTeamName = '',
 }: DashboardClientProps) {
   const router = useRouter();
-  const [confirmed, setConfirmed] = useState(initialConfirmed);
+  const [confirmed, setConfirmed] = useState(true);
   const [teamName, setTeamName] = useState(initialTeamName);
   const [checkingStatus, setCheckingStatus] = useState(false);
 
@@ -336,149 +336,7 @@ export default function DashboardClient({
   }
 
   // =========================================================================
-  // HOLDING BAY: WAITING FOR ORGANIZER CLEARANCE & TEAM NAME ASSIGNMENT
-  // =========================================================================
-  if (!confirmed) {
-    return (
-      <main className="min-h-screen bg-paper text-ink px-4 py-8 flex flex-col justify-between max-w-md mx-auto">
-        <div>
-          {/* Dateline Banner */}
-          <div className="flex justify-between items-center text-[10px] font-mono font-bold text-ink-mid pb-1.5 border-b border-line-light uppercase tracking-widest">
-            <span>DISPATCH STATION // TERMINAL #0426</span>
-            <span className="text-evidence-red font-bold">STANDBY CLEARANCE</span>
-          </div>
-
-          {/* Masthead */}
-          <header className="mb-6 pt-3 flex justify-between items-start">
-            <div>
-              <div className="inline-block border border-line px-2 py-0.5 mb-2 text-[10px] font-mono font-bold tracking-widest text-ink-mid bg-paper-inset uppercase">
-                ENVELOPE AUTHENTICATED // STEP 1 OF 2
-              </div>
-              <h1 className="font-serif text-3xl font-bold tracking-tight text-ink">
-                Awaiting Clearance
-              </h1>
-              <p className="text-xs md:text-sm font-serif text-ink-mid mt-1 leading-relaxed">
-                Unit credentials verified. Your terminal is standing by for Team Name assignment at the registration desk.
-              </p>
-            </div>
-            <ThemeToggle />
-          </header>
-
-          {/* Standby Clearance Card */}
-          <section className="news-card p-6 relative shadow-md space-y-4">
-            <div className="flex justify-between items-center pb-2 border-b border-line-light">
-              <span className="font-mono text-xs font-bold text-ink-mid uppercase tracking-wider">
-                ASSIGNED UNIT
-              </span>
-              <span className="font-mono text-sm font-bold bg-ink text-paper px-2.5 py-0.5">
-                Team {teamCode} (Track {track})
-              </span>
-            </div>
-
-            <div className="detective-directive p-4 shadow-sm space-y-2">
-              <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-evidence-red tracking-wider uppercase">
-                <span>⚑</span>
-                <span>DESK REGISTRATION PROTOCOL</span>
-              </div>
-              <div className="text-xs md:text-sm font-mono text-ink leading-relaxed font-semibold space-y-1.5">
-                <p>1. Report to the Organizer / Game Master Registration Desk.</p>
-                <p>2. Give them your unit code: <strong className="text-evidence-red">Team {teamCode}</strong>.</p>
-                <p>3. Declare your chosen <strong className="text-ink">Team Name</strong>.</p>
-                <p>4. Once the organizers register your team name, this terminal will automatically unlock your investigation journey!</p>
-              </div>
-            </div>
-
-            {/* Pulsing Sync Status Indicator */}
-            <div className="p-3 bg-paper-inset border border-line-light flex items-center justify-between text-xs font-mono">
-              <div className="flex items-center gap-2">
-                <span className="inline-block w-2.5 h-2.5 rounded-full bg-lockout-amber animate-pulse" />
-                <span className="font-bold text-ink-mid">Listening for dispatch clearance...</span>
-              </div>
-              <span className="text-[10px] text-ink-soft">Live 3s</span>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleManualCheckStatus}
-              disabled={checkingStatus}
-              className="w-full bg-ink text-paper py-3 font-mono font-bold text-xs uppercase tracking-wider hover:bg-ink-mid active:scale-95 transition-all shadow-md disabled:opacity-50"
-            >
-              {checkingStatus ? 'Checking Registry...' : '↻ Check Clearance Status Now'}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                triggerHaptic('success');
-                setConfirmed(true);
-              }}
-              className="w-full border-2 border-line text-ink py-2.5 font-mono font-bold text-xs uppercase tracking-wider hover:border-ink hover:bg-ink hover:text-paper transition-all"
-            >
-              ⚡ Enter Case File Directly →
-            </button>
-
-            {errorMsg && (
-              <div className="text-xs font-mono text-evidence-red border-l-4 border-evidence-red pl-2.5 py-1 font-bold bg-paper-inset">
-                {errorMsg}
-              </div>
-            )}
-          </section>
-        </div>
-
-        {/* Footer */}
-        <footer className="mt-8 pt-3 border-t border-line text-[11px] font-mono font-bold text-ink-soft flex justify-between items-center">
-          <button
-            type="button"
-            onClick={promptLogout}
-            className="hover:underline text-ink"
-          >
-            ← Sign out / Switch envelope
-          </button>
-          <span className="text-evidence-red">AWAITING ORGANIZER</span>
-        </footer>
-
-        {/* Logout Confirmation Modal for Standby Screen */}
-        {showLogoutConfirm && (
-          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="news-card border-2 border-ink p-5 max-w-sm w-full space-y-4 shadow-2xl animate-stamp">
-              <div className="flex justify-between items-center pb-2 border-b border-line-light">
-                <span className="font-mono text-xs font-bold text-evidence-red uppercase tracking-wider">
-                  CONFIRM SIGN OUT
-                </span>
-                <span className="text-xs font-mono font-bold text-ink-soft">
-                  Unit {teamCode}
-                </span>
-              </div>
-              
-              <p className="font-serif text-sm text-ink leading-relaxed font-medium">
-                Are you sure you want to sign out? You will need your envelope PIN to return to this screen.
-              </p>
-
-              <div className="flex gap-2.5 pt-1">
-                <button
-                  type="button"
-                  onClick={() => setShowLogoutConfirm(false)}
-                  className="flex-1 py-2.5 px-3 border-2 border-ink bg-paper text-ink font-mono text-xs font-bold uppercase tracking-wider hover:bg-line/20 active:scale-95 transition-all"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="flex-1 py-2.5 px-3 bg-evidence-red text-paper font-mono text-xs font-bold uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all shadow"
-                >
-                  Yes, Sign Out
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </main>
-    );
-  }
-
-  // =========================================================================
-  // ACTIVE CASE FILE VIEW (AFTER ADMIN CONFIRMATION & TEAM NAME ASSIGNMENT)
+  // ACTIVE CASE FILE VIEW (DIRECT ACCESS FOR ROUND 2)
   // =========================================================================
   return (
     <div className="min-h-screen bg-paper text-ink pb-44 max-w-md mx-auto relative select-none">

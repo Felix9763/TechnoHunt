@@ -34,12 +34,12 @@ export async function POST(req: NextRequest) {
 
     const { teamCode } = session;
 
-    // Check if team has been approved by admin
+    // Check if team registration exists (Round 2 teams are pre-cleared)
     const reg = await fetchTeamRegistration(activeRound, teamCode);
-    if (!reg || !reg.confirmed) {
+    if (activeRound !== 'round2' && (!reg || !reg.confirmed)) {
       return NextResponse.json(
         {
-          error: 'Your team journey has not yet been activated by event dispatch. Please assign your Team Name at the registration desk.',
+          error: 'Your team journey has not yet been activated by event dispatch.',
           notConfirmed: true,
         },
         { status: 403 }
