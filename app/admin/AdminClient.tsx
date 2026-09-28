@@ -40,6 +40,8 @@ interface AdminClientProps {
     activeRound: string;
     round1: { isReady: boolean; teamCount: number; stageCount: number; reason?: string };
     round2: { isReady: boolean; teamCount: number; stageCount: number; reason?: string };
+    round1ActiveCount?: number;
+    round2ActiveCount?: number;
     teams: Array<{ code: string; pin: string; track: string }>;
     stages?: Record<string, any>;
     progress: Record<string, TeamProgressInfo>;
@@ -108,11 +110,11 @@ export default function AdminClient({ initialData, initialTab = 'ops' }: AdminCl
   const [editingTeamCode, setEditingTeamCode] = useState<string | null>(null);
   const [editingNameValue, setEditingNameValue] = useState<string>('');
 
-  // Auto-refresh interval (5s)
+  // Auto-refresh interval (5s) with anti-cache
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const res = await fetch('/api/admin/data');
+        const res = await fetch(`/api/admin/data?t=${Date.now()}`, { cache: 'no-store' });
         if (res.ok) {
           const fresh = await res.json();
           setData(fresh);
@@ -127,7 +129,7 @@ export default function AdminClient({ initialData, initialTab = 'ops' }: AdminCl
   async function refreshData() {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/data');
+      const res = await fetch(`/api/admin/data?t=${Date.now()}`, { cache: 'no-store' });
       if (res.ok) {
         const fresh = await res.json();
         setData(fresh);
@@ -364,7 +366,12 @@ PIN: ${t.pin}
 
   const filteredTeams = data.teams.filter((t) => {
     if (trackFilter !== 'ALL' && t.track !== trackFilter) return false;
-    if (searchTerm && !t.code.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+    if (searchTerm) {
+      const q = searchTerm.toLowerCase();
+      const reg = (data.registrations || {})[t.code];
+      const teamName = (reg?.team_name || '').toLowerCase();
+      if (!t.code.toLowerCase().includes(q) && !teamName.includes(q)) return false;
+    }
     return true;
   });
 
@@ -513,7 +520,9 @@ PIN: ${t.pin}
                         : 'border-line text-ink-soft/50 bg-paper cursor-not-allowed'
                     }`}
                   >
-                    {data.activeRound === 'round1' ? '● Round 1 Live' : 'Switch to Round 1'}
+                    {data.activeRound === 'round1'
+                      ? `● Round 1 Live (${data.round1ActiveCount ?? Object.keys(data.progress).length} Active)`
+                      : `Switch to Round 1 (${data.round1ActiveCount ?? 0} Active)`}
                   </button>
                   {!data.round1.isReady && (
                     <div className="hidden group-hover:block absolute bottom-full left-0 mb-1 z-10 w-48 p-2 bg-ink text-paper text-[10px] shadow">
@@ -536,7 +545,9 @@ PIN: ${t.pin}
                         : 'border-line text-ink-soft/50 bg-paper cursor-not-allowed'
                     }`}
                   >
-                    {data.activeRound === 'round2' ? '● Round 2 Live' : 'Switch to Round 2'}
+                    {data.activeRound === 'round2'
+                      ? `● Round 2 Live (${data.round2ActiveCount ?? Object.keys(data.progress).length} Active)`
+                      : `Switch to Round 2 (${data.round2ActiveCount ?? 0} Active)`}
                   </button>
                   {!data.round2.isReady && (
                     <div className="hidden group-hover:block absolute bottom-full left-0 mb-1 z-10 w-48 p-2 bg-ink text-paper text-[10px] shadow">
@@ -548,10 +559,39 @@ PIN: ${t.pin}
             </div>
           </section>
 
+          {/* CROSS-ROUND ACTIVITY ALERT */}
+          {(() => {
+            const otherRound = data.activeRound === 'round1' ? 'round2' : 'round1';
+            const otherCount = data.activeRound === 'round1' ? (data.round2ActiveCount || 0) : (data.round1ActiveCount || 0);
+            if (otherCount > 0) {
+              return (
+                <div className="border-2 border-evidence-red bg-paper-card p-3 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 shadow">
+                  <div className="flex items-center gap-2 text-xs font-bold text-evidence-red">
+                    <span className="w-2.5 h-2.5 rounded-full bg-evidence-red animate-ping" />
+                    <span>NOTICE: {otherCount} team(s) are actively logged into {otherRound.toUpperCase()}!</span>
+                  </div>
+                  <button
+                    onClick={() => handleSwitchRound(otherRound as 'round1' | 'round2')}
+                    className="bg-evidence-red text-paper px-3 py-1 text-xs font-bold uppercase hover:opacity-90 transition-opacity"
+                  >
+                    Switch to {otherRound.toUpperCase()} View →
+                  </button>
+                </div>
+              );
+            }
+            return null;
+          })()}
+
           {/* REGISTRATION DESK & TEAM NAME ASSIGNMENT MODULE */}
           {(() => {
             const regs = data.registrations || {};
-            const waitingTeams = data.teams.filter((t) => regs[t.code] && !regs[t.code].confirmed);
+            const waitingTeams = data.teams.filter((t) => {
+              const reg = regs[t.code];
+              const prog = data.progress[t.code];
+              const isLoggedOn = !!reg || !!prog;
+              const isConfirmed = !!reg?.confirmed;
+              return isLoggedOn && !isConfirmed;
+            });
             const confirmedCount = data.teams.filter((t) => regs[t.code]?.confirmed).length;
 
             return (
@@ -572,8 +612,34 @@ PIN: ${t.pin}
                       Desk Check-In & Team Name Assignment
                     </h2>
                   </div>
-                  <div className="text-xs font-mono text-ink-soft">
-                    <span className="font-bold text-ink">{confirmedCount}</span> of {data.teams.length} Teams Cleared
+                  <div className="flex items-center gap-3">
+                    {waitingTeams.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          const ok = window.confirm(`Approve all ${waitingTeams.length} waiting teams and grant clearance?`);
+                          if (!ok) return;
+                          setSubmittingReg(true);
+                          for (const t of waitingTeams) {
+                            const name = (pendingNameInputs[t.code] || `Team ${t.code}`).trim();
+                            await fetch('/api/admin/confirm-team', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ teamCode: t.code, teamName: name }),
+                            });
+                          }
+                          setSubmittingReg(false);
+                          await refreshData();
+                        }}
+                        disabled={submittingReg}
+                        className="bg-verified-teal text-paper px-3 py-1.5 text-xs font-mono font-bold uppercase hover:opacity-90 transition-opacity shadow-sm"
+                      >
+                        ⚡ Approve All Waiting ({waitingTeams.length})
+                      </button>
+                    )}
+                    <div className="text-xs font-mono text-ink-soft">
+                      <span className="font-bold text-ink">{confirmedCount}</span> of {data.teams.length} Teams Cleared
+                    </div>
                   </div>
                 </div>
 
@@ -815,9 +881,9 @@ PIN: ${t.pin}
                             <span className="inline-block px-1.5 py-0.5 text-[10px] font-bold text-verified-teal bg-verified-teal/15 border border-verified-teal">
                               ✓ CLEARED
                             </span>
-                          ) : reg ? (
+                          ) : reg || prog ? (
                             <span className="inline-block px-1.5 py-0.5 text-[10px] font-bold text-lockout-amber bg-lockout-amber/15 border border-lockout-amber animate-pulse">
-                              ⚠️ AT DESK
+                              ⚠️ AT DESK / ACTIVE
                             </span>
                           ) : (
                             <span className="text-[10px] text-ink-soft">

@@ -414,7 +414,23 @@ export async function markFinaleSubmission(round: string, teamCode: string) {
   return { success: true, position: newPosition, alreadySubmitted: false };
 }
 
+function getRequireDeskClearance(): boolean {
+  try {
+    const filePath = path.join(process.cwd(), 'config', 'settings.json');
+    if (fs.existsSync(filePath)) {
+      const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      if (typeof data.requireDeskClearance === 'boolean') {
+        return data.requireDeskClearance;
+      }
+    }
+  } catch (err) {
+    // non-fatal
+  }
+  return false;
+}
+
 export async function fetchTeamRegistration(round: string, teamCode: string): Promise<TeamRegistration | null> {
+  const requireClearance = getRequireDeskClearance();
   const sb = getSupabase();
   if (sb) {
     try {
@@ -425,7 +441,11 @@ export async function fetchTeamRegistration(round: string, teamCode: string): Pr
         .eq('team_code', teamCode)
         .maybeSingle();
       if (!error && data) {
-        return data as TeamRegistration;
+        const reg = data as TeamRegistration;
+        if (!requireClearance && !reg.confirmed) {
+          reg.confirmed = true;
+        }
+        return reg;
       }
       if (error) {
         console.warn('Supabase fetchTeamRegistration error:', error.message);
@@ -434,16 +454,33 @@ export async function fetchTeamRegistration(round: string, teamCode: string): Pr
       console.warn('Supabase fetchTeamRegistration exception:', e);
     }
   }
+
   const db = getLocalDb();
   if (!db.team_registrations) db.team_registrations = {};
   const key = `${round}:${teamCode}`;
-  return db.team_registrations[key] || null;
+  const localReg = db.team_registrations[key] || null;
+  if (localReg) {
+    if (!requireClearance && !localReg.confirmed) {
+      localReg.confirmed = true;
+    }
+    return localReg;
+  }
+
+  return null;
 }
 
 export async function checkInTeam(round: string, teamCode: string): Promise<TeamRegistration> {
   const now = new Date().toISOString();
+  const requireClearance = getRequireDeskClearance();
+  const shouldConfirm = !requireClearance;
+
   const existing = await fetchTeamRegistration(round, teamCode);
   if (existing) {
+    if (shouldConfirm && !existing.confirmed) {
+      existing.confirmed = true;
+      existing.confirmed_at = now;
+      await confirmTeamRegistration(round, teamCode, existing.team_name || '');
+    }
     return existing;
   }
 
@@ -451,18 +488,22 @@ export async function checkInTeam(round: string, teamCode: string): Promise<Team
     round,
     team_code: teamCode,
     team_name: '',
-    confirmed: false,
+    confirmed: shouldConfirm,
     checked_in_at: now,
+    ...(shouldConfirm ? { confirmed_at: now } : {}),
   };
 
   const sb = getSupabase();
   if (sb) {
     try {
-      await sb
+      const { error } = await sb
         .from('team_registrations')
-        .upsert(newReg, { onConflict: 'round,team_code', ignoreDuplicates: true });
+        .upsert(newReg, { onConflict: 'round,team_code' });
+      if (error) {
+        console.warn('Supabase checkInTeam error:', error.message);
+      }
     } catch (e) {
-      console.warn('Supabase checkInTeam error:', e);
+      console.warn('Supabase checkInTeam exception:', e);
     }
   }
 
@@ -509,7 +550,10 @@ export async function confirmTeamRegistration(round: string, teamCode: string, t
 }
 
 export async function fetchAllTeamRegistrations(round: string): Promise<Record<string, TeamRegistration>> {
+  const map: Record<string, TeamRegistration> = {};
+  const requireClearance = getRequireDeskClearance();
   const sb = getSupabase();
+
   if (sb) {
     try {
       const { data, error } = await sb
@@ -517,24 +561,49 @@ export async function fetchAllTeamRegistrations(round: string): Promise<Record<s
         .select('*')
         .eq('round', round);
       if (!error && data) {
-        const map: Record<string, TeamRegistration> = {};
         for (const r of data) {
-          map[r.team_code] = r;
+          const reg = r as TeamRegistration;
+          if (!requireClearance && !reg.confirmed) {
+            reg.confirmed = true;
+          }
+          map[reg.team_code] = reg;
         }
-        return map;
+      } else if (error) {
+        console.warn('Supabase fetchAllTeamRegistrations error:', error.message);
       }
     } catch (e) {
-      console.warn('Supabase fetchAllTeamRegistrations error:', e);
+      console.warn('Supabase fetchAllTeamRegistrations exception:', e);
     }
   }
+
   const db = getLocalDb();
   if (!db.team_registrations) db.team_registrations = {};
-  const map: Record<string, TeamRegistration> = {};
   for (const [key, val] of Object.entries(db.team_registrations)) {
-    if (val.round === round) {
-      map[val.team_code] = val;
+    if (val.round === round && !map[val.team_code]) {
+      const reg = { ...val };
+      if (!requireClearance && !reg.confirmed) {
+        reg.confirmed = true;
+      }
+      map[reg.team_code] = reg;
     }
   }
+
+  // CRITICAL FAILSAFE: Any team that has progress in team_progress MUST have logged in!
+  // If team_registrations table failed or missed rows in Supabase, synthesize registration entries
+  // so the Admin Panel NEVER loses visibility into logged-in teams!
+  const progressList = await fetchAllTeamProgress(round);
+  for (const p of progressList) {
+    if (!map[p.team_code]) {
+      map[p.team_code] = {
+        round,
+        team_code: p.team_code,
+        team_name: '',
+        confirmed: !requireClearance,
+        checked_in_at: p.last_updated || new Date().toISOString(),
+      };
+    }
+  }
+
   return map;
 }
 

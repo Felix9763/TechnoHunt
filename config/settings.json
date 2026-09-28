@@ -5,5 +5,6 @@
   "lockoutSeconds": 90,
   "eventStart": "2026-09-27T08:00:00+05:30",
   "eventEnd": "2026-09-28T23:59:59+05:30",
-  "finaleOpen": false
+  "finaleOpen": false,
+  "requireDeskClearance": false
 }

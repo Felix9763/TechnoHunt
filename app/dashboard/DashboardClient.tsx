@@ -124,7 +124,7 @@ export default function DashboardClient({
     let mounted = true;
     const interval = setInterval(async () => {
       try {
-        const res = await fetch('/api/team/status');
+        const res = await fetch(`/api/team/status?t=${Date.now()}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           if (data.confirmed && mounted) {
@@ -195,7 +195,7 @@ export default function DashboardClient({
     setCheckingStatus(true);
     setErrorMsg(null);
     try {
-      const res = await fetch('/api/team/status');
+      const res = await fetch(`/api/team/status?t=${Date.now()}`, { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         if (data.confirmed) {
@@ -392,6 +392,17 @@ export default function DashboardClient({
               className="w-full bg-ink text-paper py-3 font-mono font-bold text-xs uppercase tracking-wider hover:bg-ink-mid active:scale-95 transition-all shadow-md disabled:opacity-50"
             >
               {checkingStatus ? 'Checking Registry...' : '↻ Check Clearance Status Now'}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                triggerHaptic('success');
+                setConfirmed(true);
+              }}
+              className="w-full border-2 border-line text-ink py-2.5 font-mono font-bold text-xs uppercase tracking-wider hover:border-ink hover:bg-ink hover:text-paper transition-all"
+            >
+              ⚡ Enter Case File Directly →
             </button>
 
             {errorMsg && (

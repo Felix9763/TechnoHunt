@@ -21,16 +21,25 @@ export async function GET(req: NextRequest) {
     const teamStages = stages[session.teamCode] || {};
     const stageData = getSanitizedStageData(teamStages, currentStage, roundId);
 
-    return NextResponse.json({
-      authenticated: true,
-      teamCode: session.teamCode,
-      track: session.track,
-      round: session.round,
-      confirmed: reg?.confirmed || false,
-      teamName: reg?.team_name || '',
-      currentStage,
-      stageData,
-    });
+    return NextResponse.json(
+      {
+        authenticated: true,
+        teamCode: session.teamCode,
+        track: session.track,
+        round: session.round,
+        confirmed: reg?.confirmed ?? true,
+        teamName: reg?.team_name || '',
+        currentStage,
+        stageData,
+      },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      }
+    );
   } catch (err: any) {
     console.error('Error in team status:', err);
     return NextResponse.json({ error: 'Failed to fetch status' }, { status: 500 });

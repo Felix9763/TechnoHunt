@@ -24,6 +24,7 @@ export interface Settings {
   eventStart: string;
   eventEnd: string;
   finaleOpen: boolean;
+  requireDeskClearance?: boolean;
 }
 
 export interface StageData {
@@ -189,6 +190,7 @@ export function getSettings(): Settings {
     eventStart: '2026-09-27T08:00:00+05:30',
     eventEnd: '2026-09-28T23:59:59+05:30',
     finaleOpen: false,
+    requireDeskClearance: false,
   };
 }
 
